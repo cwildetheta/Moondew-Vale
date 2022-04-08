@@ -1,0 +1,7 @@
+Field:
+Inheritances:
+Dependencies: Crop, Orchard, Vegetable
+Attributes:	- bool Is_active
+
+Operations:	+ bool interact_is_active()
+		+ void interact_is_active(bool)
