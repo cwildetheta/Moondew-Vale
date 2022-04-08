@@ -15,6 +15,7 @@ void field::clear_field()
 void field::die()
 {
     is_alive = false;
+    symbol = 'x';
 }
 
 //INPUTS AND OUTPUTS
