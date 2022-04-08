@@ -1,11 +1,12 @@
 #include "../include/field.h"
 
-void field::plant_field(std::string plant_name)
+void field::plant_field(std::string plant_name, char plant_symbol)
 {
     name = plant_name;
     is_active = true;
     is_alive = true;
     health = 10;
+    symbol = plant_symbol;
 }
 void field::clear_field()
 {
@@ -56,4 +57,12 @@ std::string field::interact_health()
 void field::interact_health(std::string string_health)
 {
     health = string_health;
+}
+char field::interact_symbol()
+{
+    return symbol;
+}
+void field::interact_symbol(char char_input)
+{
+    symbol = char_input;
 }

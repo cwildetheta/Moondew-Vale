@@ -6,4 +6,4 @@ include_directories(include)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}")
 
-add_executable(${PROJECT_NAME} src/field.cpp src/crop.cpp src/main.cpp)
+add_executable(${PROJECT_NAME} src/field.cpp src/crop.cpp src/orchard.cpp src/multicrop.cpp src/main.cpp)
