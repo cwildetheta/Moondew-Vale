@@ -15,6 +15,14 @@ void crop::interact_lifestage(int int_input)
 {
     lifestage = int_input;
 }
+int crop::interact_yield()
+{
+    return yield;
+}
+void crop::interact_yield(int int_input)
+{
+    yield = int_input;
+}
 bool crop::interact_is_ripe()
 {
     return is_ripe;

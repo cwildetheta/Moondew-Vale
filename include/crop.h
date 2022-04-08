@@ -5,13 +5,15 @@
 
 class crop : public field{
     private:
-        int lifestage;
+        int lifestage, yield;
         bool is_ripe, is_overripe;
 
     public:
         void grow();
         int interact_lifestage();
         void interact_lifestage(int);
+        int interact_yield();
+        void interact_yield(int);
         bool interact_is_ripe();
         void interact_is_ripe(bool);
         bool interact_is_overripe();
