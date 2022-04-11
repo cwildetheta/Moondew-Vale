@@ -5,15 +5,16 @@
 
 class multicrop : public field{
     private:
-        int lifestage, yield;
+        int lifestage;
         bool is_producing;
 
     public:
         void grow();
+        int harvest_field();
+
+        //VARIABLE INTERACTIONS//
         int interact_lifestage();
         void interact_lifestage(int);
-        int interact_yield();
-        void interact_yield(int);
         bool interact_is_producing();
         void interact_is_producing(bool);
 };

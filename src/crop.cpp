@@ -5,6 +5,32 @@ void crop::grow()
 {
     lifestage++;
 }
+int crop::harvest_field()
+{
+    int output = -1;
+    if(interact_is_active() == true){
+        if(interact_is_alive() == true){
+            if(is_ripe == true){
+                if(is_overripe == false){
+                    output = interact_yield();
+                }
+                else{
+                    output = 0.5*interact_yield();
+                }
+            }
+            else{
+                std::cout << "This plant isn't ripe yet, wait for it to grow some more." << std::endl;
+            }
+        }
+        else{
+            std::cout << "This plant is dead, there is nothing left to harvest." << std::endl;
+        }
+    }
+    else{
+        std::cout << "Error, trying to harvest a non-active field. This shouldn't be happening." << std::endl;
+    }
+    return output;
+}
 
 //INPUTS AND OUTPUTS
 int crop::interact_lifestage()
@@ -14,14 +40,6 @@ int crop::interact_lifestage()
 void crop::interact_lifestage(int int_input)
 {
     lifestage = int_input;
-}
-int crop::interact_yield()
-{
-    return yield;
-}
-void crop::interact_yield(int int_input)
-{
-    yield = int_input;
 }
 bool crop::interact_is_ripe()
 {

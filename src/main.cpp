@@ -25,6 +25,8 @@ int main()
         std::string seed_types[6] = {"Wheat", "Barley", "Apple", "Orange", "Courgette", "Tomato"};
         char plant_chars[6] = {'W', 'B', 'A', 'O', 'C', 'T'};
         int initial_seed_numbers[6] = {10, 10, 5, 5, 2, 2};
+        int base_yields[6] = {5, 5, 5, 5, 5, 5};
+        int base_price[6] = {5, 10, 6, 8, 3, 2}, current_price[6] = {5, 10, 6, 8, 3, 2};
         farmhouse home_house(6, seed_types, initial_seed_numbers);
         home_house.interact_is_working(true);
         home_house.interact_upkeep(0);
@@ -32,6 +34,7 @@ int main()
         home_house.interact_x_location(4);
         home_house.interact_y_location(4);
         bool sim_loop = true;
+        int money = 100;
         int month = 1;
         while(sim_loop == true){
             system("cls");
@@ -106,20 +109,88 @@ int main()
                                 crop_fields[x_coord-1][y_coord-1].plant_field(seed_types[seed_pick-1], plant_chars[seed_pick-1]);
                                 home_house.change_seed_totals(seed_types[seed_pick-1], -1);
                                 crop_fields[x_coord-1][y_coord-1].interact_lifestage(0);
+                                crop_fields[x_coord-1][y_coord-1].interact_yield(base_yields[seed_pick-1]);
                             }
                             if((seed_pick == 3) || (seed_pick == 4)){
                                 orchard_fields[x_coord-1][y_coord-1].plant_field(seed_types[seed_pick-1], plant_chars[seed_pick-1]);
                                 home_house.change_seed_totals(seed_types[seed_pick-1], -1);
                                 orchard_fields[x_coord-1][y_coord-1].interact_age(0);
+                                orchard_fields[x_coord-1][y_coord-1].interact_yield(base_yields[seed_pick-1]);
                             }
                             if((seed_pick == 5) || (seed_pick == 6)){
                                 multicrop_fields[x_coord-1][y_coord-1].plant_field(seed_types[seed_pick-1], plant_chars[seed_pick-1]);
                                 home_house.change_seed_totals(seed_types[seed_pick-1], -1);
                                 multicrop_fields[x_coord-1][y_coord-1].interact_lifestage(0);
+                                multicrop_fields[x_coord-1][y_coord-1].interact_yield(base_yields[seed_pick-1]);
                             }
                         }
                     }
                     break;
+                }
+                case 'h':
+                case 'H':{
+                    std::cout << "Please enter x coordinate: ";
+                    int x_coord, y_coord;
+                    std::cin >> x_coord;
+                    std::cout << "Please enter y coordinate: ";
+                    std::cin >> y_coord;
+                    if((x_coord < 1) || (x_coord > size)){
+                        std::cout << "x coordinate out of bounds, please try again." << std::endl;
+                    }
+                    else if((y_coord < 1) || (y_coord > size)){
+                        std::cout << "y coordinate out of bounds, please try again." << std::endl;
+                    }
+                    if(crop_fields[x_coord-1][y_coord-1].interact_is_active() == true){
+                        int output = crop_fields[x_coord-1][y_coord-1].harvest_field();
+                        if(output != -1){
+                            int index;
+                            for(int i = 0; i < 6; i++){ //Be careful with the limit here, make sure to change it if it needs it.
+                                if(seed_types[i] == crop_fields[x_coord-1][y_coord-1].interact_name()){
+                                    index = i;
+                                }
+                            }
+                            std::cout << "You have harvested " << output << "units of " << crop_fields[x_coord-1][y_coord-1].interact_name() << ". ";
+                            std::cout << "The current price of " << crop_fields[x_coord-1][y_coord-1].interact_name() << " is " << current_price[index] << " pounds." << std::endl;
+                            std::cout << "You have made " << output*current_price[index] << " pounds." << std::endl;
+                            money = money + (output*current_price[index]);
+                            crop_fields[x_coord-1][y_coord-1].clear_field();
+                        }
+                    }
+                    else if(orchard_fields[x_coord-1][y_coord-1].interact_is_active() == true){
+                        int output = orchard_fields[x_coord-1][y_coord-1].harvest_field();
+                        if(output != -1){
+                            int index;
+                            for(int i = 0; i < 6; i++){ //Be careful with the limit here, make sure to change it if it needs it.
+                                if(seed_types[i] == orchard_fields[x_coord-1][y_coord-1].interact_name()){
+                                    index = i;
+                                }
+                            }
+                            std::cout << "You have harvested " << output << "units of " << orchard_fields[x_coord-1][y_coord-1].interact_name() << ". ";
+                            std::cout << "The current price of " << orchard_fields[x_coord-1][y_coord-1].interact_name() << " is " << current_price[index] << " pounds." << std::endl;
+                            std::cout << "You have made " << output*current_price[index] << " pounds." << std::endl;
+                            money = money + (output*current_price[index]);
+                            orchard_fields[x_coord-1][y_coord-1].interact_is_producing(false);
+                        }
+                    }
+                    else if(multicrop_fields[x_coord-1][y_coord-1].interact_is_active() == true){
+                        int output = multicrop_fields[x_coord-1][y_coord-1].harvest_field();
+                        if(output != -1){
+                            int index;
+                            for(int i = 0; i < 6; i++){ //Be careful with the limit here, make sure to change it if it needs it.
+                                if(seed_types[i] == multicrop_fields[x_coord-1][y_coord-1].interact_name()){
+                                    index = i;
+                                }
+                            }
+                            std::cout << "You have harvested " << output << "units of " << multicrop_fields[x_coord-1][y_coord-1].interact_name() << ". ";
+                            std::cout << "The current price of " << multicrop_fields[x_coord-1][y_coord-1].interact_name() << " is " << current_price[index] << " pounds." << std::endl;
+                            std::cout << "You have made " << output*current_price[index] << " pounds." << std::endl;
+                            money = money + (output*current_price[index]);
+                            multicrop_fields[x_coord-1][y_coord-1].interact_is_producing(false);
+                        }
+                    }
+                    else{
+                        std::cout << "There is nothing in this field." << std::endl;
+                    }
                 }
                 default:{
                     month += 2;

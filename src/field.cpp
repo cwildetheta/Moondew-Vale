@@ -67,3 +67,11 @@ void field::interact_symbol(char char_input)
 {
     symbol = char_input;
 }
+int field::interact_yield()
+{
+    return yield;
+}
+void field::interact_yield(int int_input)
+{
+    yield = int_input;
+}
