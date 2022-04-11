@@ -6,13 +6,13 @@ class field{
     private:
         bool is_active, is_alive, is_fertilised;
         std::string name, health;
-        char symbol;
+        char symbol, immature_symbol;
         int yield;
 
     public:
         void clear_field();
         void die();
-        void plant_field(std::string, char);
+        void plant_field(std::string, char, char);
         void develop_illness();
 
         //VARIABLE INTERACTIONS//
@@ -28,6 +28,8 @@ class field{
         void interact_health(std::string);
         char interact_symbol();
         void interact_symbol(char);
+        char interact_immature_symbol();
+        void interact_immature_symbol(char);
         int interact_yield();
         void interact_yield(int);
 };

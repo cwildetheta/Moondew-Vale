@@ -1,6 +1,6 @@
 #include "../include/field.h"
 
-void field::plant_field(std::string plant_name, char plant_symbol)
+void field::plant_field(std::string plant_name, char plant_symbol, char small_plant_symbol)
 {
     name = plant_name;
     is_active = true;
@@ -8,6 +8,7 @@ void field::plant_field(std::string plant_name, char plant_symbol)
     is_fertilised = false;
     health = 10;
     symbol = plant_symbol;
+    immature_symbol = small_plant_symbol;
 }
 void field::clear_field()
 {
@@ -67,6 +68,14 @@ char field::interact_symbol()
 void field::interact_symbol(char char_input)
 {
     symbol = char_input;
+}
+char field::interact_immature_symbol()
+{
+    return immature_symbol;
+}
+void field::interact_immature_symbol(char char_input)
+{
+    immature_symbol = char_input;
 }
 int field::interact_yield()
 {

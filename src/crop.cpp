@@ -13,9 +13,11 @@ int crop::harvest_field()
             if(is_ripe == true){
                 if(is_overripe == false){
                     output = interact_yield();
+                    is_ripe = false;
                 }
                 else{
                     output = 0.5*interact_yield();
+                    is_ripe = false;
                 }
             }
             else{
