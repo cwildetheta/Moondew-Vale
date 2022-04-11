@@ -12,6 +12,7 @@ int multicrop::harvest_field()
         if(interact_is_alive() == true){
             if(is_producing == true){
                 output = interact_yield();
+                is_producing = false;
             }
             else{
                 std::cout << "This plant isn't ripe yet, wait for it to grow some more." << std::endl;

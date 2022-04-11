@@ -5,6 +5,7 @@ void field::plant_field(std::string plant_name, char plant_symbol)
     name = plant_name;
     is_active = true;
     is_alive = true;
+    is_fertilised = false;
     health = 10;
     symbol = plant_symbol;
 }

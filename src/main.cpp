@@ -25,7 +25,7 @@ int main()
         std::string seed_types[6] = {"Wheat", "Barley", "Apple", "Orange", "Courgette", "Tomato"};
         char plant_chars[6] = {'W', 'B', 'A', 'O', 'C', 'T'};
         int initial_seed_numbers[6] = {10, 10, 5, 5, 2, 2};
-        int base_yields[6] = {5, 5, 5, 5, 5, 5};
+        int base_yields[6] = {15, 15, 5, 5, 5, 5};
         int base_price[6] = {5, 10, 6, 8, 3, 2}, current_price[6] = {5, 10, 6, 8, 3, 2};
         farmhouse home_house(6, seed_types, initial_seed_numbers);
         home_house.interact_is_working(true);
@@ -109,18 +109,22 @@ int main()
                                 crop_fields[x_coord-1][y_coord-1].plant_field(seed_types[seed_pick-1], plant_chars[seed_pick-1]);
                                 home_house.change_seed_totals(seed_types[seed_pick-1], -1);
                                 crop_fields[x_coord-1][y_coord-1].interact_lifestage(0);
+                                crop_fields[x_coord-1][y_coord-1].interact_is_ripe(false);
+                                crop_fields[x_coord-1][y_coord-1].interact_is_overripe(false);
                                 crop_fields[x_coord-1][y_coord-1].interact_yield(base_yields[seed_pick-1]);
                             }
                             if((seed_pick == 3) || (seed_pick == 4)){
                                 orchard_fields[x_coord-1][y_coord-1].plant_field(seed_types[seed_pick-1], plant_chars[seed_pick-1]);
                                 home_house.change_seed_totals(seed_types[seed_pick-1], -1);
                                 orchard_fields[x_coord-1][y_coord-1].interact_age(0);
+                                orchard_fields[x_coord-1][y_coord-1].interact_is_producing(false);
                                 orchard_fields[x_coord-1][y_coord-1].interact_yield(base_yields[seed_pick-1]);
                             }
                             if((seed_pick == 5) || (seed_pick == 6)){
                                 multicrop_fields[x_coord-1][y_coord-1].plant_field(seed_types[seed_pick-1], plant_chars[seed_pick-1]);
                                 home_house.change_seed_totals(seed_types[seed_pick-1], -1);
                                 multicrop_fields[x_coord-1][y_coord-1].interact_lifestage(0);
+                                multicrop_fields[x_coord-1][y_coord-1].interact_is_producing(false);
                                 multicrop_fields[x_coord-1][y_coord-1].interact_yield(base_yields[seed_pick-1]);
                             }
                         }
@@ -203,7 +207,16 @@ int main()
                                 if(crop_fields[i][k].interact_is_alive() == false){
                                     crop_fields[i][k].clear_field();
                                 }
-                                if(crop_fields[i][k].interact_lifestage() == 4 || month == 10 || month == 11 || month == 0 || month == 1){
+                                if(month == 8 || month == 9){
+                                    if(crop_fields[i][k].interact_lifestage() == 4){
+                                        crop_fields[i][k].interact_is_ripe(true);
+                                    }
+                                    else if(crop_fields[i][k].interact_lifestage() == 3){
+                                        crop_fields[i][k].interact_is_ripe(true);
+                                        crop_fields[i][k].interact_is_overripe(true);
+                                    }
+                                }
+                                if(crop_fields[i][k].interact_lifestage() == 5 || month == 10 || month == 11 || month == 0){
                                     crop_fields[i][k].die();
                                 }
                                 else{
@@ -211,13 +224,22 @@ int main()
                                 }
                             }
                             if(orchard_fields[i][k].interact_is_active() == true){
+                                if((month == 6 || month == 7 || month == 8 || month == 9) && (orchard_fields[i][k].interact_age() > 18)){
+                                    orchard_fields[i][k].interact_is_producing(true);
+                                }
+                                if(month == 10 || month == 11){
+                                    orchard_fields[i][k].interact_is_producing(false);
+                                }
                                 orchard_fields[i][k].grow();
                             }
                             if(multicrop_fields[i][k].interact_is_active() == true){
                                 if(multicrop_fields[i][k].interact_is_alive() == false){
                                     multicrop_fields[i][k].clear_field();
                                 }
-                                if(multicrop_fields[i][k].interact_lifestage() == 4 || month == 10 || month == 11 || month == 0 || month == 1){
+                                if((month > 4 && month < 10) && (multicrop_fields[i][k].interact_lifestage() > 1)){
+                                    multicrop_fields[i][k].interact_is_producing(true);
+                                }
+                                if(multicrop_fields[i][k].interact_lifestage() == 5 || month == 10 || month == 11 || month == 0){
                                     multicrop_fields[i][k].die();
                                 }
                                 else{

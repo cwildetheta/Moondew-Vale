@@ -12,6 +12,7 @@ int orchard::harvest_field()
         if(interact_is_alive() == true){
             if(is_producing == true){
                 output = interact_yield();
+                is_producing = false;
             }
         }
         else{
