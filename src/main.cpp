@@ -47,9 +47,9 @@ int main()
         storehouse.interact_cost(150);
         storehouse.interact_upkeep(2);
         bool sim_loop = true;
-        int money = 200;
+        int money = 100;
         int month = 1;
-        int harvestable = 0;
+        int harvestable = 0, upkeep = 0;
         while(sim_loop == true){
             system("cls");
             int lines_printed = 0;
@@ -139,6 +139,9 @@ int main()
                 if(lines_printed == 7){
                     std::cout << "          " << "Press any other key to move on to the next season.";
                 }
+                if(lines_printed == 8){
+                    std::cout << "          " << "Upkeep this turn is " << upkeep << ".";
+                }
                 std::cout << std::endl;
                 lines_printed++;
                 if((i+1)%3 == 0){
@@ -171,6 +174,9 @@ int main()
                     }
                     else if(lines_printed == 7){
                         std::cout << "          " << "Press any other key to move on to the next season." << std::endl;
+                    }
+                    else if(lines_printed == 8){
+                        std::cout << "          " << "Upkeep this turn is " << upkeep << "." << std::endl;
                     }
                     else{
                         std::cout << std::endl;
@@ -529,6 +535,7 @@ int main()
                                         storehouse.interact_x_location(x_coord);
                                         storehouse.interact_y_location(y_coord);
                                         money = money - storehouse.interact_cost();
+                                        upkeep = upkeep + storehouse.interact_upkeep();
                                     }
                                     break;
                                 }
@@ -641,6 +648,13 @@ int main()
                                 harvestable++;
                             }
                         }
+                    }
+                    money -= upkeep;
+                    if(money < 0){
+                        std::cout << "You have run out of money, so your farm is now bankrupt." << std::endl;
+                        std::cout << "Simulation over." << std::endl;
+                        sim_loop = false;
+                        simulation = false;
                     }
                     break;
                 }
