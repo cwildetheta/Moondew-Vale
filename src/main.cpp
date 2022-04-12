@@ -2,6 +2,7 @@
 #include "../include/orchard.h"
 #include "../include/multicrop.h"
 #include "../include/farmhouse.h"
+#include "../include/granary.h"
 #include <iostream>
 #include <iomanip>
 
@@ -33,12 +34,17 @@ int main()
         int seed_prices[6] = {30, 45, 35, 35, 25, 20};
         int base_yields[6] = {15, 15, 5, 5, 5, 5};
         int base_price[6] = {5, 10, 6, 8, 3, 2}, current_price[6] = {5, 10, 6, 8, 3, 2};
+        int initial_store[6] = {0, 0, 0, 0, 0, 0};
         farmhouse home_house(6, seed_types, initial_seed_numbers);
+        granary storehouse(6, 200, 0, seed_types, initial_store);
         home_house.interact_is_working(true);
         home_house.interact_upkeep(0);
         home_house.interact_fertiliser(5);
         home_house.interact_x_location(4);
         home_house.interact_y_location(4);
+        storehouse.interact_is_working(false);
+        storehouse.interact_cost(150);
+        storehouse.interact_upkeep(2);
         bool sim_loop = true;
         int money = 100;
         int month = 1;
@@ -77,6 +83,9 @@ int main()
                     else if(((home_house.interact_x_location()-1) == k) && ((home_house.interact_y_location()-1) == i)){
                         std::cout << "F";
                     }
+                    else if(((storehouse.interact_x_location()-1) == k) && ((storehouse.interact_y_location()-1) == i)){
+                        std::cout << "S";
+                    }
                     else{
                         std::cout << ":";
                     }
@@ -98,9 +107,17 @@ int main()
                     std::cout << "          " << "Press f to fertilise a field.";
                 }
                 if(i == 5){
-                    std::cout << "          " << "Press q to exit.";
+                    if(storehouse.interact_is_working() == true){
+                        std::cout << "          " << "Press s to view the storehouse.";
+                    }
+                    else{
+                        std::cout << "          " << "Press s to build a storehouse.";
+                    }
                 }
                 if(i == 6){
+                    std::cout << "          " << "Press q to exit.";
+                }
+                if(i == 7){
                     std::cout << "          " << "Press any other key to move on to the next season.";
                 }
                 std::cout << std::endl;
@@ -182,7 +199,7 @@ int main()
                 case 'h':
                 case 'H':{
                     std::cout << "Please enter x coordinate: ";
-                    int x_coord, y_coord;
+                    int x_coord, y_coord, type_harvested = -1;
                     std::cin >> x_coord;
                     std::cout << "Please enter y coordinate: ";
                     std::cin >> y_coord;
@@ -270,7 +287,8 @@ int main()
                         }
                         else{
                             money = money - seed_prices[seed_pick-1];
-                            home_house.interact_seed_totals(seed_types[seed_pick-1], (home_house.interact_seed_totals(seed_types[seed_pick-1])+5));
+                            //home_house.interact_seed_totals(seed_types[seed_pick-1], (home_house.interact_seed_totals(seed_types[seed_pick-1])+5));
+                            home_house.change_seed_totals(seed_types[seed_pick-1], 5);
                             std::cout << "You have bought 5 " << seed_types[seed_pick-1] << " seeds." << std::endl;
                         }
                     }
@@ -381,6 +399,91 @@ int main()
                         }
                         else if((home_house.interact_x_location() == (x_coord-1)) && (home_house.interact_y_location() == (y_coord-1))){
                             std::cout << "This is your farmhouse. You can't fertilise it." << std::endl;
+                        }
+                    }
+                    system("pause");
+                    break;
+                }
+                case 's':
+                case 'S':{
+                    if(storehouse.interact_is_working() == false){
+                        std::cout << "It costs " << storehouse.interact_cost() << " pounds to build a storehouse." << std::endl;
+                        if(money >= storehouse.interact_cost()){
+                            std::cout << "Would you like to build one? Y/N: ";
+                            char char_input;
+                            std::cin >> char_input;
+                            switch(char_input){
+                                case 'y':
+                                case 'Y':{
+                                    std::cout << "Please enter x coordinate: ";
+                                    int x_coord, y_coord;
+                                    std::cin >> x_coord;
+                                    std::cout << "Please enter y coordinate: ";
+                                    std::cin >> y_coord;
+                                    if((x_coord < 1) || (x_coord > size)){
+                                        std::cout << "x coordinate out of bounds, please try again." << std::endl;
+                                    }
+                                    else if((y_coord < 1) || (y_coord > size)){
+                                        std::cout << "y coordinate out of bounds, please try again." << std::endl;
+                                    }
+                                    else if(crop_fields[x_coord-1][y_coord-1].interact_is_active() == true || orchard_fields[x_coord-1][y_coord-1].interact_is_active() == true || multicrop_fields[x_coord-1][y_coord-1].interact_is_active() == true){
+                                        std::cout << "There is a field planted here. You need to clear it before a storehouse can be built here." << std::endl;
+                                    }
+                                    else if((home_house.interact_x_location() == (x_coord-1)) && (home_house.interact_y_location() == (y_coord-1))){
+                                        std::cout << "That's the farmhouse, you can't build a storehouse here." << std::endl;
+                                    }
+                                    else{
+                                        storehouse.interact_is_working(true);
+                                        storehouse.interact_x_location(x_coord);
+                                        storehouse.interact_y_location(y_coord);
+                                    }
+                                    break;
+                                }
+                                case 'n':
+                                case 'N':{
+                                    break;
+                                }
+                                default:{
+                                    std::cout << "Invalid entry." << std::endl;
+                                    break;
+                                }
+                            }
+                        }
+                        else{
+                            std::cout << "You do not have enough money currently." << std::endl;
+                        }
+                    }
+                    else{
+                        std::cout << "The current storage totals are:" << std::endl;
+                        std::cout << "1. Wheat       Current store: " << std::setw(6) << storehouse.interact_store_totals(seed_types[0]) << std::endl;
+                        std::cout << "2. Barley      Current store: " << std::setw(6) << storehouse.interact_store_totals(seed_types[1]) << std::endl;
+                        std::cout << "3. Apple       Current store: " << std::setw(6) << storehouse.interact_store_totals(seed_types[2]) << std::endl;
+                        std::cout << "4. Orange      Current store: " << std::setw(6) << storehouse.interact_store_totals(seed_types[3]) << std::endl;
+                        std::cout << "5. Courgette   Current store: " << std::setw(6) << storehouse.interact_store_totals(seed_types[4]) << std::endl;
+                        std::cout << "6. Tomato      Current store: " << std::setw(6) << storehouse.interact_store_totals(seed_types[5]) << std::endl << std::endl;
+                        std::cout << "Would you like to sell some of your stores? 0 to exit or pick a number: ";
+                        int store_pick;
+                        std::cin >> store_pick;
+                        if((store_pick > 0) && (store_pick < 7)){
+                            if(storehouse.interact_store_totals(seed_types[store_pick-1]) > 0){
+                                std::cout << "The current price of " << seed_types[store_pick-1] << " is " << current_price[store_pick-1] << " pounds. How much would you like to sell?: ";
+                                int sell_amount;
+                                std::cin >> sell_amount;
+                                if(sell_amount >= storehouse.interact_store_totals(seed_types[store_pick-1])){
+                                    sell_amount = storehouse.interact_store_totals(seed_types[store_pick-1]);
+                                    std::cout << "Selling the entire store of " << seed_types[store_pick-1] << "." << std::endl;
+                                    storehouse.add_to_store(seed_types[store_pick-1], -sell_amount);
+                                    money = money + (sell_amount*current_price[store_pick-1]);
+                                }
+                                else{
+                                    std::cout << "Selling " << sell_amount << " units of " << seed_types[store_pick-1] << "." << std::endl;
+                                    storehouse.add_to_store(seed_types[store_pick-1], -sell_amount);
+                                    money = money + (sell_amount*current_price[store_pick-1]);
+                                }
+                            }
+                            else{
+                                std::cout << "You have no " << seed_types[store_pick-1] << " to sell." << std::endl;
+                            }
                         }
                     }
                     system("pause");
