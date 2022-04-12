@@ -52,62 +52,80 @@ int main()
         int harvestable = 0;
         while(sim_loop == true){
             system("cls");
+            int lines_printed = 0;
             std::cout << "Current money: " << money << " pounds." << std::endl;
             std::cout << "The current month is " << months[month] << "." << std::endl;
-            for(int i = 0; i < size; i++){
-                for(int k = 0; k < size; k++){
+            std::cout << "-------------------------------------------------------------------------------------" << std::endl;
+            for(int i = 0; i < 3*size; i++){
+                std::cout << "|";
+                for(int k = 0; k < 3*size; k++){
                     std::cout << " ";
-                    if(crop_fields[i][k].interact_is_active() == true){
-                        if(crop_fields[i][k].interact_is_ripe() == true){
-                            std::cout << crop_fields[i][k].interact_symbol();
+                    if(crop_fields[i/3][k/3].interact_is_active() == true){
+                        if(crop_fields[i/3][k/3].interact_is_ripe() == true){
+                            std::cout << crop_fields[i/3][k/3].interact_symbol();
+                        }
+                        else if(crop_fields[i/3][k/3].interact_lifestage() == 0){
+                            std::cout << "^";
                         }
                         else{
-                            std::cout << crop_fields[i][k].interact_immature_symbol();
+                            std::cout << crop_fields[i/3][k/3].interact_immature_symbol();
                         }
                     }
-                    else if(orchard_fields[i][k].interact_is_active() == true){
-                        if(orchard_fields[i][k].interact_age() > 18){
-                            std::cout << orchard_fields[i][k].interact_symbol();
+                    else if(orchard_fields[i/3][k/3].interact_is_active() == true){
+                        if(orchard_fields[i/3][k/3].interact_age() <= 18){
+                            std::cout << char(193);
+                        }
+                        else if((orchard_fields[i/3][k/3].interact_age() > 18) && (orchard_fields[i/3][k/3].interact_is_producing() == true)){
+                            std::cout << orchard_fields[i/3][k/3].interact_symbol();
                         }
                         else{
-                            std::cout << orchard_fields[i][k].interact_immature_symbol();
+                            std::cout << orchard_fields[i/3][k/3].interact_immature_symbol();
                         }
                     }
-                    else if(multicrop_fields[i][k].interact_is_active() == true){
-                        if(multicrop_fields[i][k].interact_is_producing() == true){
-                            std::cout << multicrop_fields[i][k].interact_symbol();
+                    else if(multicrop_fields[i/3][k/3].interact_is_active() == true){
+                        if(multicrop_fields[i/3][k/3].interact_is_producing() == true){
+                            std::cout << multicrop_fields[i/3][k/3].interact_symbol();
+                        }
+                        else if(multicrop_fields[i/3][k/3].interact_lifestage() == 0){
+                            std::cout << "^";
                         }
                         else{
-                            std::cout << multicrop_fields[i][k].interact_immature_symbol();
+                            std::cout << multicrop_fields[i/3][k/3].interact_immature_symbol();
                         }
                     }
-                    else if(((home_house.interact_x_location()-1) == k) && ((home_house.interact_y_location()-1) == i)){
+                    else if(((home_house.interact_x_location()-1) == k/3) && ((home_house.interact_y_location()-1) == i/3)){
                         std::cout << "F";
                     }
-                    else if(((storehouse.interact_x_location()-1) == k) && ((storehouse.interact_y_location()-1) == i)){
+                    else if(((storehouse.interact_x_location()-1) == k/3) && ((storehouse.interact_y_location()-1) == i/3)){
                         std::cout << "S";
                     }
                     else{
-                        std::cout << ":";
+                        std::cout << "'";
                     }
                     std::cout << " ";
+                    if((k+1)%3 == 0){
+                        std::cout << "|";
+                    }
+                    else{
+                        std::cout << " ";
+                    }
                 }
-                if(i == 0){
+                if(lines_printed == 0){
                     std::cout << "          " << "Press p to plant a crop.";
                 }
-                if(i == 1){
+                if(lines_printed == 1){
                     std::cout << "          " << "Press h to harvest a crop.";
                 }
-                if(i == 2){
+                if(lines_printed == 2){
                     std::cout << "          " << "Press b to buy more seeds.";
                 }
-                if(i == 3){
+                if(lines_printed == 3){
                     std::cout << "          " << "Press c to clear a field.";
                 }
-                if(i == 4){
+                if(lines_printed == 4){
                     std::cout << "          " << "Press f to fertilise a field.";
                 }
-                if(i == 5){
+                if(lines_printed == 5){
                     if(storehouse.interact_is_working() == true){
                         std::cout << "          " << "Press s to view the storehouse.";
                     }
@@ -115,13 +133,50 @@ int main()
                         std::cout << "          " << "Press s to build a storehouse.";
                     }
                 }
-                if(i == 6){
+                if(lines_printed == 6){
                     std::cout << "          " << "Press q to exit.";
                 }
-                if(i == 7){
+                if(lines_printed == 7){
                     std::cout << "          " << "Press any other key to move on to the next season.";
                 }
                 std::cout << std::endl;
+                lines_printed++;
+                if((i+1)%3 == 0){
+                    std::cout << "-------------------------------------------------------------------------------------";
+                    if(lines_printed == 0){
+                        std::cout << "          " << "Press p to plant a crop." << std::endl;
+                    }
+                    else if(lines_printed == 1){
+                        std::cout << "          " << "Press h to harvest a crop." << std::endl;
+                    }
+                    else if(lines_printed == 2){
+                        std::cout << "          " << "Press b to buy more seeds." << std::endl;
+                    }
+                    else if(lines_printed == 3){
+                        std::cout << "          " << "Press c to clear a field." << std::endl;
+                    }
+                    else if(lines_printed == 4){
+                        std::cout << "          " << "Press f to fertilise a field." << std::endl;
+                    }
+                    else if(lines_printed == 5){
+                        if(storehouse.interact_is_working() == true){
+                            std::cout << "          " << "Press s to view the storehouse." << std::endl;
+                        }
+                        else{
+                            std::cout << "          " << "Press s to build a storehouse." << std::endl;
+                        }
+                    }
+                    else if(lines_printed == 6){
+                        std::cout << "          " << "Press q to exit." << std::endl;
+                    }
+                    else if(lines_printed == 7){
+                        std::cout << "          " << "Press any other key to move on to the next season." << std::endl;
+                    }
+                    else{
+                        std::cout << std::endl;
+                    }
+                    lines_printed++;
+                }
             }
             if(harvestable > 0){
                 std::cout << "There are " << harvestable << " fields ready to be harvested." << std::endl;
