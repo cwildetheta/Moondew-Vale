@@ -25,6 +25,9 @@ int multicrop::harvest_field()
     else{
         std::cout << "Error, trying to harvest a non-active field. This shouldn't be happening." << std::endl;
     }
+    if(interact_is_fertilised() == true){
+        output = output*1.5;
+    }
     return output;
 }
 
