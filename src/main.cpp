@@ -53,8 +53,6 @@ int main()
         while(sim_loop == true){
             system("cls");
             int lines_printed = 0;
-            std::cout << "Current money: " << money << " pounds." << std::endl;
-            std::cout << "The current month is " << months[month] << "." << std::endl;
             std::cout << "-------------------------------------------------------------------------------------" << std::endl;
             for(int i = 0; i < 3*size; i++){
                 std::cout << "|";
@@ -111,21 +109,33 @@ int main()
                     }
                 }
                 if(lines_printed == 0){
-                    std::cout << "          " << "Press p to plant a crop.";
+                    std::cout << "          " << "Current month: " << months[month] << ".";
                 }
                 if(lines_printed == 1){
-                    std::cout << "          " << "Press h to harvest a crop.";
+                    std::cout << "          " << "Current money: \x9C" << money << ".";
                 }
                 if(lines_printed == 2){
-                    std::cout << "          " << "Press b to buy more seeds.";
+                    std::cout << "          " << "Current upkeep: \x9C" << upkeep << ".";
                 }
                 if(lines_printed == 3){
-                    std::cout << "          " << "Press c to clear a field.";
+                    std::cout << "          ";
                 }
                 if(lines_printed == 4){
-                    std::cout << "          " << "Press f to fertilise a field.";
+                    std::cout << "          " << "Press p to plant a crop.";
                 }
                 if(lines_printed == 5){
+                    std::cout << "          " << "Press h to harvest a crop.";
+                }
+                if(lines_printed == 6){
+                    std::cout << "          " << "Press b to buy more seeds.";
+                }
+                if(lines_printed == 7){
+                    std::cout << "          " << "Press c to clear a field.";
+                }
+                if(lines_printed == 8){
+                    std::cout << "          " << "Press f to fertilise a field.";
+                }
+                if(lines_printed == 9){
                     if(storehouse.interact_is_working() == true){
                         std::cout << "          " << "Press s to view the storehouse.";
                     }
@@ -133,35 +143,44 @@ int main()
                         std::cout << "          " << "Press s to build a storehouse.";
                     }
                 }
-                if(lines_printed == 6){
+                if(lines_printed == 10){
                     std::cout << "          " << "Press q to exit.";
                 }
-                if(lines_printed == 7){
+                if(lines_printed == 11){
                     std::cout << "          " << "Press any other key to move on to the next season.";
-                }
-                if(lines_printed == 8){
-                    std::cout << "          " << "Upkeep this turn is " << upkeep << ".";
                 }
                 std::cout << std::endl;
                 lines_printed++;
                 if((i+1)%3 == 0){
                     std::cout << "-------------------------------------------------------------------------------------";
                     if(lines_printed == 0){
-                        std::cout << "          " << "Press p to plant a crop." << std::endl;
+                        std::cout << "          " << "Current month: " << months[month] << "." << std::endl;
                     }
                     else if(lines_printed == 1){
-                        std::cout << "          " << "Press h to harvest a crop." << std::endl;
+                        std::cout << "          " << "Current money: \x9C" << money << "." << std::endl;
                     }
                     else if(lines_printed == 2){
-                        std::cout << "          " << "Press b to buy more seeds." << std::endl;
+                        std::cout << "          " << "Current upkeep: \x9C" << upkeep << "." << std::endl;
                     }
                     else if(lines_printed == 3){
-                        std::cout << "          " << "Press c to clear a field." << std::endl;
+                        std::cout << "          " << std::endl;
                     }
                     else if(lines_printed == 4){
-                        std::cout << "          " << "Press f to fertilise a field." << std::endl;
+                        std::cout << "          " << "Press p to plant a crop." << std::endl;
                     }
                     else if(lines_printed == 5){
+                        std::cout << "          " << "Press h to harvest a crop." << std::endl;
+                    }
+                    else if(lines_printed == 6){
+                        std::cout << "          " << "Press b to buy more seeds." << std::endl;
+                    }
+                    else if(lines_printed == 7){
+                        std::cout << "          " << "Press c to clear a field." << std::endl;
+                    }
+                    else if(lines_printed == 8){
+                        std::cout << "          " << "Press f to fertilise a field." << std::endl;
+                    }
+                    else if(lines_printed == 9){
                         if(storehouse.interact_is_working() == true){
                             std::cout << "          " << "Press s to view the storehouse." << std::endl;
                         }
@@ -169,13 +188,13 @@ int main()
                             std::cout << "          " << "Press s to build a storehouse." << std::endl;
                         }
                     }
-                    else if(lines_printed == 6){
+                    else if(lines_printed == 10){
                         std::cout << "          " << "Press q to exit." << std::endl;
                     }
-                    else if(lines_printed == 7){
+                    else if(lines_printed == 11){
                         std::cout << "          " << "Press any other key to move on to the next season." << std::endl;
                     }
-                    else if(lines_printed == 8){
+                    else if(lines_printed == 12){
                         std::cout << "          " << "Upkeep this turn is " << upkeep << "." << std::endl;
                     }
                     else{
@@ -332,7 +351,7 @@ int main()
                         std::cout << "There is nothing in this field." << std::endl;
                     }
                     if(index != -1){
-                        std::cout << "The current price of " << seed_types[index] << " is " << current_price[index] << " pounds";
+                        std::cout << "The current price of " << seed_types[index] << " is \x9C" << current_price[index];
                         storehouse.calculate_total();
                         if((storehouse.interact_is_working() == true) && ((storehouse.interact_storage_space()-storehouse.interact_current_total()) >= output)){
                             std::cout << ", or there is " << (storehouse.interact_storage_space()-storehouse.interact_current_total()) << " units of space available in the storehouse." << std::endl;
@@ -344,13 +363,13 @@ int main()
                                 std::cout << "The harvest has been stored." << std::endl;
                             }
                             else{
-                                std::cout << "You have made " << output*current_price[index] << " pounds." << std::endl;
+                                std::cout << "You have made \x9C" << output*current_price[index] << "." << std::endl;
                                 money = money + (output*current_price[index]);
                             }
                         }
                         else{
                             std::cout << "." << std::endl;
-                            std::cout << "You have made " << output*current_price[index] << " pounds." << std::endl;
+                            std::cout << "You have made \x9C" << output*current_price[index] << "." << std::endl;
                             money = money + (output*current_price[index]);
                         }
                         harvestable--;
@@ -360,14 +379,14 @@ int main()
                 }
                 case 'b':
                 case 'B':{
-                    std::cout << "Which type of seeds would you like to buy? Seeds are bought in packs of 5.    Current money: "<< money << " pounds." << std::endl; //Generalise this later, ie. seed_types[i]
-                    std::cout << "0. Fertiliser  Current ammount: " << std::setw(4) << home_house.interact_fertiliser() << "     Cost: 10 pounds." << std::endl;
-                    std::cout << "1. Wheat       Current seeds: " << std::setw(6) << home_house.interact_seed_totals(seed_types[0]) << "     Cost: " << seed_prices[0] << " pounds." << std::endl;
-                    std::cout << "2. Barley      Current seeds: " << std::setw(6) << home_house.interact_seed_totals(seed_types[1]) << "     Cost: " << seed_prices[1] << " pounds." << std::endl;
-                    std::cout << "3. Apple       Current seeds: " << std::setw(6) << home_house.interact_seed_totals(seed_types[2]) << "     Cost: " << seed_prices[2] << " pounds." << std::endl;
-                    std::cout << "4. Orange      Current seeds: " << std::setw(6) << home_house.interact_seed_totals(seed_types[3]) << "     Cost: " << seed_prices[3] << " pounds." << std::endl;
-                    std::cout << "5. Courgette   Current seeds: " << std::setw(6) << home_house.interact_seed_totals(seed_types[4]) << "     Cost: " << seed_prices[4] << " pounds." << std::endl;
-                    std::cout << "6. Tomato      Current seeds: " << std::setw(6) << home_house.interact_seed_totals(seed_types[5]) << "     Cost: " << seed_prices[5] << " pounds." << std::endl << std::endl;
+                    std::cout << "Which type of seeds would you like to buy? Seeds are bought in packs of 5.    Current money: \x9C"<< money << "." << std::endl; //Generalise this later, ie. seed_types[i]
+                    std::cout << "0. Fertiliser  Current ammount: " << std::setw(4) << home_house.interact_fertiliser() << "     Cost: \x9C" << "10." << std::endl;
+                    std::cout << "1. Wheat       Current seeds: " << std::setw(6) << home_house.interact_seed_totals(seed_types[0]) << "     Cost: \x9C" << seed_prices[0] << "." << std::endl;
+                    std::cout << "2. Barley      Current seeds: " << std::setw(6) << home_house.interact_seed_totals(seed_types[1]) << "     Cost: \x9C" << seed_prices[1] << "." << std::endl;
+                    std::cout << "3. Apple       Current seeds: " << std::setw(6) << home_house.interact_seed_totals(seed_types[2]) << "     Cost: \x9C" << seed_prices[2] << "." << std::endl;
+                    std::cout << "4. Orange      Current seeds: " << std::setw(6) << home_house.interact_seed_totals(seed_types[3]) << "     Cost: \x9C" << seed_prices[3] << "." << std::endl;
+                    std::cout << "5. Courgette   Current seeds: " << std::setw(6) << home_house.interact_seed_totals(seed_types[4]) << "     Cost: \x9C" << seed_prices[4] << "." << std::endl;
+                    std::cout << "6. Tomato      Current seeds: " << std::setw(6) << home_house.interact_seed_totals(seed_types[5]) << "     Cost: \x9C" << seed_prices[5] << "." << std::endl << std::endl;
                     int seed_pick;
                     std::cin >> seed_pick;
                     if((seed_pick > 0) && (seed_pick < 7)){
@@ -505,7 +524,7 @@ int main()
                 case 's':
                 case 'S':{
                     if(storehouse.interact_is_working() == false){
-                        std::cout << "It costs " << storehouse.interact_cost() << " pounds to build a storehouse." << std::endl;
+                        std::cout << "It costs \x9C" << storehouse.interact_cost() << " to build a storehouse." << std::endl;
                         if(money >= storehouse.interact_cost()){
                             std::cout << "Would you like to build one? Y/N: ";
                             char char_input;
@@ -566,7 +585,7 @@ int main()
                         std::cin >> store_pick;
                         if((store_pick > 0) && (store_pick < 7)){
                             if(storehouse.interact_store_totals(seed_types[store_pick-1]) > 0){
-                                std::cout << "The current price of " << seed_types[store_pick-1] << " is " << current_price[store_pick-1] << " pounds. How much would you like to sell?: ";
+                                std::cout << "The current price of " << seed_types[store_pick-1] << " is \x9C" << current_price[store_pick-1] << ". How much would you like to sell?: ";
                                 int sell_amount;
                                 std::cin >> sell_amount;
                                 if(sell_amount >= storehouse.interact_store_totals(seed_types[store_pick-1])){
