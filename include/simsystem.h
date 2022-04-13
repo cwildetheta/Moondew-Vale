@@ -1,5 +1,6 @@
 #ifndef SIMSYSTEM_H_INCLUDED
 #define SIMSYSTEM_H_INCLUDED
+#include "../include/field.h"
 #include "../include/crop.h"
 #include "../include/orchard.h"
 #include "../include/multicrop.h"
@@ -11,6 +12,7 @@ class simsystem{
         crop crop_fields[1][1];
         orchard orchard_fields[1][1];
         multicrop multicrop_fields[1][1];
+        field fields[7][7];
 
     public:
         simsystem(int);

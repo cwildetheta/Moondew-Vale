@@ -1,8 +1,10 @@
+#include "../include/field.h"
 #include "../include/crop.h"
 #include "../include/orchard.h"
 #include "../include/multicrop.h"
 #include "../include/farmhouse.h"
 #include "../include/granary.h"
+#include "../include/simsystem.h"
 #include <iostream>
 #include <iomanip>
 
@@ -57,50 +59,122 @@ int main()
             for(int i = 0; i < 3*size; i++){
                 std::cout << "|";
                 for(int k = 0; k < 3*size; k++){
-                    std::cout << " ";
+                    //std::cout << " ";
                     if(crop_fields[i/3][k/3].interact_is_active() == true){
-                        if(crop_fields[i/3][k/3].interact_is_ripe() == true){
-                            std::cout << crop_fields[i/3][k/3].interact_symbol();
-                        }
-                        else if(crop_fields[i/3][k/3].interact_lifestage() == 0){
-                            std::cout << "^";
+                        if(crop_fields[i/3][k/3].interact_is_fertilised() == false){
+                            if(crop_fields[i/3][k/3].interact_is_ripe() == true){
+                                std::cout << " " << crop_fields[i/3][k/3].interact_symbol() << " ";
+                            }
+                            else if(crop_fields[i/3][k/3].interact_lifestage() == 0){
+                                std::cout << " ^ ";
+                            }
+                            else{
+                                std::cout << " " << crop_fields[i/3][k/3].interact_immature_symbol() << " ";
+                            }
                         }
                         else{
-                            std::cout << crop_fields[i/3][k/3].interact_immature_symbol();
+                            if((i%3 == 1) && (k%3 == 1)){
+                                std::cout << " f ";
+                            }
+                            else{
+                                if(crop_fields[i/3][k/3].interact_is_ripe() == true){
+                                    std::cout << " " << crop_fields[i/3][k/3].interact_symbol() << " ";
+                                }
+                                else if(crop_fields[i/3][k/3].interact_lifestage() == 0){
+                                    std::cout << " ^ ";
+                                }
+                                else{
+                                    std::cout << " " << crop_fields[i/3][k/3].interact_immature_symbol() << " ";
+                                }
+                            }
                         }
                     }
                     else if(orchard_fields[i/3][k/3].interact_is_active() == true){
                         if(orchard_fields[i/3][k/3].interact_age() <= 18){
-                            std::cout << char(193);
+                            std::cout << " " << char(193) << " ";
                         }
                         else if((orchard_fields[i/3][k/3].interact_age() > 18) && (orchard_fields[i/3][k/3].interact_is_producing() == true)){
-                            std::cout << orchard_fields[i/3][k/3].interact_symbol();
+                            std::cout << " " << orchard_fields[i/3][k/3].interact_symbol() << " ";
                         }
                         else{
-                            std::cout << orchard_fields[i/3][k/3].interact_immature_symbol();
+                            std::cout << " " << orchard_fields[i/3][k/3].interact_immature_symbol() << " ";
                         }
                     }
                     else if(multicrop_fields[i/3][k/3].interact_is_active() == true){
                         if(multicrop_fields[i/3][k/3].interact_is_producing() == true){
-                            std::cout << multicrop_fields[i/3][k/3].interact_symbol();
+                            std::cout << " " << multicrop_fields[i/3][k/3].interact_symbol() << " ";
                         }
                         else if(multicrop_fields[i/3][k/3].interact_lifestage() == 0){
-                            std::cout << "^";
+                            std::cout << " ^ ";
                         }
                         else{
-                            std::cout << multicrop_fields[i/3][k/3].interact_immature_symbol();
+                            std::cout << " " << multicrop_fields[i/3][k/3].interact_immature_symbol() << " ";
                         }
                     }
                     else if(((home_house.interact_x_location()-1) == k/3) && ((home_house.interact_y_location()-1) == i/3)){
-                        std::cout << "F";
+                        if((i%3 == 0) && (k%3 == 0)){
+                            std::cout << char(219) << char(223) << char(223);
+                        }
+                        else if((i%3 == 0) && (k%3 == 1)){
+                            std::cout << char(223) << char(223) << char(223);
+                        }
+                        else if((i%3 == 0) && (k%3 == 2)){
+                            std::cout << char(223) << char(223) << char(219);
+                        }
+                        else if((i%3 == 1) && (k%3 == 0)){
+                            std::cout << char(219) << " H";
+                        }
+                        else if((i%3 == 1) && (k%3 == 1)){
+                            std::cout << " H ";
+                        }
+                        else if((i%3 == 1) && (k%3 == 2)){
+                            std::cout << "H " << char(219);
+                        }
+                        else if((i%3 == 2) && (k%3 == 0)){
+                            std::cout << char(219) << char(220) << char(220);
+                        }
+                        else if((i%3 == 2) && (k%3 == 1)){
+                            std::cout << char(220) << char(220) << char(220);
+                        }
+                        else if((i%3 == 2) && (k%3 == 2)){
+                            std::cout << char(220) << char(220) << char(219);
+                        }
+                        //std::cout << " H ";
                     }
                     else if(((storehouse.interact_x_location()-1) == k/3) && ((storehouse.interact_y_location()-1) == i/3)){
-                        std::cout << "S";
+                        if((i%3 == 0) && (k%3 == 0)){
+                            std::cout << char(219) << char(223) << char(223);
+                        }
+                        else if((i%3 == 0) && (k%3 == 1)){
+                            std::cout << char(223) << char(223) << char(223);
+                        }
+                        else if((i%3 == 0) && (k%3 == 2)){
+                            std::cout << char(223) << char(223) << char(219);
+                        }
+                        else if((i%3 == 1) && (k%3 == 0)){
+                            std::cout << char(219) << " S";
+                        }
+                        else if((i%3 == 1) && (k%3 == 1)){
+                            std::cout << " S ";
+                        }
+                        else if((i%3 == 1) && (k%3 == 2)){
+                            std::cout << "S " << char(219);
+                        }
+                        else if((i%3 == 2) && (k%3 == 0)){
+                            std::cout << char(219) << char(220) << char(220);
+                        }
+                        else if((i%3 == 2) && (k%3 == 1)){
+                            std::cout << char(220) << char(220) << char(220);
+                        }
+                        else if((i%3 == 2) && (k%3 == 2)){
+                            std::cout << char(220) << char(220) << char(219);
+                        }
+                        //std::cout << " S ";
                     }
                     else{
-                        std::cout << "'";
+                        std::cout << " ' ";
                     }
-                    std::cout << " ";
+                    //std::cout << " ";
                     if((k+1)%3 == 0){
                         std::cout << "|";
                     }
@@ -302,10 +376,6 @@ int main()
                                 }
                             }
                             std::cout << "You have harvested " << output << " units of " << crop_fields[y_coord-1][x_coord-1].interact_name() << ". ";
-                            /*std::cout << "The current price of " << crop_fields[x_coord-1][y_coord-1].interact_name() << " is " << current_price[index] << " pounds." << std::endl;
-                            std::cout << "You have made " << output*current_price[index] << " pounds." << std::endl;
-                            money = money + (output*current_price[index]);
-                            harvestable--;*/
                             crop_fields[y_coord-1][x_coord-1].clear_field();
                         }
                     }
@@ -318,10 +388,6 @@ int main()
                                 }
                             }
                             std::cout << "You have harvested " << output << " units of " << orchard_fields[y_coord-1][x_coord-1].interact_name() << ". ";
-                            /*std::cout << "The current price of " << orchard_fields[x_coord-1][y_coord-1].interact_name() << " is " << current_price[index] << " pounds." << std::endl;
-                            std::cout << "You have made " << output*current_price[index] << " pounds." << std::endl;
-                            money = money + (output*current_price[index]);
-                            harvestable--;*/
                             orchard_fields[y_coord-1][x_coord-1].interact_is_producing(false);
                         }
                     }
@@ -334,10 +400,6 @@ int main()
                                 }
                             }
                             std::cout << "You have harvested " << output << " units of " << multicrop_fields[y_coord-1][x_coord-1].interact_name() << ". ";
-                            /*std::cout << "The current price of " << multicrop_fields[x_coord-1][y_coord-1].interact_name() << " is " << current_price[index] << " pounds." << std::endl;
-                            std::cout << "You have made " << output*current_price[index] << " pounds." << std::endl;
-                            money = money + (output*current_price[index]);
-                            harvestable--;*/
                             multicrop_fields[y_coord-1][x_coord-1].interact_is_producing(false);
                         }
                     }
@@ -680,6 +742,9 @@ int main()
             }
         }
     }
+    /*for(int i = 0; i < 256; i++){
+        std::cout << i << " is " << char(i) << "   ";
+    }*/
     system("pause");
     system("cls");
     return 0;
