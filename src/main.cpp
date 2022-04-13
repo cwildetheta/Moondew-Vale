@@ -1,9 +1,10 @@
-#include "../include/field.h"
 #include "../include/crop.h"
 #include "../include/orchard.h"
 #include "../include/multicrop.h"
 #include "../include/farmhouse.h"
 #include "../include/granary.h"
+#include "../include/brewery.h"
+#include "../include/workhouse.h"
 #include "../include/simsystem.h"
 #include <iostream>
 #include <iomanip>
@@ -40,6 +41,8 @@ int main()
         int initial_store[number_of_plants] = {0, 0, 0, 0, 0, 0};
         farmhouse home_house(number_of_plants, seed_types, initial_seed_numbers);
         granary storehouse(number_of_plants, 200, 0, seed_types, initial_store);
+        brewery ale_house(100, 10);
+        workhouse dormitory(0);
         home_house.interact_is_working(true);
         home_house.interact_upkeep(0);
         home_house.interact_fertiliser(5);
@@ -48,6 +51,12 @@ int main()
         storehouse.interact_is_working(false);
         storehouse.interact_cost(150);
         storehouse.interact_upkeep(2);
+        ale_house.interact_is_working(false);
+        ale_house.interact_cost(200);
+        ale_house.interact_upkeep(3);
+        dormitory.interact_is_working(false);
+        dormitory.interact_cost(200);
+        dormitory.interact_upkeep(5);
         bool sim_loop = true;
         int money = 100;
         int month = 1;
