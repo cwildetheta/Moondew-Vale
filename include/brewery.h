@@ -5,7 +5,7 @@
 
 class brewery : public building{
     private:
-        int storage_space, current_total, stored_barley, stored_beer, brewing_cap;
+        int storage_space, current_total, stored_barley, stored_beer, brewing_cap, current_brewing;
 
     public:
         brewery(int, int);
@@ -13,6 +13,7 @@ class brewery : public building{
         void make_beer(int);
         void sell_beer(int);
         void transfer_barley(int);
+        void add_to_brewing(int);
 
         //VARIABLE INTERACTIONS//
         int interact_storage_space();
@@ -25,6 +26,8 @@ class brewery : public building{
         void interact_stored_beer(int);
         int interact_brewing_cap();
         void interact_brewing_cap(int);
+        int interact_current_brewing();
+        void interact_current_brewing(int);
 
 };
 

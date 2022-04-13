@@ -5,7 +5,6 @@
 #include "../include/granary.h"
 #include "../include/brewery.h"
 #include "../include/workhouse.h"
-#include "../include/simsystem.h"
 #include <iostream>
 #include <iomanip>
 
@@ -58,7 +57,7 @@ int main()
         dormitory.interact_cost(200);
         dormitory.interact_upkeep(5);
         bool sim_loop = true;
-        int money = 100;
+        int money = 1000;
         int month = 1;
         int harvestable = 0, upkeep = 0;
         while(sim_loop == true){
@@ -120,7 +119,7 @@ int main()
                             std::cout << " " << multicrop_fields[i/3][k/3].interact_immature_symbol() << " ";
                         }
                     }
-                    else if(((home_house.interact_x_location()-1) == k/3) && ((home_house.interact_y_location()-1) == i/3)){
+                    else if((home_house.interact_is_working() == true) && ((home_house.interact_x_location()-1) == k/3) && ((home_house.interact_y_location()-1) == i/3)){
                         if((i%3 == 0) && (k%3 == 0)){
                             std::cout << char(219) << char(223) << char(223);
                         }
@@ -150,7 +149,7 @@ int main()
                         }
                         //std::cout << " H ";
                     }
-                    else if(((storehouse.interact_x_location()-1) == k/3) && ((storehouse.interact_y_location()-1) == i/3)){
+                    else if((storehouse.interact_is_working() == true) && ((storehouse.interact_x_location()-1) == k/3) && ((storehouse.interact_y_location()-1) == i/3)){
                         if((i%3 == 0) && (k%3 == 0)){
                             std::cout << char(219) << char(223) << char(223);
                         }
@@ -168,6 +167,66 @@ int main()
                         }
                         else if((i%3 == 1) && (k%3 == 2)){
                             std::cout << "S " << char(219);
+                        }
+                        else if((i%3 == 2) && (k%3 == 0)){
+                            std::cout << char(219) << char(220) << char(220);
+                        }
+                        else if((i%3 == 2) && (k%3 == 1)){
+                            std::cout << char(220) << char(220) << char(220);
+                        }
+                        else if((i%3 == 2) && (k%3 == 2)){
+                            std::cout << char(220) << char(220) << char(219);
+                        }
+                        //std::cout << " S ";
+                    }
+                    else if((ale_house.interact_is_working() == true) && ((ale_house.interact_x_location()-1) == k/3) && ((ale_house.interact_y_location()-1) == i/3)){
+                        if((i%3 == 0) && (k%3 == 0)){
+                            std::cout << char(219) << char(223) << char(223);
+                        }
+                        else if((i%3 == 0) && (k%3 == 1)){
+                            std::cout << char(223) << char(223) << char(223);
+                        }
+                        else if((i%3 == 0) && (k%3 == 2)){
+                            std::cout << char(223) << char(223) << char(219);
+                        }
+                        else if((i%3 == 1) && (k%3 == 0)){
+                            std::cout << char(219) << "Br";
+                        }
+                        else if((i%3 == 1) && (k%3 == 1)){
+                            std::cout << " Br";
+                        }
+                        else if((i%3 == 1) && (k%3 == 2)){
+                            std::cout << "Br" << char(219);
+                        }
+                        else if((i%3 == 2) && (k%3 == 0)){
+                            std::cout << char(219) << char(220) << char(220);
+                        }
+                        else if((i%3 == 2) && (k%3 == 1)){
+                            std::cout << char(220) << char(220) << char(220);
+                        }
+                        else if((i%3 == 2) && (k%3 == 2)){
+                            std::cout << char(220) << char(220) << char(219);
+                        }
+                        //std::cout << " S ";
+                    }
+                    else if((dormitory.interact_is_working() == true) && ((dormitory.interact_x_location()-1) == k/3) && ((dormitory.interact_y_location()-1) == i/3)){
+                        if((i%3 == 0) && (k%3 == 0)){
+                            std::cout << char(219) << char(223) << char(223);
+                        }
+                        else if((i%3 == 0) && (k%3 == 1)){
+                            std::cout << char(223) << char(223) << char(223);
+                        }
+                        else if((i%3 == 0) && (k%3 == 2)){
+                            std::cout << char(223) << char(223) << char(219);
+                        }
+                        else if((i%3 == 1) && (k%3 == 0)){
+                            std::cout << char(219) << " D";
+                        }
+                        else if((i%3 == 1) && (k%3 == 1)){
+                            std::cout << " D ";
+                        }
+                        else if((i%3 == 1) && (k%3 == 2)){
+                            std::cout << "D " << char(219);
                         }
                         else if((i%3 == 2) && (k%3 == 0)){
                             std::cout << char(219) << char(220) << char(220);
@@ -227,9 +286,25 @@ int main()
                     }
                 }
                 if(lines_printed == 10){
-                    std::cout << "          " << "Press q to exit.";
+                    if(ale_house.interact_is_working() == true){
+                        std::cout << "          " << "Press a to view the brewery.";
+                    }
+                    else{
+                        std::cout << "          " << "Press a to build a brewery.";
+                    }
                 }
                 if(lines_printed == 11){
+                    if(dormitory.interact_is_working() == true){
+                        std::cout << "          " << "Press d to view the dormitory.";
+                    }
+                    else{
+                        std::cout << "          " << "Press d to build a dormitory.";
+                    }
+                }
+                if(lines_printed == 12){
+                    std::cout << "          " << "Press q to exit.";
+                }
+                if(lines_printed == 13){
                     std::cout << "          " << "Press any other key to move on to the next season.";
                 }
                 std::cout << std::endl;
@@ -272,13 +347,26 @@ int main()
                         }
                     }
                     else if(lines_printed == 10){
-                        std::cout << "          " << "Press q to exit." << std::endl;
+                        if(ale_house.interact_is_working() == true){
+                            std::cout << "          " << "Press a to view the brewery." << std::endl;
+                        }
+                        else{
+                            std::cout << "          " << "Press a to build a brewery." << std::endl;
+                        }
                     }
                     else if(lines_printed == 11){
-                        std::cout << "          " << "Press any other key to move on to the next season." << std::endl;
+                        if(dormitory.interact_is_working() == true){
+                            std::cout << "          " << "Press d to view the dormitory." << std::endl;
+                        }
+                        else{
+                            std::cout << "          " << "Press d to build a dormitory." << std::endl;
+                        }
                     }
                     else if(lines_printed == 12){
-                        std::cout << "          " << "Upkeep this turn is " << upkeep << "." << std::endl;
+                        std::cout << "          " << "Press q to exit." << std::endl;
+                    }
+                    else if(lines_printed == 13){
+                        std::cout << "          " << "Press any other key to move on to the next season." << std::endl;
                     }
                     else{
                         std::cout << std::endl;
@@ -620,6 +708,12 @@ int main()
                                     else if((home_house.interact_x_location() == x_coord) && (home_house.interact_y_location() == y_coord)){
                                         std::cout << "That's the farmhouse, you can't build a storehouse here." << std::endl;
                                     }
+                                    else if((ale_house.interact_is_working() == true) && (ale_house.interact_x_location() == x_coord) && (ale_house.interact_y_location() == y_coord)){
+                                        std::cout << "That's the brewery, you can't build a storehouse here." << std::endl;
+                                    }
+                                    else if((dormitory.interact_is_working() == true) && (dormitory.interact_x_location() == x_coord) && (dormitory.interact_y_location() == y_coord)){
+                                        std::cout << "That's the dormitory, you can't build a storehouse here." << std::endl;
+                                    }
                                     else{
                                         storehouse.interact_is_working(true);
                                         storehouse.interact_x_location(x_coord);
@@ -676,6 +770,281 @@ int main()
                             }
                         }
                     }
+                    system("pause");
+                    break;
+                }
+                case 'a':
+                case 'A':{
+                    if(ale_house.interact_is_working() == false){
+                        std::cout << "It costs \x9C" << ale_house.interact_cost() << " to build a brewery." << std::endl;
+                        if(money >= ale_house.interact_cost()){
+                            std::cout << "Would you like to build one? Y/N: ";
+                            char char_input;
+                            std::cin >> char_input;
+                            switch(char_input){
+                                case 'y':
+                                case 'Y':{
+                                    std::cout << "Please enter x coordinate: ";
+                                    int x_coord, y_coord;
+                                    std::cin >> x_coord;
+                                    std::cout << "Please enter y coordinate: ";
+                                    std::cin >> y_coord;
+                                    if((x_coord < 1) || (x_coord > size)){
+                                        std::cout << "x coordinate out of bounds, please try again." << std::endl;
+                                    }
+                                    else if((y_coord < 1) || (y_coord > size)){
+                                        std::cout << "y coordinate out of bounds, please try again." << std::endl;
+                                    }
+                                    else if(crop_fields[y_coord-1][x_coord-1].interact_is_active() == true || orchard_fields[y_coord-1][x_coord-1].interact_is_active() == true || multicrop_fields[y_coord-1][x_coord-1].interact_is_active() == true){
+                                        std::cout << "There is a field planted here. You need to clear it before a brewery can be built here." << std::endl;
+                                    }
+                                    else if((home_house.interact_x_location() == x_coord) && (home_house.interact_y_location() == y_coord)){
+                                        std::cout << "That's the farmhouse, you can't build a brewery here." << std::endl;
+                                    }
+                                    else if((storehouse.interact_is_working() == true) && (storehouse.interact_x_location() == x_coord) && (storehouse.interact_y_location() == y_coord)){
+                                        std::cout << "That's the storehouse, you can't build a brewery here." << std::endl;
+                                    }
+                                    else if((dormitory.interact_is_working() == true) && (dormitory.interact_x_location() == x_coord) && (dormitory.interact_y_location() == y_coord)){
+                                        std::cout << "That's the dormitory, you can't build a brewery here." << std::endl;
+                                    }
+                                    else{
+                                        ale_house.interact_is_working(true);
+                                        ale_house.interact_x_location(x_coord);
+                                        ale_house.interact_y_location(y_coord);
+                                        money = money - ale_house.interact_cost();
+                                        upkeep = upkeep + ale_house.interact_upkeep();
+                                    }
+                                    break;
+                                }
+                                case 'n':
+                                case 'N':{
+                                    break;
+                                }
+                                default:{
+                                    std::cout << "Invalid entry." << std::endl;
+                                    break;
+                                }
+                            }
+                        }
+                        else{
+                            std::cout << "You do not have enough money currently." << std::endl;
+                        }
+                    }
+                    else{
+                        std::cout << "The brewery currently contains " << ale_house.interact_stored_barley() << " units of Barley and " << ale_house.interact_stored_beer() << " units of Beer." << std::endl;
+                        std::cout << "The brewery can convert " << ale_house.interact_brewing_cap() << " units of Barley into Beer on a bimonthly basis, and is currently converting " << ale_house.interact_current_brewing() << " units." << std::endl;
+                        std::cout << "Would you like to move Barley into the brewery (i), move Barley out of the brewery (o), change the amount of beer being made (b), sell beer (s), or leave the brewery (any other key): ";
+                        char brewery_input;
+                        std::cin >> brewery_input;
+                        switch(brewery_input){
+                            case 'i':
+                            case 'I':{
+                                if(storehouse.interact_store_totals("Barley") > 0){
+                                    storehouse.calculate_total();
+                                    std::cout << "How much Barley do you want to move into the brewery. There are " << storehouse.interact_store_totals("Barley") << " units in the storehouse and " << (ale_house.interact_storage_space() - ale_house.interact_current_total()) << " units of space in the brewery: ";
+                                    if(ale_house.interact_current_total() == ale_house.interact_storage_space()){
+                                        std::cout << "The brewery is full. Remove something if you wish to add more Barley to it." << std::endl;
+                                    }
+                                    else{
+                                        int move_input;
+                                        std::cin >> move_input;
+                                        if(move_input >= storehouse.interact_store_totals("Barley")){
+                                            move_input = storehouse.interact_store_totals("Barley");
+                                            std::cout << "Moving the entire Barley store into the brewery." << std::endl;
+                                            storehouse.add_to_store("Barley", -move_input);
+                                            ale_house.transfer_barley(move_input);
+                                        }
+                                        else{
+                                            std::cout << "Moving " << move_input << " units of Barley into the brewery." << std::endl;
+                                            storehouse.add_to_store("Barley", -move_input);
+                                            ale_house.transfer_barley(move_input);
+                                        }
+                                    }
+                                }
+                                else{
+                                    std::cout << "There is currently no Barley stored in the storehouse." << std::endl;
+                                }
+                                break;
+                            }
+                            case 'o':
+                            case 'O':{
+                                if(ale_house.interact_stored_barley() > 0){
+                                    storehouse.calculate_total();
+                                    std::cout << "How much Barley do you want to move into the storehouse. There are " << ale_house.interact_stored_barley() << " units in the brewery, and " << (storehouse.interact_storage_space() - storehouse.interact_current_total()) << " units of space free in the storehouse: ";
+                                    if(storehouse.interact_current_total() == storehouse.interact_storage_space()){
+                                        std::cout << "There storehouse is full, so no Barley can be move to there." << std::endl;
+                                    }
+                                    else{
+                                        int move_input;
+                                        std::cin >> move_input;
+                                        if(move_input >= ale_house.interact_stored_barley()){
+                                            move_input = ale_house.interact_stored_barley();
+                                            std::cout << "Moving the entire Barley store into the storehouse." << std::endl;
+                                            storehouse.add_to_store("Barley", move_input);
+                                            ale_house.transfer_barley(-move_input);
+                                        }
+                                        else{
+                                            std::cout << "Moving " << move_input << " units of Barley into the storehouse." << std::endl;
+                                            storehouse.add_to_store("Barley", move_input);
+                                            ale_house.transfer_barley(-move_input);
+                                        }
+                                    }
+                                }
+                                else{
+                                    std::cout << "There is currently no Barley stored in the brewery." << std::endl;
+                                }
+                                break;
+                            }
+                            case 'b':
+                            case 'B':{
+                                bool in_brew_adding = true;
+                                while(in_brew_adding == true){
+                                    std::cout << "There are currently " << ale_house.interact_current_brewing() << " units of Barley waiting to be brewed, out of a potential total of " << ale_house.interact_brewing_cap() << " units." << std::endl;
+                                    std::cout << "Would you like to add (a) or remove (r) Barley, or exit (e): ";
+                                    char brew_input;
+                                    int move_amount;
+                                    std::cin >> brew_input;
+                                    switch(brew_input){
+                                        case 'a':
+                                        case 'A':{
+                                            if(ale_house.interact_current_brewing() == ale_house.interact_brewing_cap()){
+                                                std::cout << "The brewing process is already at capacity, you can't add any more Barley." << std::endl;
+                                            }
+                                            else if(ale_house.interact_stored_barley() == 0){
+                                                std::cout << "There is no Barley currently stored in the brewery to add to the process." << std::endl;
+                                            }
+                                            else{
+                                                std::cout << "How much Barley would you like to add: ";
+                                                std::cin >> move_amount;
+                                                if(move_amount > ale_house.interact_stored_barley()){
+                                                    move_amount = ale_house.interact_stored_barley();
+                                                }
+                                                if(move_amount > (ale_house.interact_brewing_cap() - ale_house.interact_current_brewing())){
+                                                    move_amount = (ale_house.interact_brewing_cap() - ale_house.interact_current_brewing());
+                                                }
+                                                std::cout << "Adding " << move_amount << " units of Barley to the brewing process.";
+                                                ale_house.add_to_brewing(move_amount);
+                                            }
+                                            break;
+                                        }
+                                        case 'r':
+                                        case 'R':{
+                                            if(ale_house.interact_current_brewing() == 0){
+                                                std::cout << "There is no Barley in the brewing process to be removed." << std::endl;
+                                            }
+                                            else{
+                                                std::cout << "How much Barley would you like to remove: ";
+                                                std::cin >> move_amount;
+                                                if(move_amount > ale_house.interact_current_brewing()){
+                                                    move_amount = ale_house.interact_current_brewing();
+                                                }
+                                                std::cout << "Removing " << move_amount << " units of Barley from the brewing process.";
+                                                ale_house.add_to_brewing(-move_amount);
+                                            }
+                                            break;
+                                        }
+                                        case 'e':
+                                        case 'E':{
+                                            in_brew_adding = false;
+                                            break;
+                                        }
+                                        default:{
+                                            std::cout << "Invalid entry, please try again." << std::endl;
+                                            break;
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+                            case 's':
+                            case 'S':{
+                                if(ale_house.interact_stored_beer() > 0){
+                                    std::cout << "There are currently " << ale_house.interact_stored_beer() << " units of beer in the brewery. It sells for \x9C" << "20 per unit. How many would you like to sell: ";
+                                    int sell_amount;
+                                    std::cin >> sell_amount;
+                                    if(sell_amount >= ale_house.interact_stored_beer()){
+                                        sell_amount = ale_house.interact_stored_beer();
+                                        std::cout << "Selling the entire beer stock." << std::endl;
+                                        ale_house.sell_beer(sell_amount);
+                                        money += (sell_amount*20);
+                                    }
+                                    else{
+                                        std::cout << "Selling " << sell_amount << " units of beer." << std::endl;
+                                        ale_house.sell_beer(sell_amount);
+                                        money += (sell_amount*20);
+                                    }
+                                }
+                                else{
+                                    std::cout << "There is currently no beer stored in the brewery to sell." << std::endl;
+                                }
+                                break;
+                            }
+                            default:{
+                                break;
+                            }
+                        }
+                    }
+                    system("pause");
+                    break;
+                }
+                case 'd':
+                case 'D':{
+                    if(dormitory.interact_is_working() == false){
+                        std::cout << "It costs \x9C" << dormitory.interact_cost() << " to build a dormitory." << std::endl;
+                        if(money >= dormitory.interact_cost()){
+                            std::cout << "Would you like to build one? Y/N: ";
+                            char char_input;
+                            std::cin >> char_input;
+                            switch(char_input){
+                                case 'y':
+                                case 'Y':{
+                                    std::cout << "Please enter x coordinate: ";
+                                    int x_coord, y_coord;
+                                    std::cin >> x_coord;
+                                    std::cout << "Please enter y coordinate: ";
+                                    std::cin >> y_coord;
+                                    if((x_coord < 1) || (x_coord > size)){
+                                        std::cout << "x coordinate out of bounds, please try again." << std::endl;
+                                    }
+                                    else if((y_coord < 1) || (y_coord > size)){
+                                        std::cout << "y coordinate out of bounds, please try again." << std::endl;
+                                    }
+                                    else if(crop_fields[y_coord-1][x_coord-1].interact_is_active() == true || orchard_fields[y_coord-1][x_coord-1].interact_is_active() == true || multicrop_fields[y_coord-1][x_coord-1].interact_is_active() == true){
+                                        std::cout << "There is a field planted here. You need to clear it before a dormitory can be built here." << std::endl;
+                                    }
+                                    else if((home_house.interact_x_location() == x_coord) && (home_house.interact_y_location() == y_coord)){
+                                        std::cout << "That's the farmhouse, you can't build a dormitory here." << std::endl;
+                                    }
+                                    else if((storehouse.interact_is_working() == true) && (storehouse.interact_x_location() == x_coord) && (storehouse.interact_y_location() == y_coord)){
+                                        std::cout << "That's the storehouse, you can't build a dormitory here." << std::endl;
+                                    }
+                                    else if((ale_house.interact_is_working() == true) && (ale_house.interact_x_location() == x_coord) && (ale_house.interact_y_location() == y_coord)){
+                                        std::cout << "That's the brewery, you can't build a dormitory here." << std::endl;
+                                    }
+                                    else{
+                                        dormitory.interact_is_working(true);
+                                        dormitory.interact_x_location(x_coord);
+                                        dormitory.interact_y_location(y_coord);
+                                        money = money - dormitory.interact_cost();
+                                        upkeep = upkeep + dormitory.interact_upkeep();
+                                    }
+                                    break;
+                                }
+                                case 'n':
+                                case 'N':{
+                                    break;
+                                }
+                                default:{
+                                    std::cout << "Invalid entry." << std::endl;
+                                    break;
+                                }
+                            }
+                        }
+                        else{
+                            std::cout << "You do not have enough money currently." << std::endl;
+                        }
+                    }
+                    else{}
                     system("pause");
                     break;
                 }
@@ -745,6 +1114,11 @@ int main()
                         std::cout << "Simulation over." << std::endl;
                         sim_loop = false;
                         simulation = false;
+                    }
+                    if(ale_house.interact_is_working() == true){
+                        if(ale_house.interact_current_brewing() > 0){
+                            ale_house.make_beer(ale_house.interact_current_brewing());
+                        }
                     }
                     break;
                 }
