@@ -1,5 +1,11 @@
 #include "../include/building.h"
 
+void building::build(int x_input, int y_input)
+{
+    x_location = x_input, y_location = y_input;
+    is_working = true;
+}
+
 //INPUTS AND OUTPUTS
 bool building::interact_is_working()
 {

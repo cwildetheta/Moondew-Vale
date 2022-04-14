@@ -7,7 +7,7 @@ class workhouse : public building{
         int workers, max_workers, harvesters, fertilisers;
 
     public:
-        workhouse(int, int);
+        workhouse(int, int, int, int, bool);
         int increase_workers(int);
         void automate_harvest();
         void automate_fertilise();

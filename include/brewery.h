@@ -8,7 +8,7 @@ class brewery : public building{
         int storage_space, current_total, stored_barley, stored_beer, brewing_cap, current_brewing;
 
     public:
-        brewery(int, int);
+        brewery(int, int, int, int, bool);
         void calculate_total();
         void make_beer(int);
         void sell_beer(int);

@@ -9,7 +9,7 @@ class granary : public building{
         std::string store_types[6];
 
     public:
-        granary(int, int, int, std::string[], int[]);
+        granary(int, int, int, std::string[], int[], int, int, bool);
         void calculate_total();
         void increase_size(int);
         void add_to_store(std::string, int);

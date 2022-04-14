@@ -1,10 +1,13 @@
 #include "../include/workhouse.h"
 #include <iostream>
 
-workhouse::workhouse(int int_input, int int_input_2)
+workhouse::workhouse(int int_input, int int_input_2, int cost_input, int upkeep_input, bool is_working_input)
 {
     workers = int_input, max_workers = int_input_2;
     harvesters = 0, fertilisers = 0;
+    interact_cost(cost_input);
+    interact_upkeep(upkeep_input);
+    interact_is_working(is_working_input);
 }
 int workhouse::increase_workers(int money)
 {

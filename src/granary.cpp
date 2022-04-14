@@ -1,6 +1,6 @@
 #include "../include/granary.h"
 
-granary::granary(int int_input, int store_input, int current_store_input, std::string string_input_array[], int int_input_array[])
+granary::granary(int int_input, int store_input, int current_store_input, std::string string_input_array[], int int_input_array[], int cost_input, int upkeep_input, bool is_working_input)
 {
     num_store_types = int_input;
     storage_space = store_input;
@@ -9,6 +9,9 @@ granary::granary(int int_input, int store_input, int current_store_input, std::s
         store_types[i] = string_input_array[i];
         store_totals[i] = int_input_array[i];
     }
+    interact_cost(cost_input);
+    interact_upkeep(upkeep_input);
+    interact_is_working(is_working_input);
 }
 void granary::calculate_total()
 {

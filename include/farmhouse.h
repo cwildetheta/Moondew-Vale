@@ -9,7 +9,7 @@ class farmhouse : public building{
         std::string seed_types[6];
 
     public:
-        farmhouse(int, std::string[], int[]);
+        farmhouse(int, std::string[], int[], int, int, int, int, bool);
         void change_seed_totals(std::string, int);
 
         //VARIABLE INTERACTIONS//

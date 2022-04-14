@@ -40,30 +40,14 @@ int main()
         int initial_seed_numbers[number_of_plants] = {10, 10, 5, 5, 2, 2};
         int seed_prices[number_of_plants] = {30, 45, 35, 35, 25, 20};
         int base_yields[number_of_plants] = {15, 15, 5, 5, 5, 5};
-        int base_price[number_of_plants] = {5, 10, 6, 8, 3, 2}, current_price[6] = {5, 10, 6, 8, 3, 2};
+        int base_price[number_of_plants] = {5, 10, 6, 8, 3, 2}, current_price[number_of_plants] = {5, 10, 6, 8, 3, 2};
         int initial_store[number_of_plants] = {0, 0, 0, 0, 0, 0};
-        farmhouse home_house(number_of_plants, seed_types, initial_seed_numbers);
-        granary storehouse(number_of_plants, 200, 0, seed_types, initial_store);
-        brewery ale_house(100, 10);
-        workhouse dormitory(0, 10);
-        home_house.interact_is_working(true);
-        home_house.interact_upkeep(0);
-        home_house.interact_fertiliser(5);
-        home_house.interact_x_location(4);
-        home_house.interact_y_location(4);
-        storehouse.interact_is_working(false);
-        storehouse.interact_cost(150);
-        storehouse.interact_upkeep(2);
-        ale_house.interact_is_working(false);
-        ale_house.interact_cost(200);
-        ale_house.interact_upkeep(3);
-        dormitory.interact_is_working(false);
-        dormitory.interact_cost(200);
-        dormitory.interact_upkeep(5);
+        farmhouse home_house(number_of_plants, seed_types, initial_seed_numbers, 0, 5, 4, 4, true);
+        granary storehouse(number_of_plants, 200, 0, seed_types, initial_store, 150, 2, false);
+        brewery ale_house(100, 10, 200, 3, false);
+        workhouse dormitory(0, 10, 200, 5, false);
         bool sim_loop = true;
-        int money = 1000;
-        int month = 1;
-        int harvestable = 0, upkeep = 0;
+        int money = 1000, month = 1, harvestable = 0, upkeep = 0;
         while(sim_loop == true){
             system("cls");
             main_ui(crop_fields, orchard_fields, multicrop_fields, size, month, money, upkeep, harvestable, home_house, storehouse, ale_house, dormitory);
@@ -440,9 +424,7 @@ int main()
                                         std::cout << "That's the dormitory, you can't build a storehouse here." << std::endl;
                                     }
                                     else{
-                                        storehouse.interact_is_working(true);
-                                        storehouse.interact_x_location(x_coord);
-                                        storehouse.interact_y_location(y_coord);
+                                        storehouse.build(x_coord, y_coord);
                                         money = money - storehouse.interact_cost();
                                         upkeep = upkeep + storehouse.interact_upkeep();
                                     }
@@ -533,9 +515,7 @@ int main()
                                         std::cout << "That's the dormitory, you can't build a brewery here." << std::endl;
                                     }
                                     else{
-                                        ale_house.interact_is_working(true);
-                                        ale_house.interact_x_location(x_coord);
-                                        ale_house.interact_y_location(y_coord);
+                                        ale_house.build(x_coord, y_coord);
                                         money = money - ale_house.interact_cost();
                                         upkeep = upkeep + ale_house.interact_upkeep();
                                     }
@@ -757,9 +737,7 @@ int main()
                                         std::cout << "That's the brewery, you can't build a dormitory here." << std::endl;
                                     }
                                     else{
-                                        dormitory.interact_is_working(true);
-                                        dormitory.interact_x_location(x_coord);
-                                        dormitory.interact_y_location(y_coord);
+                                        dormitory.build(x_coord, y_coord);
                                         money = money - dormitory.interact_cost();
                                         upkeep = upkeep + dormitory.interact_upkeep();
                                     }

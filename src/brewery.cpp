@@ -1,10 +1,13 @@
 #include "../include/brewery.h"
 
-brewery::brewery(int int_input_1, int int_input_2)
+brewery::brewery(int int_input_1, int int_input_2, int cost_input, int upkeep_input, bool is_working_input)
 {
     storage_space = int_input_1;
     brewing_cap = int_input_2;
     current_total = 0, stored_barley = 0, stored_beer = 0, current_brewing = 0;
+    interact_cost(cost_input);
+    interact_upkeep(upkeep_input);
+    interact_is_working(is_working_input);
 }
 void brewery::calculate_total()
 {

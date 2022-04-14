@@ -7,6 +7,7 @@ class building{
         int cost, upkeep, x_location, y_location;
 
     public:
+        void build(int, int);
 
         //VARIABLE INTERACTIONS//
         bool interact_is_working();
