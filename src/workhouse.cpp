@@ -55,7 +55,7 @@ int workhouse::increase_workers(int money)
                     if(int_input > workers){
                         int_input = workers;
                     }
-                    std::cout << "Firing " << int_input << "workers." << std::endl;
+                    std::cout << "Firing " << int_input << " workers." << std::endl;
                     int_input = -int_input;
                     workers += int_input;
                     while((harvesters + fertilisers) > workers){
@@ -85,7 +85,7 @@ void workhouse::automate_harvest()
     std::cout << "How many workers do you want to assign to harvesting (negative to remove): ";
     int int_input;
     std::cin >> int_input;
-    if((int_input >= 0) && (int_input <= 10)){
+    if((int_input >= -10) && (int_input <= 10)){
         if(int_input > (workers - harvesters - fertilisers)){
             std::cout << "You don't have that many free workers." << std::endl;
         }
