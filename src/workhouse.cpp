@@ -22,15 +22,20 @@ int workhouse::increase_workers(int money)
                     std::cout << "You have \x9C" << money << ", and workers cost \x9C" << "25 to hire, with an upkeep of \x9C" << "2." << std::endl;
                     std::cout << "How many workers would you like to hire: ";
                     std::cin >> int_input;
-                    if(int_input > (max_workers - workers)){
-                        int_input = (max_workers - workers);
-                    }
-                    if((int_input*25) > money){
-                        std::cout << "You don't have enough money to afford that many workers." << std::endl;
+                    if((int_input >=0) && (int_input <= 10)){
+                        if(int_input > (max_workers - workers)){
+                            int_input = (max_workers - workers);
+                        }
+                        if((int_input*25) > money){
+                            std::cout << "You don't have enough money to afford that many workers." << std::endl;
+                        }
+                        else{
+                            std::cout << "Hiring " << int_input << " new workers." << std::endl;
+                            workers += int_input;
+                        }
                     }
                     else{
-                        std::cout << "Hiring " << int_input << " new workers." << std::endl;
-                        workers += int_input;
+                        std::cout << "Invalid input." << std::endl;
                     }
                 }
                 else{
@@ -77,11 +82,16 @@ void workhouse::automate_harvest()
     std::cout << "How many workers do you want to assign to harvesting (negative to remove): ";
     int int_input;
     std::cin >> int_input;
-    if(int_input > (workers - harvesters - fertilisers)){
-        std::cout << "You don't have that many free workers." << std::endl;
+    if((int_input >= 0) && (int_input <= 10)){
+        if(int_input > (workers - harvesters - fertilisers)){
+            std::cout << "You don't have that many free workers." << std::endl;
+        }
+        else{
+            harvesters += int_input;
+        }
     }
     else{
-        harvesters += int_input;
+        std::cout << "Invalid input." << std::endl;
     }
 }
 void workhouse::automate_fertilise()
