@@ -11,6 +11,7 @@ class orchard : public field{
     public:
         void grow();
         int harvest_field();
+        void begin(int, bool);
 
         //VARIABLE INTERACTIONS//
         int interact_age();

@@ -12,7 +12,7 @@ class field{
     public:
         void clear_field();
         void die();
-        void plant_field(std::string, char, char);
+        void plant_field(std::string, char, char, int);
         void develop_illness();
 
         //VARIABLE INTERACTIONS//

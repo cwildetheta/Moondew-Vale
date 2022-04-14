@@ -36,6 +36,12 @@ int crop::harvest_field()
     }
     return output;
 }
+void crop::begin(int lifestage_input, bool is_ripe_input, bool is_overripe_input)
+{
+    lifestage = lifestage_input;
+    is_ripe = is_ripe_input;
+    is_overripe = is_overripe_input;
+}
 
 //INPUTS AND OUTPUTS
 int crop::interact_lifestage()

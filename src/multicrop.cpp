@@ -30,6 +30,11 @@ int multicrop::harvest_field()
     }
     return output;
 }
+void multicrop::begin(int lifestage_input, bool is_producing_input)
+{
+    lifestage = lifestage_input;
+    is_producing = is_producing_input;
+}
 
 //INPUTS AND OUTPUTS
 int multicrop::interact_lifestage()

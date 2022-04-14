@@ -11,6 +11,7 @@ class crop : public field{
     public:
         void grow();
         int harvest_field();
+        void begin(int, bool, bool);
 
         //VARIABLE INTERACTIONS//
         int interact_lifestage();

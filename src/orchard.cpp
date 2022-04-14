@@ -27,6 +27,11 @@ int orchard::harvest_field()
     }
     return output;
 }
+void orchard::begin(int age_input, bool is_producing_input)
+{
+    age = age_input;
+    is_producing = is_producing_input;
+}
 
 //INPUTS AND OUTPUTS
 int orchard::interact_age()

@@ -98,26 +98,19 @@ int main()
                     else{
                         if(home_house.interact_seed_totals(seed_types[seed_pick-1]) > 0){
                             if((seed_pick == 1) || (seed_pick == 2)){ //Needs work on generalising which field subclass is used.
-                                crop_fields[y_coord-1][x_coord-1].plant_field(seed_types[seed_pick-1], plant_chars[seed_pick-1], small_plant_chars[seed_pick-1]);
+                                crop_fields[y_coord-1][x_coord-1].plant_field(seed_types[seed_pick-1], plant_chars[seed_pick-1], small_plant_chars[seed_pick-1], base_yields[seed_pick-1]);
                                 home_house.change_seed_totals(seed_types[seed_pick-1], -1);
-                                crop_fields[y_coord-1][x_coord-1].interact_lifestage(0);
-                                crop_fields[y_coord-1][x_coord-1].interact_is_ripe(false);
-                                crop_fields[y_coord-1][x_coord-1].interact_is_overripe(false);
-                                crop_fields[y_coord-1][x_coord-1].interact_yield(base_yields[seed_pick-1]);
+                                crop_fields[y_coord-1][x_coord-1].begin(0, false, false);
                             }
                             if((seed_pick == 3) || (seed_pick == 4)){
-                                orchard_fields[y_coord-1][x_coord-1].plant_field(seed_types[seed_pick-1], plant_chars[seed_pick-1], small_plant_chars[seed_pick-1]);
+                                orchard_fields[y_coord-1][x_coord-1].plant_field(seed_types[seed_pick-1], plant_chars[seed_pick-1], small_plant_chars[seed_pick-1], base_yields[seed_pick-1]);
                                 home_house.change_seed_totals(seed_types[seed_pick-1], -1);
-                                orchard_fields[y_coord-1][x_coord-1].interact_age(0);
-                                orchard_fields[y_coord-1][x_coord-1].interact_is_producing(false);
-                                orchard_fields[y_coord-1][x_coord-1].interact_yield(base_yields[seed_pick-1]);
+                                orchard_fields[y_coord-1][x_coord-1].begin(0, false);
                             }
                             if((seed_pick == 5) || (seed_pick == 6)){
-                                multicrop_fields[y_coord-1][x_coord-1].plant_field(seed_types[seed_pick-1], plant_chars[seed_pick-1], small_plant_chars[seed_pick-1]);
+                                multicrop_fields[y_coord-1][x_coord-1].plant_field(seed_types[seed_pick-1], plant_chars[seed_pick-1], small_plant_chars[seed_pick-1], base_yields[seed_pick-1]);
                                 home_house.change_seed_totals(seed_types[seed_pick-1], -1);
-                                multicrop_fields[y_coord-1][x_coord-1].interact_lifestage(0);
-                                multicrop_fields[y_coord-1][x_coord-1].interact_is_producing(false);
-                                multicrop_fields[y_coord-1][x_coord-1].interact_yield(base_yields[seed_pick-1]);
+                                multicrop_fields[y_coord-1][x_coord-1].begin(0, false);
                             }
                         }
                     }
