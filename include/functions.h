@@ -9,6 +9,7 @@
 #include "../include/workhouse.h"
 #include <vector>
 
+void options(int, granary, brewery, workhouse, int, int, int);
 void main_ui(std::vector<std::vector<crop>>, std::vector<std::vector<orchard>>, std::vector<std::vector<multicrop>>, int, int, int, int, int, farmhouse, granary, brewery, workhouse);
 
 #endif //FUNCTIONS_H_INCLUDED
