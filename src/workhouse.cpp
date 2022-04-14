@@ -1,16 +1,101 @@
 #include "../include/workhouse.h"
+#include <iostream>
 
-workhouse::workhouse(int int_input)
+workhouse::workhouse(int int_input, int int_input_2)
 {
-    workers = int_input;
+    workers = int_input, max_workers = int_input_2;
     harvesters = 0, fertilisers = 0;
 }
-void workhouse::increase_workers(int int_input)
+int workhouse::increase_workers(int money)
 {
-    workers += int_input;
+    int int_input = 0;
+    char reply;
+    bool reply_loop = true;
+    std::cout << "You currently have " << workers << " workers out of a potential maximum of " << max_workers << "." << std::endl;
+    while(reply_loop == true){
+        std::cout << "Would you like to hire new workers or fire current workers? h to hire or f to fire: ";
+        std::cin >> reply;
+        switch(reply){
+            case 'h':
+            case 'H':{
+                if(workers != max_workers){
+                    std::cout << "You have \x9C" << money << ", and workers cost \x9C" << "25 to hire, with an upkeep of \x9C" << "2." << std::endl;
+                    std::cout << "How many workers would you like to hire: ";
+                    std::cin >> int_input;
+                    if(int_input > (max_workers - workers)){
+                        int_input = (max_workers - workers);
+                    }
+                    if((int_input*25) > money){
+                        std::cout << "You don't have enough money to afford that many workers." << std::endl;
+                    }
+                    else{
+                        std::cout << "Hiring " << int_input << " new workers." << std::endl;
+                        workers += int_input;
+                    }
+                }
+                else{
+                    std::cout << "You can't hire anymore workers." << std::endl;
+                }
+                reply_loop = false;
+                break;
+            }
+            case 'f':
+            case 'F':{
+                if(workers != 0){
+                    std::cout << "How many workers do you want to fire: ";
+                    std::cin >> int_input;
+                    if(int_input > workers){
+                        int_input = workers;
+                    }
+                    std::cout << "Firing " << int_input << "workers." << std::endl;
+                    int_input = -int_input;
+                    workers += int_input;
+                    while((harvesters + fertilisers) > workers){
+                        if(fertilisers > 0){
+                            fertilisers--;
+                        }
+                        else{
+                            harvesters--;
+                        }
+                    }
+                }
+                else{
+                    std::cout << "You have no workers to fire." << std::endl;
+                }
+                reply_loop = false;
+                break;
+            }
+            default:{
+                break;
+            }
+        }
+    }
+    return int_input;
 }
-void workhouse::automate_harvest(int int_input){}
-void workhouse::automate_fertilise(int int_input){}
+void workhouse::automate_harvest()
+{
+    std::cout << "How many workers do you want to assign to harvesting (negative to remove): ";
+    int int_input;
+    std::cin >> int_input;
+    if(int_input > (workers - harvesters - fertilisers)){
+        std::cout << "You don't have that many free workers." << std::endl;
+    }
+    else{
+        harvesters += int_input;
+    }
+}
+void workhouse::automate_fertilise()
+{
+    std::cout << "How many workers do you want to assign to fertilising (negative to remove): ";
+    int int_input;
+    std::cin >> int_input;
+    if(int_input > (workers - harvesters - fertilisers)){
+        std::cout << "You don't have that many free workers." << std::endl;
+    }
+    else{
+        fertilisers += int_input;
+    }
+}
 
 //INPUTS AND OUTPUTS//
 int workhouse::interact_workers()
@@ -20,6 +105,14 @@ int workhouse::interact_workers()
 void workhouse::interact_workers(int int_input)
 {
     workers = int_input;
+}
+int workhouse::interact_max_workers()
+{
+    return max_workers;
+}
+void workhouse::interact_max_workers(int int_input)
+{
+    max_workers = int_input;
 }
 int workhouse::interact_harvesters()
 {

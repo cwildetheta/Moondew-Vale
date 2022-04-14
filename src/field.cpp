@@ -17,7 +17,9 @@ void field::clear_field()
 void field::die()
 {
     is_alive = false;
+    is_fertilised = false;
     symbol = 'x';
+    immature_symbol = 'x';
 }
 
 //INPUTS AND OUTPUTS

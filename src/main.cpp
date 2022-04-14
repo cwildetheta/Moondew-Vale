@@ -41,7 +41,7 @@ int main()
         farmhouse home_house(number_of_plants, seed_types, initial_seed_numbers);
         granary storehouse(number_of_plants, 200, 0, seed_types, initial_store);
         brewery ale_house(100, 10);
-        workhouse dormitory(0);
+        workhouse dormitory(0, 10);
         home_house.interact_is_working(true);
         home_house.interact_upkeep(0);
         home_house.interact_fertiliser(5);
@@ -512,14 +512,47 @@ int main()
                     if(index != -1){
                         std::cout << "The current price of " << seed_types[index] << " is \x9C" << current_price[index];
                         storehouse.calculate_total();
-                        if((storehouse.interact_is_working() == true) && ((storehouse.interact_storage_space()-storehouse.interact_current_total()) >= output)){
+                        ale_house.calculate_total();
+                        if(((index == 1) && (ale_house.interact_is_working() == true) && ((ale_house.interact_storage_space() - ale_house.interact_current_total()) >= output)) && ((storehouse.interact_is_working() == true) && ((storehouse.interact_storage_space()-storehouse.interact_current_total()) >= output))){
+                            std::cout << ", or there is " << (storehouse.interact_storage_space()-storehouse.interact_current_total()) << " units of space available in the storehouse, or " << (ale_house.interact_storage_space()-ale_house.interact_current_total()) << " units of space available in the brewery." << std::endl;
+                            std::cout << "If you would like to store the harvest in the storehouse, press s, or in the brewery, press b, otherwise it will be sold: ";
+                            char store_input;
+                            std::cin >> store_input;
+                            if(store_input == 's' || store_input == 'S'){
+                                storehouse.add_to_store(seed_types[index], output);
+                                std::cout << "The harvest has been stored in the storehouse." << std::endl;
+                            }
+                            if(store_input == 'b' || store_input == 'B'){
+                                ale_house.transfer_barley(output);
+                                std::cout << "The harvest has been stored in the brewery." << std::endl;
+                            }
+                            else{
+                                std::cout << "You have made \x9C" << output*current_price[index] << "." << std::endl;
+                                money = money + (output*current_price[index]);
+                            }
+                        }
+                        else if((index == 1) && (ale_house.interact_is_working() == true) && ((ale_house.interact_storage_space()-ale_house.interact_current_total()) >= output)){
+                            std::cout << ", or there is " << (ale_house.interact_storage_space()-ale_house.interact_current_total()) << " units of space available in the brewery." << std::endl;
+                            std::cout << "If you would like to store the harvest, press s, otherwise it will be sold: ";
+                            char store_input;
+                            std::cin >> store_input;
+                            if(store_input == 's' || store_input == 'S'){
+                                ale_house.transfer_barley(output);
+                                std::cout << "The harvest has been stored in the brewery." << std::endl;
+                            }
+                            else{
+                                std::cout << "You have made \x9C" << output*current_price[index] << "." << std::endl;
+                                money = money + (output*current_price[index]);
+                            }
+                        }
+                        else if((storehouse.interact_is_working() == true) && ((storehouse.interact_storage_space()-storehouse.interact_current_total()) >= output)){
                             std::cout << ", or there is " << (storehouse.interact_storage_space()-storehouse.interact_current_total()) << " units of space available in the storehouse." << std::endl;
                             std::cout << "If you would like to store the harvest, press s, otherwise it will be sold: ";
                             char store_input;
                             std::cin >> store_input;
                             if(store_input == 's' || store_input == 'S'){
                                 storehouse.add_to_store(seed_types[index], output);
-                                std::cout << "The harvest has been stored." << std::endl;
+                                std::cout << "The harvest has been stored in the storehouse." << std::endl;
                             }
                             else{
                                 std::cout << "You have made \x9C" << output*current_price[index] << "." << std::endl;
@@ -593,20 +626,23 @@ int main()
                         std::cout << "Field at " << x_coord << "," << y_coord << " cleared." << std::endl;
                         if(crop_fields[y_coord-1][x_coord-1].interact_is_ripe() == true){
                             harvestable--;
+                            crop_fields[y_coord-1][x_coord-1].interact_is_ripe(false);
                         }
                     }
                     else if(orchard_fields[y_coord-1][x_coord-1].interact_is_active() == true){
                         orchard_fields[y_coord-1][x_coord-1].clear_field();
                         std::cout << "Field at " << x_coord << "," << y_coord << " cleared." << std::endl;
-                        if(crop_fields[y_coord-1][x_coord-1].interact_is_ripe() == true){
+                        if(orchard_fields[y_coord-1][x_coord-1].interact_is_producing() == true){
                             harvestable--;
+                            orchard_fields[y_coord-1][x_coord-1].interact_is_producing(false);
                         }
                     }
                     else if(multicrop_fields[y_coord-1][x_coord-1].interact_is_active() == true){
                         multicrop_fields[y_coord-1][x_coord-1].clear_field();
                         std::cout << "Field at " << x_coord << "," << y_coord << " cleared." << std::endl;
-                        if(crop_fields[y_coord-1][x_coord-1].interact_is_ripe() == true){
+                        if(multicrop_fields[y_coord-1][x_coord-1].interact_is_producing() == true){
                             harvestable--;
+                            multicrop_fields[y_coord-1][x_coord-1].interact_is_producing();
                         }
                     }
                     else if((home_house.interact_x_location() == x_coord) && (home_house.interact_y_location() == y_coord)){
@@ -839,59 +875,69 @@ int main()
                         switch(brewery_input){
                             case 'i':
                             case 'I':{
-                                if(storehouse.interact_store_totals("Barley") > 0){
-                                    storehouse.calculate_total();
-                                    std::cout << "How much Barley do you want to move into the brewery. There are " << storehouse.interact_store_totals("Barley") << " units in the storehouse and " << (ale_house.interact_storage_space() - ale_house.interact_current_total()) << " units of space in the brewery: ";
-                                    if(ale_house.interact_current_total() == ale_house.interact_storage_space()){
-                                        std::cout << "The brewery is full. Remove something if you wish to add more Barley to it." << std::endl;
-                                    }
-                                    else{
-                                        int move_input;
-                                        std::cin >> move_input;
-                                        if(move_input >= storehouse.interact_store_totals("Barley")){
-                                            move_input = storehouse.interact_store_totals("Barley");
-                                            std::cout << "Moving the entire Barley store into the brewery." << std::endl;
-                                            storehouse.add_to_store("Barley", -move_input);
-                                            ale_house.transfer_barley(move_input);
+                                if(storehouse.interact_is_working() == true){
+                                    if(storehouse.interact_store_totals("Barley") > 0){
+                                        storehouse.calculate_total();
+                                        std::cout << "How much Barley do you want to move into the brewery. There are " << storehouse.interact_store_totals("Barley") << " units in the storehouse and " << (ale_house.interact_storage_space() - ale_house.interact_current_total()) << " units of space in the brewery: ";
+                                        if(ale_house.interact_current_total() == ale_house.interact_storage_space()){
+                                            std::cout << "The brewery is full. Remove something if you wish to add more Barley to it." << std::endl;
                                         }
                                         else{
-                                            std::cout << "Moving " << move_input << " units of Barley into the brewery." << std::endl;
-                                            storehouse.add_to_store("Barley", -move_input);
-                                            ale_house.transfer_barley(move_input);
+                                            int move_input;
+                                            std::cin >> move_input;
+                                            if(move_input >= storehouse.interact_store_totals("Barley")){
+                                                move_input = storehouse.interact_store_totals("Barley");
+                                                std::cout << "Moving the entire Barley store into the brewery." << std::endl;
+                                                storehouse.add_to_store("Barley", -move_input);
+                                                ale_house.transfer_barley(move_input);
+                                            }
+                                            else{
+                                                std::cout << "Moving " << move_input << " units of Barley into the brewery." << std::endl;
+                                                storehouse.add_to_store("Barley", -move_input);
+                                                ale_house.transfer_barley(move_input);
+                                            }
                                         }
+                                    }
+                                    else{
+                                        std::cout << "There is currently no Barley stored in the storehouse." << std::endl;
                                     }
                                 }
                                 else{
-                                    std::cout << "There is currently no Barley stored in the storehouse." << std::endl;
+                                    std::cout << "You currently don't have a storehouse, so there is nowhere to move Barley from." << std::endl;
                                 }
                                 break;
                             }
                             case 'o':
                             case 'O':{
-                                if(ale_house.interact_stored_barley() > 0){
-                                    storehouse.calculate_total();
-                                    std::cout << "How much Barley do you want to move into the storehouse. There are " << ale_house.interact_stored_barley() << " units in the brewery, and " << (storehouse.interact_storage_space() - storehouse.interact_current_total()) << " units of space free in the storehouse: ";
-                                    if(storehouse.interact_current_total() == storehouse.interact_storage_space()){
-                                        std::cout << "There storehouse is full, so no Barley can be move to there." << std::endl;
-                                    }
-                                    else{
-                                        int move_input;
-                                        std::cin >> move_input;
-                                        if(move_input >= ale_house.interact_stored_barley()){
-                                            move_input = ale_house.interact_stored_barley();
-                                            std::cout << "Moving the entire Barley store into the storehouse." << std::endl;
-                                            storehouse.add_to_store("Barley", move_input);
-                                            ale_house.transfer_barley(-move_input);
+                                if(storehouse.interact_is_working() == true){
+                                    if(ale_house.interact_stored_barley() > 0){
+                                        storehouse.calculate_total();
+                                        std::cout << "How much Barley do you want to move into the storehouse. There are " << ale_house.interact_stored_barley() << " units in the brewery, and " << (storehouse.interact_storage_space() - storehouse.interact_current_total()) << " units of space free in the storehouse: ";
+                                        if(storehouse.interact_current_total() == storehouse.interact_storage_space()){
+                                            std::cout << "There storehouse is full, so no Barley can be move to there." << std::endl;
                                         }
                                         else{
-                                            std::cout << "Moving " << move_input << " units of Barley into the storehouse." << std::endl;
-                                            storehouse.add_to_store("Barley", move_input);
-                                            ale_house.transfer_barley(-move_input);
+                                            int move_input;
+                                            std::cin >> move_input;
+                                            if(move_input >= ale_house.interact_stored_barley()){
+                                                move_input = ale_house.interact_stored_barley();
+                                                std::cout << "Moving the entire Barley store into the storehouse." << std::endl;
+                                                storehouse.add_to_store("Barley", move_input);
+                                                ale_house.transfer_barley(-move_input);
+                                            }
+                                            else{
+                                                std::cout << "Moving " << move_input << " units of Barley into the storehouse." << std::endl;
+                                                storehouse.add_to_store("Barley", move_input);
+                                                ale_house.transfer_barley(-move_input);
+                                            }
                                         }
+                                    }
+                                    else{
+                                        std::cout << "There is currently no Barley stored in the brewery." << std::endl;
                                     }
                                 }
                                 else{
-                                    std::cout << "There is currently no Barley stored in the brewery." << std::endl;
+                                    std::cout << "You currently don't have a storehouse, so there is nowhere to move Barley from." << std::endl;
                                 }
                                 break;
                             }
@@ -922,7 +968,7 @@ int main()
                                                 if(move_amount > (ale_house.interact_brewing_cap() - ale_house.interact_current_brewing())){
                                                     move_amount = (ale_house.interact_brewing_cap() - ale_house.interact_current_brewing());
                                                 }
-                                                std::cout << "Adding " << move_amount << " units of Barley to the brewing process.";
+                                                std::cout << "Adding " << move_amount << " units of Barley to the brewing process." << std::endl;
                                                 ale_house.add_to_brewing(move_amount);
                                             }
                                             break;
@@ -1044,80 +1090,131 @@ int main()
                             std::cout << "You do not have enough money currently." << std::endl;
                         }
                     }
-                    else{}
+                    else{
+                        bool in_dormitory = true;
+                        while(in_dormitory == true){
+                            std::cout << "You currently have " << dormitory.interact_workers() << " workers out of a maximum of " << dormitory.interact_max_workers() << "." << std::endl;
+                            if(dormitory.interact_workers() > 0){
+                                std::cout << "of those, " << dormitory.interact_harvesters() << " workers are assigned to harvesting, " << dormitory.interact_fertilisers() << " workers are assigned to fertilising, with " << (dormitory.interact_workers() - dormitory.interact_harvesters() - dormitory.interact_fertilisers()) << " workers unassigned." << std::endl;
+                            }
+                            std::cout << "Would you like to change the number of workers assigned to harvesting (h), fertilising (f), hire new workers (n), or exit (any other key): ";
+                            char dormitory_input;
+                            std::cin >> dormitory_input;
+                            switch(dormitory_input){
+                                case 'h':
+                                case 'H':{
+                                    dormitory.automate_harvest();
+                                    break;
+                                }
+                                case 'f':
+                                case 'F':{
+                                    dormitory.automate_fertilise();
+                                    break;
+                                }
+                                case 'n':
+                                case 'N':{
+                                    int new_workers = dormitory.increase_workers(money);
+                                    if(new_workers > 0){
+                                        money -= (new_workers*25);
+                                    }
+                                    break;
+                                }
+                                default:{
+                                    in_dormitory = false;
+                                    break;
+                                }
+                            }
+                        }
+                    }
                     system("pause");
                     break;
                 }
                 default:{
-                    month += 2;
-                    if(month >= 12){
-                        month = month - 12;
+                    bool end_turn = true;
+                    if(harvestable > 0){
+                        std::cout << "There are still fields that can be harvested, are you sure you want to move on? Press y to confirm: ";
+                        char end_turn_input;
+                        std::cin >> end_turn_input;
+                        if(end_turn_input == 'y' || end_turn_input == 'Y'){
+                            end_turn = true;
+                        }
+                        else{
+                            end_turn = false;
+                        }
                     }
-                    for(int i = 0; i < size; i++){
-                        for(int k = 0; k < size; k++){
-                            if(crop_fields[i][k].interact_is_active() == true){
-                                if(crop_fields[i][k].interact_is_alive() == false){
-                                    crop_fields[i][k].clear_field();
-                                }
-                                if(month == 8 || month == 9){
-                                    if(crop_fields[i][k].interact_lifestage() == 4){
-                                        crop_fields[i][k].interact_is_ripe(true);
+                    if(end_turn == true){
+                        month += 2;
+                        if(month >= 12){
+                            month = month - 12;
+                        }
+                        for(int i = 0; i < size; i++){
+                            for(int k = 0; k < size; k++){
+                                if(crop_fields[i][k].interact_is_active() == true){
+                                    if(crop_fields[i][k].interact_is_alive() == false){
+                                        crop_fields[i][k].clear_field();
                                     }
-                                    else if(crop_fields[i][k].interact_lifestage() == 3){
-                                        crop_fields[i][k].interact_is_ripe(true);
-                                        crop_fields[i][k].interact_is_overripe(true);
+                                    if(month == 8 || month == 9){
+                                        if(crop_fields[i][k].interact_lifestage() == 4){
+                                            crop_fields[i][k].interact_is_ripe(true);
+                                        }
+                                        else if(crop_fields[i][k].interact_lifestage() == 3){
+                                            crop_fields[i][k].interact_is_ripe(true);
+                                            crop_fields[i][k].interact_is_overripe(true);
+                                        }
+                                    }
+                                    if(crop_fields[i][k].interact_lifestage() >= 5 || month == 10 || month == 11 || month == 0){
+                                        crop_fields[i][k].die();
+                                        crop_fields[i][k].interact_is_ripe(false);
+                                    }
+                                    else{
+                                        crop_fields[i][k].grow();
                                     }
                                 }
-                                if(crop_fields[i][k].interact_lifestage() >= 5 || month == 10 || month == 11 || month == 0){
-                                    crop_fields[i][k].die();
+                                if(orchard_fields[i][k].interact_is_active() == true){
+                                    if((month == 6 || month == 7 || month == 8 || month == 9) && (orchard_fields[i][k].interact_age() > 18)){
+                                        orchard_fields[i][k].interact_is_producing(true);
+                                    }
+                                    if(month == 10 || month == 11){
+                                        orchard_fields[i][k].interact_is_producing(false);
+                                    }
+                                    orchard_fields[i][k].grow();
                                 }
-                                else{
-                                    crop_fields[i][k].grow();
-                                }
-                            }
-                            if(orchard_fields[i][k].interact_is_active() == true){
-                                if((month == 6 || month == 7 || month == 8 || month == 9) && (orchard_fields[i][k].interact_age() > 18)){
-                                    orchard_fields[i][k].interact_is_producing(true);
-                                }
-                                if(month == 10 || month == 11){
-                                    orchard_fields[i][k].interact_is_producing(false);
-                                }
-                                orchard_fields[i][k].grow();
-                            }
-                            if(multicrop_fields[i][k].interact_is_active() == true){
-                                if(multicrop_fields[i][k].interact_is_alive() == false){
-                                    multicrop_fields[i][k].clear_field();
-                                }
-                                if((month > 4 && month < 10) && (multicrop_fields[i][k].interact_lifestage() > 1)){
-                                    multicrop_fields[i][k].interact_is_producing(true);
-                                }
-                                if(multicrop_fields[i][k].interact_lifestage() >= 5 || month == 10 || month == 11 || month == 0){
-                                    multicrop_fields[i][k].die();
-                                }
-                                else{
-                                    multicrop_fields[i][k].grow();
+                                if(multicrop_fields[i][k].interact_is_active() == true){
+                                    if(multicrop_fields[i][k].interact_is_alive() == false){
+                                        multicrop_fields[i][k].clear_field();
+                                    }
+                                    if((month > 4 && month < 10) && (multicrop_fields[i][k].interact_lifestage() > 1)){
+                                        multicrop_fields[i][k].interact_is_producing(true);
+                                    }
+                                    if(multicrop_fields[i][k].interact_lifestage() >= 5 || month == 10 || month == 11 || month == 0){
+                                        multicrop_fields[i][k].die();
+                                        multicrop_fields[i][k].interact_is_producing(false);
+                                    }
+                                    else{
+                                        multicrop_fields[i][k].grow();
+                                    }
                                 }
                             }
                         }
-                    }
-                    harvestable = 0;
-                    for(int i = 0; i < size; i++){
-                        for(int k = 0; k < size; k++){
-                            if(crop_fields[i][k].interact_is_ripe() == true || orchard_fields[i][k].interact_is_producing() == true || multicrop_fields[i][k].interact_is_producing() == true){
-                                harvestable++;
+                        harvestable = 0;
+                        for(int i = 0; i < size; i++){
+                            for(int k = 0; k < size; k++){
+                                if(crop_fields[i][k].interact_is_ripe() == true || orchard_fields[i][k].interact_is_producing() == true || multicrop_fields[i][k].interact_is_producing() == true){
+                                    harvestable++;
+                                }
                             }
                         }
-                    }
-                    money -= upkeep;
-                    if(money < 0){
-                        std::cout << "You have run out of money, so your farm is now bankrupt." << std::endl;
-                        std::cout << "Simulation over." << std::endl;
-                        sim_loop = false;
-                        simulation = false;
-                    }
-                    if(ale_house.interact_is_working() == true){
-                        if(ale_house.interact_current_brewing() > 0){
-                            ale_house.make_beer(ale_house.interact_current_brewing());
+                        money -= upkeep;
+                        if(money < 0){
+                            std::cout << "You have run out of money, so your farm is now bankrupt." << std::endl;
+                            std::cout << "Simulation over." << std::endl;
+                            sim_loop = false;
+                            simulation = false;
+                        }
+                        if(ale_house.interact_is_working() == true){
+                            if(ale_house.interact_current_brewing() > 0){
+                                ale_house.make_beer(ale_house.interact_current_brewing());
+                            }
                         }
                     }
                     break;

@@ -4,17 +4,19 @@
 
 class workhouse : public building{
     private:
-        int workers, harvesters, fertilisers;
+        int workers, max_workers, harvesters, fertilisers;
 
     public:
-        workhouse(int);
-        void increase_workers(int);
-        void automate_harvest(int);
-        void automate_fertilise(int);
+        workhouse(int, int);
+        int increase_workers(int);
+        void automate_harvest();
+        void automate_fertilise();
 
         //VARIABLE INTERACTIONS//
         int interact_workers();
         void interact_workers(int);
+        int interact_max_workers();
+        void interact_max_workers(int);
         int interact_harvesters();
         void interact_harvesters(int);
         int interact_fertilisers();
