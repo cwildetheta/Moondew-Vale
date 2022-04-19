@@ -335,6 +335,7 @@ int set_up_granary(std::vector<std::vector<crop>> crop_fields, std::vector<std::
     switch(char_input){
         case 'y':
         case 'Y':{
+            return_int = 0;
             std::cout << "Please enter x coordinate: ";
             int x_coord, y_coord;
             std::cin >> x_coord;
@@ -360,6 +361,111 @@ int set_up_granary(std::vector<std::vector<crop>> crop_fields, std::vector<std::
             }
             else{
                 storehouse->build(x_coord, y_coord);
+                return_int = 1;
+            }
+            break;
+        }
+        case 'n':
+        case 'N':{
+            return_int = 0;
+            break;
+        }
+        default:{
+            std::cout << "Invalid entry." << std::endl;
+            return_int = 0;
+            break;
+        }
+    }
+    return return_int;
+}
+int set_up_brewery(std::vector<std::vector<crop>> crop_fields, std::vector<std::vector<orchard>> orchard_fields, std::vector<std::vector<multicrop>> multicrop_fields, farmhouse home_house, granary storehouse, brewery *ale_house, workhouse dormitory, int size)
+{
+    int return_int = -1;
+    std::cout << "Would you like to build one? Y/N: ";
+    char char_input;
+    std::cin >> char_input;
+    switch(char_input){
+        case 'y':
+        case 'Y':{
+            return_int = 0;
+            std::cout << "Please enter x coordinate: ";
+            int x_coord, y_coord;
+            std::cin >> x_coord;
+            std::cout << "Please enter y coordinate: ";
+            std::cin >> y_coord;
+            if((x_coord < 1) || (x_coord > size)){
+                std::cout << "x coordinate out of bounds, please try again." << std::endl;
+            }
+            else if((y_coord < 1) || (y_coord > size)){
+                std::cout << "y coordinate out of bounds, please try again." << std::endl;
+            }
+            else if(crop_fields[y_coord-1][x_coord-1].interact_is_active() == true || orchard_fields[y_coord-1][x_coord-1].interact_is_active() == true || multicrop_fields[y_coord-1][x_coord-1].interact_is_active() == true){
+                std::cout << "There is a field planted here. You need to clear it before a brewery can be built here." << std::endl;
+            }
+            else if((home_house.interact_x_location() == x_coord) && (home_house.interact_y_location() == y_coord)){
+                std::cout << "That's the farmhouse, you can't build a brewery here." << std::endl;
+            }
+            else if((storehouse.interact_is_working() == true) && (storehouse.interact_x_location() == x_coord) && (storehouse.interact_y_location() == y_coord)){
+                std::cout << "That's the storehouse, you can't build a brewery here." << std::endl;
+            }
+            else if((dormitory.interact_is_working() == true) && (dormitory.interact_x_location() == x_coord) && (dormitory.interact_y_location() == y_coord)){
+                std::cout << "That's the dormitory, you can't build a brewery here." << std::endl;
+            }
+            else{
+                ale_house->build(x_coord, y_coord);
+                return_int = 1;
+            }
+            break;
+        }
+        case 'n':
+        case 'N':{
+            return_int = 0;
+            break;
+        }
+        default:{
+            std::cout << "Invalid entry." << std::endl;
+            return_int = 0;
+            break;
+        }
+    }
+    return return_int;
+}
+
+int set_up_workhouse(std::vector<std::vector<crop>> crop_fields, std::vector<std::vector<orchard>> orchard_fields, std::vector<std::vector<multicrop>> multicrop_fields, farmhouse home_house, granary storehouse, brewery ale_house, workhouse *dormitory, int size)
+{
+    int return_int = -1;
+    std::cout << "Would you like to build one? Y/N: ";
+    char char_input;
+    std::cin >> char_input;
+    switch(char_input){
+        case 'y':
+        case 'Y':{
+            return_int = 0;
+            std::cout << "Please enter x coordinate: ";
+            int x_coord, y_coord;
+            std::cin >> x_coord;
+            std::cout << "Please enter y coordinate: ";
+            std::cin >> y_coord;
+            if((x_coord < 1) || (x_coord > size)){
+                std::cout << "x coordinate out of bounds, please try again." << std::endl;
+            }
+            else if((y_coord < 1) || (y_coord > size)){
+                std::cout << "y coordinate out of bounds, please try again." << std::endl;
+            }
+            else if(crop_fields[y_coord-1][x_coord-1].interact_is_active() == true || orchard_fields[y_coord-1][x_coord-1].interact_is_active() == true || multicrop_fields[y_coord-1][x_coord-1].interact_is_active() == true){
+                std::cout << "There is a field planted here. You need to clear it before a dormitory can be built here." << std::endl;
+            }
+            else if((home_house.interact_x_location() == x_coord) && (home_house.interact_y_location() == y_coord)){
+                std::cout << "That's the farmhouse, you can't build a dormitory here." << std::endl;
+            }
+            else if((storehouse.interact_is_working() == true) && (storehouse.interact_x_location() == x_coord) && (storehouse.interact_y_location() == y_coord)){
+                std::cout << "That's the storehouse, you can't build a dormitory here." << std::endl;
+            }
+            else if((ale_house.interact_is_working() == true) && (ale_house.interact_x_location() == x_coord) && (ale_house.interact_y_location() == y_coord)){
+                std::cout << "That's the brewery, you can't build a dormitory here." << std::endl;
+            }
+            else{
+                dormitory->build(x_coord, y_coord);
                 return_int = 1;
             }
             break;
