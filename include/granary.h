@@ -18,6 +18,7 @@ class granary : public building{
     public:
         granary(int, int, int, std::string[], int[], int, int, bool);
         int set_up(std::vector<std::vector<crop>>, std::vector<std::vector<orchard>>, std::vector<std::vector<multicrop>>, farmhouse, brewery, workhouse, int);
+        void interact(std::string[], int[], int *);
         void calculate_total();
         void increase_size(int);
         void add_to_store(std::string, int);

@@ -14,6 +14,8 @@ class brewery : public building{
         void sell_beer(int);
         void transfer_barley(int);
         void add_to_brewing(int);
+        void barley_in();
+        void barley_out();
 
         //VARIABLE INTERACTIONS//
         int interact_storage_space();

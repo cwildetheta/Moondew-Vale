@@ -385,37 +385,7 @@ int main()
                         }
                     }
                     else{
-                        std::cout << "The current storage totals are:" << std::endl;
-                        std::cout << "1. Wheat       Current store: " << std::setw(6) << storehouse.interact_store_totals(seed_types[0]) << std::endl;
-                        std::cout << "2. Barley      Current store: " << std::setw(6) << storehouse.interact_store_totals(seed_types[1]) << std::endl;
-                        std::cout << "3. Apple       Current store: " << std::setw(6) << storehouse.interact_store_totals(seed_types[2]) << std::endl;
-                        std::cout << "4. Orange      Current store: " << std::setw(6) << storehouse.interact_store_totals(seed_types[3]) << std::endl;
-                        std::cout << "5. Courgette   Current store: " << std::setw(6) << storehouse.interact_store_totals(seed_types[4]) << std::endl;
-                        std::cout << "6. Tomato      Current store: " << std::setw(6) << storehouse.interact_store_totals(seed_types[5]) << std::endl << std::endl;
-                        std::cout << "Would you like to sell some of your stores? 0 to exit or pick a number: ";
-                        int store_pick;
-                        std::cin >> store_pick;
-                        if((store_pick > 0) && (store_pick < 7)){
-                            if(storehouse.interact_store_totals(seed_types[store_pick-1]) > 0){
-                                std::cout << "The current price of " << seed_types[store_pick-1] << " is \x9C" << current_price[store_pick-1] << ". How much would you like to sell?: ";
-                                int sell_amount;
-                                std::cin >> sell_amount;
-                                if(sell_amount >= storehouse.interact_store_totals(seed_types[store_pick-1])){
-                                    sell_amount = storehouse.interact_store_totals(seed_types[store_pick-1]);
-                                    std::cout << "Selling the entire store of " << seed_types[store_pick-1] << "." << std::endl;
-                                    storehouse.add_to_store(seed_types[store_pick-1], -sell_amount);
-                                    money = money + (sell_amount*current_price[store_pick-1]);
-                                }
-                                else{
-                                    std::cout << "Selling " << sell_amount << " units of " << seed_types[store_pick-1] << "." << std::endl;
-                                    storehouse.add_to_store(seed_types[store_pick-1], -sell_amount);
-                                    money = money + (sell_amount*current_price[store_pick-1]);
-                                }
-                            }
-                            else{
-                                std::cout << "You have no " << seed_types[store_pick-1] << " to sell." << std::endl;
-                            }
-                        }
+                        storehouse.interact(seed_types, current_price, &money);
                     }
                     system("pause");
                     break;
@@ -450,7 +420,7 @@ int main()
                             case 'I':{
                                 if(storehouse.interact_is_working() == true){
                                     if(storehouse.interact_store_totals("Barley") > 0){
-                                        storehouse.calculate_total();
+                                        ale_house.calculate_total();
                                         std::cout << "How much Barley do you want to move into the brewery. There are " << storehouse.interact_store_totals("Barley") << " units in the storehouse and " << (ale_house.interact_storage_space() - ale_house.interact_current_total()) << " units of space in the brewery: ";
                                         if(ale_house.interact_current_total() == ale_house.interact_storage_space()){
                                             std::cout << "The brewery is full. Remove something if you wish to add more Barley to it." << std::endl;
@@ -650,11 +620,7 @@ int main()
                                 }
                                 case 'n':
                                 case 'N':{
-                                    int new_workers = dormitory.increase_workers(money);
-                                    if(new_workers > 0){
-                                        money -= (new_workers*25);
-                                    }
-                                    upkeep += (new_workers*2);
+                                    dormitory.increase_workers(&money, &upkeep);
                                     break;
                                 }
                                 default:{

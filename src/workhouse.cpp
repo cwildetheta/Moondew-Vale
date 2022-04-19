@@ -9,7 +9,7 @@ workhouse::workhouse(int int_input, int int_input_2, int cost_input, int upkeep_
     interact_upkeep(upkeep_input);
     interact_is_working(is_working_input);
 }
-int workhouse::increase_workers(int money)
+void workhouse::increase_workers(int *money, int *upkeep)
 {
     int int_input = 0;
     char reply;
@@ -29,12 +29,14 @@ int workhouse::increase_workers(int money)
                         if(int_input > (max_workers - workers)){
                             int_input = (max_workers - workers);
                         }
-                        if((int_input*25) > money){
+                        if((int_input*25) > *money){
                             std::cout << "You don't have enough money to afford that many workers." << std::endl;
                         }
                         else{
                             std::cout << "Hiring " << int_input << " new workers." << std::endl;
                             workers += int_input;
+                            *money -= (25*int_input);
+                            *upkeep += (2*int_input);
                         }
                     }
                     else{
@@ -56,8 +58,8 @@ int workhouse::increase_workers(int money)
                         int_input = workers;
                     }
                     std::cout << "Firing " << int_input << " workers." << std::endl;
-                    int_input = -int_input;
-                    workers += int_input;
+                    workers -= int_input;
+                    *upkeep -= (2*int_input);
                     while((harvesters + fertilisers) > workers){
                         if(fertilisers > 0){
                             fertilisers--;
@@ -78,7 +80,6 @@ int workhouse::increase_workers(int money)
             }
         }
     }
-    return int_input;
 }
 void workhouse::automate_harvest()
 {

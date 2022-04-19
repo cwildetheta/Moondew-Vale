@@ -8,7 +8,7 @@ class workhouse : public building{
 
     public:
         workhouse(int, int, int, int, bool);
-        int increase_workers(int);
+        void increase_workers(int *, int *);
         void automate_harvest();
         void automate_fertilise();
 

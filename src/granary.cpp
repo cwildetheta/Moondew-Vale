@@ -1,5 +1,6 @@
 #include "../include/granary.h"
 #include <iostream>
+#include <iomanip>
 
 granary::granary(int int_input, int store_input, int current_store_input, std::string string_input_array[], int int_input_array[], int cost_input, int upkeep_input, bool is_working_input)
 {
@@ -64,6 +65,38 @@ int granary::set_up(std::vector<std::vector<crop>> crop_fields, std::vector<std:
         }
     }
     return return_int;
+}
+void granary::interact(std::string seed_types[], int current_price[], int *money)
+{
+    std::cout << "The current storage totals are:" << std::endl;
+    std::cout << "1. Wheat       Current store: " << std::setw(6) << interact_store_totals(seed_types[0]) << std::endl;
+    std::cout << "2. Barley      Current store: " << std::setw(6) << interact_store_totals(seed_types[1]) << std::endl;
+    std::cout << "3. Apple       Current store: " << std::setw(6) << interact_store_totals(seed_types[2]) << std::endl;
+    std::cout << "4. Orange      Current store: " << std::setw(6) << interact_store_totals(seed_types[3]) << std::endl;
+    std::cout << "5. Courgette   Current store: " << std::setw(6) << interact_store_totals(seed_types[4]) << std::endl;
+    std::cout << "6. Tomato      Current store: " << std::setw(6) << interact_store_totals(seed_types[5]) << std::endl << std::endl;
+    std::cout << "Would you like to sell some of your stores? 0 to exit or pick a number: ";
+    int store_pick;
+    std::cin >> store_pick;
+    if((store_pick > 0) && (store_pick < 7)){
+        if(interact_store_totals(seed_types[store_pick-1]) > 0){
+            std::cout << "The current price of " << seed_types[store_pick-1] << " is \x9C" << current_price[store_pick-1] << ". How much would you like to sell?: ";
+            int sell_amount;
+            std::cin >> sell_amount;
+            if(sell_amount >= interact_store_totals(seed_types[store_pick-1])){
+                sell_amount = interact_store_totals(seed_types[store_pick-1]);
+                std::cout << "Selling the entire store of " << seed_types[store_pick-1] << "." << std::endl;
+            }
+            else{
+                std::cout << "Selling " << sell_amount << " units of " << seed_types[store_pick-1] << "." << std::endl;
+            }
+            add_to_store(seed_types[store_pick-1], -sell_amount);
+            *money += (sell_amount*current_price[store_pick-1]);
+        }
+        else{
+            std::cout << "You have no " << seed_types[store_pick-1] << " to sell." << std::endl;
+        }
+    }
 }
 void granary::calculate_total()
 {
