@@ -13,9 +13,9 @@ void options(int, granary, brewery, workhouse, int, int, int);
 void main_ui(std::vector<std::vector<crop>>, std::vector<std::vector<orchard>>, std::vector<std::vector<multicrop>>, int, int, int, int, int, farmhouse, granary, brewery, workhouse);
 int change_prices(int, int, int);
 void test_function(farmhouse *);
-int set_up_granary(std::vector<std::vector<crop>>, std::vector<std::vector<orchard>>, std::vector<std::vector<multicrop>>, farmhouse, granary *, brewery, workhouse, int);
-int set_up_brewery(std::vector<std::vector<crop>>, std::vector<std::vector<orchard>>, std::vector<std::vector<multicrop>>, farmhouse, granary, brewery *, workhouse, int);
-int set_up_workhouse(std::vector<std::vector<crop>>, std::vector<std::vector<orchard>>, std::vector<std::vector<multicrop>>, farmhouse, granary, brewery, workhouse *, int);
+void set_up_granary(std::vector<std::vector<crop>>, std::vector<std::vector<orchard>>, std::vector<std::vector<multicrop>>, farmhouse, granary *, brewery, workhouse, int, int*, int*);
+void set_up_brewery(std::vector<std::vector<crop>>, std::vector<std::vector<orchard>>, std::vector<std::vector<multicrop>>, farmhouse, granary, brewery *, workhouse, int, int*, int *);
+void set_up_workhouse(std::vector<std::vector<crop>>, std::vector<std::vector<orchard>>, std::vector<std::vector<multicrop>>, farmhouse, granary, brewery, workhouse *, int, int*, int *);
 void harvest(std::string, int, granary *, brewery *, int, int *);
 void test(int *);
 

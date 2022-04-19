@@ -1,6 +1,7 @@
 #ifndef BREWERY_H_INCLUDED
 #define BREWERY_H_INCLUDED
 #include "building.h"
+#include "granary.h"
 #include <string>
 
 class brewery : public building{
@@ -14,8 +15,10 @@ class brewery : public building{
         void sell_beer(int);
         void transfer_barley(int);
         void add_to_brewing(int);
-        void barley_in();
-        void barley_out();
+        void barley_in(granary *);
+        void barley_out(granary *);
+        void brew();
+        void sale(int *);
 
         //VARIABLE INTERACTIONS//
         int interact_storage_space();

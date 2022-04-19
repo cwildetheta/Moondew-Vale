@@ -300,6 +300,12 @@ int main()
                     else if((storehouse.interact_is_working() == true) && (storehouse.interact_x_location() == x_coord) && (storehouse.interact_y_location() == y_coord)){
                         std::cout << "This is your storehouse, you can't remove that right now." << std::endl;
                     }
+                    else if((ale_house.interact_is_working() == true) && (ale_house.interact_x_location() == x_coord) && (ale_house.interact_y_location() == y_coord)){
+                        std::cout << "This is your brewery, you can't remove that right now." << std::endl;
+                    }
+                    else if((dormitory.interact_is_working() == true) && (dormitory.interact_x_location() == x_coord) && (dormitory.interact_y_location() == y_coord)){
+                        std::cout << "This is your workhouse, you can't remove that right now." << std::endl;
+                    }
                     else{
                         std::cout << "There's nothing in this field to clear." << std::endl;
                     }
@@ -370,15 +376,7 @@ int main()
                     if(storehouse.interact_is_working() == false){
                         std::cout << "It costs \x9C" << storehouse.interact_cost() << " to build a storehouse." << std::endl;
                         if(money >= storehouse.interact_cost()){
-                            int build_storehouse = set_up_granary(crop_fields, orchard_fields, multicrop_fields, home_house, &storehouse, ale_house, dormitory, size);
-                            if(build_storehouse == 1){
-                                money -= storehouse.interact_cost();
-                                upkeep += storehouse.interact_upkeep();
-                            }
-                            else if(build_storehouse == -1){
-                                std::cout << "Error value returned, something has gone completely wrong." << std::endl;
-                                system("pause");
-                            }
+                            set_up_granary(crop_fields, orchard_fields, multicrop_fields, home_house, &storehouse, ale_house, dormitory, size, &money, &upkeep);
                         }
                         else{
                             std::cout << "You do not have enough money currently." << std::endl;
@@ -395,15 +393,7 @@ int main()
                     if(ale_house.interact_is_working() == false){
                         std::cout << "It costs \x9C" << ale_house.interact_cost() << " to build a brewery." << std::endl;
                         if(money >= ale_house.interact_cost()){
-                            int build_ale_house = set_up_brewery(crop_fields, orchard_fields, multicrop_fields, home_house, storehouse, &ale_house, dormitory, size);
-                            if(build_ale_house == 1){
-                                money -= ale_house.interact_cost();
-                                upkeep += ale_house.interact_upkeep();
-                            }
-                            else if(build_ale_house == -1){
-                                std::cout << "Error value returned, something has gone completely wrong." << std::endl;
-                                system("pause");
-                            }
+                            set_up_brewery(crop_fields, orchard_fields, multicrop_fields, home_house, storehouse, &ale_house, dormitory, size, &money, &upkeep);
                         }
                         else{
                             std::cout << "You do not have enough money currently." << std::endl;
@@ -418,154 +408,22 @@ int main()
                         switch(brewery_input){
                             case 'i':
                             case 'I':{
-                                if(storehouse.interact_is_working() == true){
-                                    if(storehouse.interact_store_totals("Barley") > 0){
-                                        ale_house.calculate_total();
-                                        std::cout << "How much Barley do you want to move into the brewery. There are " << storehouse.interact_store_totals("Barley") << " units in the storehouse and " << (ale_house.interact_storage_space() - ale_house.interact_current_total()) << " units of space in the brewery: ";
-                                        if(ale_house.interact_current_total() == ale_house.interact_storage_space()){
-                                            std::cout << "The brewery is full. Remove something if you wish to add more Barley to it." << std::endl;
-                                        }
-                                        else{
-                                            int move_input;
-                                            std::cin >> move_input;
-                                            if(move_input >= storehouse.interact_store_totals("Barley")){
-                                                move_input = storehouse.interact_store_totals("Barley");
-                                                std::cout << "Moving the entire Barley store into the brewery." << std::endl;
-                                                storehouse.add_to_store("Barley", -move_input);
-                                                ale_house.transfer_barley(move_input);
-                                            }
-                                            else{
-                                                std::cout << "Moving " << move_input << " units of Barley into the brewery." << std::endl;
-                                                storehouse.add_to_store("Barley", -move_input);
-                                                ale_house.transfer_barley(move_input);
-                                            }
-                                        }
-                                    }
-                                    else{
-                                        std::cout << "There is currently no Barley stored in the storehouse." << std::endl;
-                                    }
-                                }
-                                else{
-                                    std::cout << "You currently don't have a storehouse, so there is nowhere to move Barley from." << std::endl;
-                                }
+                                ale_house.barley_in(&storehouse);
                                 break;
                             }
                             case 'o':
                             case 'O':{
-                                if(storehouse.interact_is_working() == true){
-                                    if(ale_house.interact_stored_barley() > 0){
-                                        storehouse.calculate_total();
-                                        std::cout << "How much Barley do you want to move into the storehouse. There are " << ale_house.interact_stored_barley() << " units in the brewery, and " << (storehouse.interact_storage_space() - storehouse.interact_current_total()) << " units of space free in the storehouse: ";
-                                        if(storehouse.interact_current_total() == storehouse.interact_storage_space()){
-                                            std::cout << "There storehouse is full, so no Barley can be move to there." << std::endl;
-                                        }
-                                        else{
-                                            int move_input;
-                                            std::cin >> move_input;
-                                            if(move_input >= ale_house.interact_stored_barley()){
-                                                move_input = ale_house.interact_stored_barley();
-                                                std::cout << "Moving the entire Barley store into the storehouse." << std::endl;
-                                                storehouse.add_to_store("Barley", move_input);
-                                                ale_house.transfer_barley(-move_input);
-                                            }
-                                            else{
-                                                std::cout << "Moving " << move_input << " units of Barley into the storehouse." << std::endl;
-                                                storehouse.add_to_store("Barley", move_input);
-                                                ale_house.transfer_barley(-move_input);
-                                            }
-                                        }
-                                    }
-                                    else{
-                                        std::cout << "There is currently no Barley stored in the brewery." << std::endl;
-                                    }
-                                }
-                                else{
-                                    std::cout << "You currently don't have a storehouse, so there is nowhere to move Barley from." << std::endl;
-                                }
+                                ale_house.barley_out(&storehouse);
                                 break;
                             }
                             case 'b':
                             case 'B':{
-                                bool in_brew_adding = true;
-                                while(in_brew_adding == true){
-                                    std::cout << "There are currently " << ale_house.interact_current_brewing() << " units of Barley waiting to be brewed, out of a potential total of " << ale_house.interact_brewing_cap() << " units." << std::endl;
-                                    std::cout << "Would you like to add (a) or remove (r) Barley, or exit (e): ";
-                                    char brew_input;
-                                    int move_amount;
-                                    std::cin >> brew_input;
-                                    switch(brew_input){
-                                        case 'a':
-                                        case 'A':{
-                                            if(ale_house.interact_current_brewing() == ale_house.interact_brewing_cap()){
-                                                std::cout << "The brewing process is already at capacity, you can't add any more Barley." << std::endl;
-                                            }
-                                            else if(ale_house.interact_stored_barley() == 0){
-                                                std::cout << "There is no Barley currently stored in the brewery to add to the process." << std::endl;
-                                            }
-                                            else{
-                                                std::cout << "How much Barley would you like to add: ";
-                                                std::cin >> move_amount;
-                                                if(move_amount > ale_house.interact_stored_barley()){
-                                                    move_amount = ale_house.interact_stored_barley();
-                                                }
-                                                if(move_amount > (ale_house.interact_brewing_cap() - ale_house.interact_current_brewing())){
-                                                    move_amount = (ale_house.interact_brewing_cap() - ale_house.interact_current_brewing());
-                                                }
-                                                std::cout << "Adding " << move_amount << " units of Barley to the brewing process." << std::endl;
-                                                ale_house.add_to_brewing(move_amount);
-                                            }
-                                            break;
-                                        }
-                                        case 'r':
-                                        case 'R':{
-                                            if(ale_house.interact_current_brewing() == 0){
-                                                std::cout << "There is no Barley in the brewing process to be removed." << std::endl;
-                                            }
-                                            else{
-                                                std::cout << "How much Barley would you like to remove: ";
-                                                std::cin >> move_amount;
-                                                if(move_amount > ale_house.interact_current_brewing()){
-                                                    move_amount = ale_house.interact_current_brewing();
-                                                }
-                                                std::cout << "Removing " << move_amount << " units of Barley from the brewing process.";
-                                                ale_house.add_to_brewing(-move_amount);
-                                            }
-                                            break;
-                                        }
-                                        case 'e':
-                                        case 'E':{
-                                            in_brew_adding = false;
-                                            break;
-                                        }
-                                        default:{
-                                            std::cout << "Invalid entry, please try again." << std::endl;
-                                            break;
-                                        }
-                                    }
-                                }
+                                ale_house.brew();
                                 break;
                             }
                             case 's':
                             case 'S':{
-                                if(ale_house.interact_stored_beer() > 0){
-                                    std::cout << "There are currently " << ale_house.interact_stored_beer() << " units of beer in the brewery. It sells for \x9C" << "20 per unit. How many would you like to sell: ";
-                                    int sell_amount;
-                                    std::cin >> sell_amount;
-                                    if(sell_amount >= ale_house.interact_stored_beer()){
-                                        sell_amount = ale_house.interact_stored_beer();
-                                        std::cout << "Selling the entire beer stock." << std::endl;
-                                        ale_house.sell_beer(sell_amount);
-                                        money += (sell_amount*20);
-                                    }
-                                    else{
-                                        std::cout << "Selling " << sell_amount << " units of beer." << std::endl;
-                                        ale_house.sell_beer(sell_amount);
-                                        money += (sell_amount*20);
-                                    }
-                                }
-                                else{
-                                    std::cout << "There is currently no beer stored in the brewery to sell." << std::endl;
-                                }
+                                ale_house.sale(&money);
                                 break;
                             }
                             default:{
@@ -581,15 +439,7 @@ int main()
                     if(dormitory.interact_is_working() == false){
                         std::cout << "It costs \x9C" << dormitory.interact_cost() << " to build a dormitory." << std::endl;
                         if(money >= dormitory.interact_cost()){
-                            int build_dormitory = set_up_workhouse(crop_fields, orchard_fields, multicrop_fields, home_house, storehouse, ale_house, &dormitory, size);
-                            if(build_dormitory == 1){
-                                money -= dormitory.interact_cost();
-                                upkeep += dormitory.interact_upkeep();
-                            }
-                            else if(build_dormitory == -1){
-                                std::cout << "Error value returned, something has gone completely wrong." << std::endl;
-                                system("pause");
-                            }
+                            set_up_workhouse(crop_fields, orchard_fields, multicrop_fields, home_house, storehouse, ale_house, &dormitory, size, &money, &upkeep);
                         }
                         else{
                             std::cout << "You do not have enough money currently." << std::endl;

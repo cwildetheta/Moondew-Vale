@@ -1,12 +1,6 @@
 #ifndef GRANARY_H_INCLUDED
 #define GRANARY_H_INCLUDED
 #include "building.h"
-#include "crop.h"
-#include "orchard.h"
-#include "multicrop.h"
-#include "farmhouse.h"
-#include "brewery.h"
-#include "workhouse.h"
 #include <string>
 #include <vector>
 
@@ -17,7 +11,6 @@ class granary : public building{
 
     public:
         granary(int, int, int, std::string[], int[], int, int, bool);
-        int set_up(std::vector<std::vector<crop>>, std::vector<std::vector<orchard>>, std::vector<std::vector<multicrop>>, farmhouse, brewery, workhouse, int);
         void interact(std::string[], int[], int *);
         void calculate_total();
         void increase_size(int);

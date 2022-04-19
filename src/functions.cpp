@@ -326,16 +326,14 @@ void test_function(farmhouse *home_house)
     std::cout << "Upadating seed totals." << std::endl;
 }
 
-int set_up_granary(std::vector<std::vector<crop>> crop_fields, std::vector<std::vector<orchard>> orchard_fields, std::vector<std::vector<multicrop>> multicrop_fields, farmhouse home_house, granary *storehouse, brewery ale_house, workhouse dormitory, int size)
+void set_up_granary(std::vector<std::vector<crop>> crop_fields, std::vector<std::vector<orchard>> orchard_fields, std::vector<std::vector<multicrop>> multicrop_fields, farmhouse home_house, granary *storehouse, brewery ale_house, workhouse dormitory, int size, int* money, int *upkeep)
 {
-    int return_int = -1;
     std::cout << "Would you like to build one? Y/N: ";
     char char_input;
     std::cin >> char_input;
     switch(char_input){
         case 'y':
         case 'Y':{
-            return_int = 0;
             std::cout << "Please enter x coordinate: ";
             int x_coord, y_coord;
             std::cin >> x_coord;
@@ -361,33 +359,29 @@ int set_up_granary(std::vector<std::vector<crop>> crop_fields, std::vector<std::
             }
             else{
                 storehouse->build(x_coord, y_coord);
-                return_int = 1;
+                *money -= storehouse->interact_cost();
+                *upkeep += storehouse->interact_upkeep();
             }
             break;
         }
         case 'n':
         case 'N':{
-            return_int = 0;
             break;
         }
         default:{
             std::cout << "Invalid entry." << std::endl;
-            return_int = 0;
             break;
         }
     }
-    return return_int;
 }
-int set_up_brewery(std::vector<std::vector<crop>> crop_fields, std::vector<std::vector<orchard>> orchard_fields, std::vector<std::vector<multicrop>> multicrop_fields, farmhouse home_house, granary storehouse, brewery *ale_house, workhouse dormitory, int size)
+void set_up_brewery(std::vector<std::vector<crop>> crop_fields, std::vector<std::vector<orchard>> orchard_fields, std::vector<std::vector<multicrop>> multicrop_fields, farmhouse home_house, granary storehouse, brewery *ale_house, workhouse dormitory, int size, int* money, int *upkeep)
 {
-    int return_int = -1;
     std::cout << "Would you like to build one? Y/N: ";
     char char_input;
     std::cin >> char_input;
     switch(char_input){
         case 'y':
         case 'Y':{
-            return_int = 0;
             std::cout << "Please enter x coordinate: ";
             int x_coord, y_coord;
             std::cin >> x_coord;
@@ -413,34 +407,29 @@ int set_up_brewery(std::vector<std::vector<crop>> crop_fields, std::vector<std::
             }
             else{
                 ale_house->build(x_coord, y_coord);
-                return_int = 1;
+                *money -= ale_house->interact_cost();
+                *upkeep += ale_house->interact_upkeep();
             }
             break;
         }
         case 'n':
         case 'N':{
-            return_int = 0;
             break;
         }
         default:{
             std::cout << "Invalid entry." << std::endl;
-            return_int = 0;
             break;
         }
     }
-    return return_int;
 }
-
-int set_up_workhouse(std::vector<std::vector<crop>> crop_fields, std::vector<std::vector<orchard>> orchard_fields, std::vector<std::vector<multicrop>> multicrop_fields, farmhouse home_house, granary storehouse, brewery ale_house, workhouse *dormitory, int size)
+void set_up_workhouse(std::vector<std::vector<crop>> crop_fields, std::vector<std::vector<orchard>> orchard_fields, std::vector<std::vector<multicrop>> multicrop_fields, farmhouse home_house, granary storehouse, brewery ale_house, workhouse *dormitory, int size, int* money, int *upkeep)
 {
-    int return_int = -1;
     std::cout << "Would you like to build one? Y/N: ";
     char char_input;
     std::cin >> char_input;
     switch(char_input){
         case 'y':
         case 'Y':{
-            return_int = 0;
             std::cout << "Please enter x coordinate: ";
             int x_coord, y_coord;
             std::cin >> x_coord;
@@ -466,22 +455,20 @@ int set_up_workhouse(std::vector<std::vector<crop>> crop_fields, std::vector<std
             }
             else{
                 dormitory->build(x_coord, y_coord);
-                return_int = 1;
+                *money -= dormitory->interact_cost();
+                *upkeep += dormitory->interact_upkeep();
             }
             break;
         }
         case 'n':
         case 'N':{
-            return_int = 0;
             break;
         }
         default:{
             std::cout << "Invalid entry." << std::endl;
-            return_int = 0;
             break;
         }
     }
-    return return_int;
 }
 
 void harvest(std::string seed_types, int current_price, granary *storehouse, brewery *ale_house, int output, int *money)
@@ -498,7 +485,7 @@ void harvest(std::string seed_types, int current_price, granary *storehouse, bre
             storehouse->add_to_store(seed_types, output);
             std::cout << "The harvest has been stored in the storehouse." << std::endl;
         }
-        if(store_input == 'b' || store_input == 'B'){
+        else if(store_input == 'b' || store_input == 'B'){
             ale_house->transfer_barley(output);
             std::cout << "The harvest has been stored in the brewery." << std::endl;
         }
