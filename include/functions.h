@@ -16,5 +16,7 @@ void test_function(farmhouse *);
 int set_up_granary(std::vector<std::vector<crop>>, std::vector<std::vector<orchard>>, std::vector<std::vector<multicrop>>, farmhouse, granary *, brewery, workhouse, int);
 int set_up_brewery(std::vector<std::vector<crop>>, std::vector<std::vector<orchard>>, std::vector<std::vector<multicrop>>, farmhouse, granary, brewery *, workhouse, int);
 int set_up_workhouse(std::vector<std::vector<crop>>, std::vector<std::vector<orchard>>, std::vector<std::vector<multicrop>>, farmhouse, granary, brewery, workhouse *, int);
+void harvest(std::string, int, granary *, brewery *, int, int *);
+void test(int *);
 
 #endif //FUNCTIONS_H_INCLUDED

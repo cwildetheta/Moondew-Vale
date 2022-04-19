@@ -483,3 +483,66 @@ int set_up_workhouse(std::vector<std::vector<crop>> crop_fields, std::vector<std
     }
     return return_int;
 }
+
+void harvest(std::string seed_types, int current_price, granary *storehouse, brewery *ale_house, int output, int *money)
+{
+    std::cout << "The current price of " << seed_types << " is \x9C" << current_price;
+    storehouse->calculate_total();
+    ale_house->calculate_total();
+    if(((seed_types == "Barley") && (ale_house->interact_is_working() == true) && ((ale_house->interact_storage_space() - ale_house->interact_current_total()) >= output)) && ((storehouse->interact_is_working() == true) && ((storehouse->interact_storage_space()-storehouse->interact_current_total()) >= output))){
+        std::cout << ", or there is " << (storehouse->interact_storage_space()-storehouse->interact_current_total()) << " units of space available in the storehouse, or " << (ale_house->interact_storage_space()-ale_house->interact_current_total()) << " units of space available in the brewery." << std::endl;
+        std::cout << "If you would like to store the harvest in the storehouse, press s, or in the brewery, press b, otherwise it will be sold: ";
+        char store_input;
+        std::cin >> store_input;
+        if(store_input == 's' || store_input == 'S'){
+            storehouse->add_to_store(seed_types, output);
+            std::cout << "The harvest has been stored in the storehouse." << std::endl;
+        }
+        if(store_input == 'b' || store_input == 'B'){
+            ale_house->transfer_barley(output);
+            std::cout << "The harvest has been stored in the brewery." << std::endl;
+        }
+        else{
+            std::cout << "You have made \x9C" << output*current_price << "." << std::endl;
+            *money += (output*current_price);
+        }
+    }
+    else if((seed_types == "Barley") && (ale_house->interact_is_working() == true) && ((ale_house->interact_storage_space()-ale_house->interact_current_total()) >= output)){
+        std::cout << ", or there is " << (ale_house->interact_storage_space()-ale_house->interact_current_total()) << " units of space available in the brewery." << std::endl;
+        std::cout << "If you would like to store the harvest, press s, otherwise it will be sold: ";
+        char store_input;
+        std::cin >> store_input;
+        if(store_input == 's' || store_input == 'S'){
+            ale_house->transfer_barley(output);
+            std::cout << "The harvest has been stored in the brewery." << std::endl;
+        }
+        else{
+            std::cout << "You have made \x9C" << output*current_price << "." << std::endl;
+            *money += (output*current_price);
+        }
+    }
+    else if((storehouse->interact_is_working() == true) && ((storehouse->interact_storage_space()-storehouse->interact_current_total()) >= output)){
+        std::cout << ", or there is " << (storehouse->interact_storage_space()-storehouse->interact_current_total()) << " units of space available in the storehouse." << std::endl;
+        std::cout << "If you would like to store the harvest, press s, otherwise it will be sold: ";
+        char store_input;
+        std::cin >> store_input;
+        if(store_input == 's' || store_input == 'S'){
+            storehouse->add_to_store(seed_types, output);
+            std::cout << "The harvest has been stored in the storehouse." << std::endl;
+        }
+        else{
+            std::cout << "You have made \x9C" << output*current_price << "." << std::endl;
+            *money += (output*current_price);
+        }
+    }
+    else{
+        std::cout << "." << std::endl;
+        std::cout << "You have made \x9C" << output*current_price << "." << std::endl;
+        *money += (output*current_price);
+    }
+}
+
+void test(int *money)
+{
+    *money += 1000;
+}
