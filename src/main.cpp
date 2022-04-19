@@ -51,6 +51,120 @@ int main()
         while(sim_loop == true){
             system("cls");
             main_ui(crop_fields, orchard_fields, multicrop_fields, size, month, money, upkeep, harvestable, home_house, storehouse, ale_house, dormitory);
+            if((harvestable > 0) && (dormitory.interact_is_working() == true) && (dormitory.interact_harvesters() > 0)){
+                int auto_harvest[number_of_plants], to_harvest = dormitory.interact_harvesters(), i = 0, k = 0;
+                for(int i = 0; i < number_of_plants; i++){
+                    auto_harvest[i] = 0;
+                }
+                while((harvestable > 0) && (to_harvest > 0) && (i < 7)){
+                    int index = 0;
+                    if((crop_fields[i][k].interact_is_active() == true) && (crop_fields[i][k].interact_is_alive() == true) && (crop_fields[i][k].interact_is_ripe() == true)){
+                        for(int l = 0; l < number_of_plants; l++){
+                            if(seed_types[l] == crop_fields[i][k].interact_name()){
+                                index = l;
+                            }
+                        }
+                        auto_harvest[index] += crop_fields[i][k].harvest_field();
+                        crop_fields[i][k].clear_field();
+                        to_harvest--;
+                        harvestable--;
+                    }
+                    else if((orchard_fields[i][k].interact_is_active() == true) && (orchard_fields[i][k].interact_is_alive() == true) && (orchard_fields[i][k].interact_is_producing() == true)){
+                        for(int l = 0; l < number_of_plants; l++){
+                            if(seed_types[l] == orchard_fields[i][k].interact_name()){
+                                index = l;
+                            }
+                        }
+                        auto_harvest[index] += orchard_fields[i][k].harvest_field();
+                        orchard_fields[i][k].clear_field();
+                        to_harvest--;
+                        harvestable--;
+                    }
+                    else if((multicrop_fields[i][k].interact_is_active() == true) && (multicrop_fields[i][k].interact_is_alive() == true) && (multicrop_fields[i][k].interact_is_producing() == true)){
+                        for(int l = 0; l < number_of_plants; l++){
+                            if(seed_types[l] == multicrop_fields[i][k].interact_name()){
+                                index = l;
+                            }
+                        }
+                        auto_harvest[index] += multicrop_fields[i][k].harvest_field();
+                        multicrop_fields[i][k].clear_field();
+                        to_harvest--;
+                        harvestable--;
+                    }
+                    k++;
+                    if(k > 6){
+                        k = 0, i++;
+                    }
+                }
+                std::cout << "Your workers have automatically harvested:";
+                for(int l = 0; l < number_of_plants; l++){
+                    if(auto_harvest[l] > 0){
+                        std::cout << "   " << auto_harvest[l] << " units of " << seed_types[l];
+                    }
+                }
+                std::cout << "." << std::endl;
+                for(int l = 0; l < number_of_plants; l++){
+                    if(auto_harvest[l] > 0){
+                        std::cout << "The current price of " << seed_types[l] << " is \x9C" << current_price[l];
+                        storehouse.calculate_total();
+                        ale_house.calculate_total();
+                        if(((l == 1) && (ale_house.interact_is_working() == true) && ((ale_house.interact_storage_space() - ale_house.interact_current_total()) >= auto_harvest[l])) && ((storehouse.interact_is_working() == true) && ((storehouse.interact_storage_space()-storehouse.interact_current_total()) >= auto_harvest[l]))){
+                            std::cout << ", or there is " << (storehouse.interact_storage_space()-storehouse.interact_current_total()) << " units of space available in the storehouse, or " << (ale_house.interact_storage_space()-ale_house.interact_current_total()) << " units of space available in the brewery." << std::endl;
+                            std::cout << "If you would like to store the harvest in the storehouse, press s, or in the brewery, press b, otherwise it will be sold: ";
+                            char store_input;
+                            std::cin >> store_input;
+                            if(store_input == 's' || store_input == 'S'){
+                                storehouse.add_to_store(seed_types[l], auto_harvest[l]);
+                                std::cout << "The harvest has been stored in the storehouse." << std::endl;
+                            }
+                            if(store_input == 'b' || store_input == 'B'){
+                                ale_house.transfer_barley(auto_harvest[l]);
+                                std::cout << "The harvest has been stored in the brewery." << std::endl;
+                            }
+                            else{
+                                std::cout << "You have made \x9C" << auto_harvest[l]*current_price[l] << "." << std::endl;
+                                money = money + (auto_harvest[l]*current_price[l]);
+                            }
+                        }
+                        else if((l == 1) && (ale_house.interact_is_working() == true) && ((ale_house.interact_storage_space()-ale_house.interact_current_total()) >= auto_harvest[l])){
+                            std::cout << ", or there is " << (ale_house.interact_storage_space()-ale_house.interact_current_total()) << " units of space available in the brewery." << std::endl;
+                            std::cout << "If you would like to store the harvest, press s, otherwise it will be sold: ";
+                            char store_input;
+                            std::cin >> store_input;
+                            if(store_input == 's' || store_input == 'S'){
+                                ale_house.transfer_barley(auto_harvest[l]);
+                                std::cout << "The harvest has been stored in the brewery." << std::endl;
+                            }
+                            else{
+                                std::cout << "You have made \x9C" << auto_harvest[l]*current_price[l] << "." << std::endl;
+                                money = money + (auto_harvest[l]*current_price[l]);
+                            }
+                        }
+                        else if((storehouse.interact_is_working() == true) && ((storehouse.interact_storage_space()-storehouse.interact_current_total()) >= auto_harvest[l])){
+                            std::cout << ", or there is " << (storehouse.interact_storage_space()-storehouse.interact_current_total()) << " units of space available in the storehouse." << std::endl;
+                            std::cout << "If you would like to store the harvest, press s, otherwise it will be sold: ";
+                            char store_input;
+                            std::cin >> store_input;
+                            if(store_input == 's' || store_input == 'S'){
+                                storehouse.add_to_store(seed_types[l], auto_harvest[l]);
+                                std::cout << "The harvest has been stored in the storehouse." << std::endl;
+                            }
+                            else{
+                                std::cout << "You have made \x9C" << auto_harvest[l]*current_price[l] << "." << std::endl;
+                                money = money + (auto_harvest[l]*current_price[l]);
+                            }
+                        }
+                        else{
+                            std::cout << "." << std::endl;
+                            std::cout << "You have made \x9C" << auto_harvest[l]*current_price[l] << "." << std::endl;
+                            money = money + (auto_harvest[l]*current_price[l]);
+                            system("pause");
+                        }
+                    }
+                }
+                system("cls");
+                main_ui(crop_fields, orchard_fields, multicrop_fields, size, month, money, upkeep, harvestable, home_house, storehouse, ale_house, dormitory);
+            }
             char entry;
             std::cout << "Enter choice: ";
             std::cin >> entry;
@@ -847,7 +961,6 @@ int main()
                             }
                         }
                         if(dormitory.interact_is_working() == true){
-                            int to_harvest = dormitory.interact_harvesters();
                             int to_fertilise = dormitory.interact_fertilisers();
                             int i = 0, k = 0;
                             while((to_fertilise > 0) && (i < 7) && (home_house.interact_fertiliser() > 0)){
@@ -873,6 +986,7 @@ int main()
                             }
                             if((home_house.interact_fertiliser() == 0) && (dormitory.interact_fertilisers() > 0)){
                                 std::cout << "You are out of fertiliser, so yor workers cannot fertilise the fields." << std::endl;
+                                system("pause");
                             }
                         }
                     }
