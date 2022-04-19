@@ -11,5 +11,6 @@
 
 void options(int, granary, brewery, workhouse, int, int, int);
 void main_ui(std::vector<std::vector<crop>>, std::vector<std::vector<orchard>>, std::vector<std::vector<multicrop>>, int, int, int, int, int, farmhouse, granary, brewery, workhouse);
+int change_prices(int, int, int);
 
 #endif //FUNCTIONS_H_INCLUDED

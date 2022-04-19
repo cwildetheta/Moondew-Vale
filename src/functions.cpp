@@ -311,3 +311,11 @@ void main_ui(std::vector<std::vector<crop>> crop_fields, std::vector<std::vector
     }
     std::cout << std::endl << std::endl;
 }
+
+int change_prices(int current_price, int base_price, int price_variation)
+{
+    srand(time(NULL));
+    current_price = rand()%(2*price_variation) + (base_price - price_variation);
+
+    return current_price;
+}

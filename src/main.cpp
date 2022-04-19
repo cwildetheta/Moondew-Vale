@@ -41,6 +41,7 @@ int main()
         int seed_prices[number_of_plants] = {30, 45, 35, 35, 25, 20};
         int base_yields[number_of_plants] = {15, 15, 5, 5, 5, 5};
         int base_price[number_of_plants] = {5, 10, 6, 8, 3, 2}, current_price[number_of_plants] = {5, 10, 6, 8, 3, 2};
+        int price_variation[number_of_plants] = {3, 8, 4, 5, 2, 1};
         int initial_store[number_of_plants] = {0, 0, 0, 0, 0, 0};
         farmhouse home_house(number_of_plants, seed_types, initial_seed_numbers, 0, 5, 4, 4, true);
         granary storehouse(number_of_plants, 200, 0, seed_types, initial_store, 150, 2, false);
@@ -51,6 +52,11 @@ int main()
         while(sim_loop == true){
             system("cls");
             main_ui(crop_fields, orchard_fields, multicrop_fields, size, month, money, upkeep, harvestable, home_house, storehouse, ale_house, dormitory);
+            /*std::cout << "Current Prices: ";
+            for(int i = 0; i < 6; i++){
+                std::cout << "\x9C" << current_price[i] << "   ";
+            }
+            std::cout << std::endl;*/
             if((harvestable > 0) && (dormitory.interact_is_working() == true) && (dormitory.interact_harvesters() > 0)){
                 int auto_harvest[number_of_plants], to_harvest = dormitory.interact_harvesters(), i = 0, k = 0;
                 for(int i = 0; i < number_of_plants; i++){
@@ -989,6 +995,9 @@ int main()
                                 system("pause");
                             }
                         }
+                    }
+                    for(int i = 0; i < number_of_plants; i++){
+                        current_price[i] = change_prices(current_price[i], base_price[i], price_variation[i]);
                     }
                     break;
                 }
