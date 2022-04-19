@@ -474,50 +474,14 @@ int main()
                     if(storehouse.interact_is_working() == false){
                         std::cout << "It costs \x9C" << storehouse.interact_cost() << " to build a storehouse." << std::endl;
                         if(money >= storehouse.interact_cost()){
-                            std::cout << "Would you like to build one? Y/N: ";
-                            char char_input;
-                            std::cin >> char_input;
-                            switch(char_input){
-                                case 'y':
-                                case 'Y':{
-                                    std::cout << "Please enter x coordinate: ";
-                                    int x_coord, y_coord;
-                                    std::cin >> x_coord;
-                                    std::cout << "Please enter y coordinate: ";
-                                    std::cin >> y_coord;
-                                    if((x_coord < 1) || (x_coord > size)){
-                                        std::cout << "x coordinate out of bounds, please try again." << std::endl;
-                                    }
-                                    else if((y_coord < 1) || (y_coord > size)){
-                                        std::cout << "y coordinate out of bounds, please try again." << std::endl;
-                                    }
-                                    else if(crop_fields[y_coord-1][x_coord-1].interact_is_active() == true || orchard_fields[y_coord-1][x_coord-1].interact_is_active() == true || multicrop_fields[y_coord-1][x_coord-1].interact_is_active() == true){
-                                        std::cout << "There is a field planted here. You need to clear it before a storehouse can be built here." << std::endl;
-                                    }
-                                    else if((home_house.interact_x_location() == x_coord) && (home_house.interact_y_location() == y_coord)){
-                                        std::cout << "That's the farmhouse, you can't build a storehouse here." << std::endl;
-                                    }
-                                    else if((ale_house.interact_is_working() == true) && (ale_house.interact_x_location() == x_coord) && (ale_house.interact_y_location() == y_coord)){
-                                        std::cout << "That's the brewery, you can't build a storehouse here." << std::endl;
-                                    }
-                                    else if((dormitory.interact_is_working() == true) && (dormitory.interact_x_location() == x_coord) && (dormitory.interact_y_location() == y_coord)){
-                                        std::cout << "That's the dormitory, you can't build a storehouse here." << std::endl;
-                                    }
-                                    else{
-                                        storehouse.build(x_coord, y_coord);
-                                        money = money - storehouse.interact_cost();
-                                        upkeep = upkeep + storehouse.interact_upkeep();
-                                    }
-                                    break;
-                                }
-                                case 'n':
-                                case 'N':{
-                                    break;
-                                }
-                                default:{
-                                    std::cout << "Invalid entry." << std::endl;
-                                    break;
-                                }
+                            int build_storehouse = storehouse.set_up(crop_fields, orchard_fields, multicrop_fields, home_house, ale_house, dormitory, size);
+                            if(build_storehouse == 1){
+                                money -= storehouse.interact_cost();
+                                upkeep += storehouse.interact_upkeep();
+                            }
+                            else if(build_storehouse == -1){
+                                std::cout << "Error value returned, something has gone completely wrong." << std::endl;
+                                system("pause");
                             }
                         }
                         else{

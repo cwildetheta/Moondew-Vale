@@ -319,3 +319,9 @@ int change_prices(int current_price, int base_price, int price_variation)
 
     return current_price;
 }
+
+void test_function(farmhouse *home_house)
+{
+    home_house->change_seed_totals("Wheat", 5);
+    std::cout << "Upadating seed totals." << std::endl;
+}
