@@ -474,7 +474,7 @@ int main()
                     if(storehouse.interact_is_working() == false){
                         std::cout << "It costs \x9C" << storehouse.interact_cost() << " to build a storehouse." << std::endl;
                         if(money >= storehouse.interact_cost()){
-                            int build_storehouse = storehouse.set_up(crop_fields, orchard_fields, multicrop_fields, home_house, ale_house, dormitory, size);
+                            int build_storehouse = set_up_granary(crop_fields, orchard_fields, multicrop_fields, home_house, &storehouse, ale_house, dormitory, size);
                             if(build_storehouse == 1){
                                 money -= storehouse.interact_cost();
                                 upkeep += storehouse.interact_upkeep();
