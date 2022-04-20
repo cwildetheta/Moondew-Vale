@@ -320,12 +320,6 @@ int change_prices(int current_price, int base_price, int price_variation)
     return current_price;
 }
 
-/*void test_function(farmhouse *home_house)
-{
-    home_house->change_seed_totals("Wheat", 5);
-    std::cout << "Upadating seed totals." << std::endl;
-}*/
-
 void set_up_granary(std::vector<std::vector<crop>> crop_fields, std::vector<std::vector<orchard>> orchard_fields, std::vector<std::vector<multicrop>> multicrop_fields, farmhouse home_house, granary *storehouse, brewery ale_house, workhouse dormitory, int size, int* money, int *upkeep)
 {
     std::cout << "Would you like to build one? Y/N: ";
@@ -462,6 +456,124 @@ void set_up_workhouse(std::vector<std::vector<crop>> crop_fields, std::vector<st
     }
 }
 
+void plant(std::string seed_types[], std::vector<std::vector<crop *>> crop_fields, std::vector<std::vector<orchard *>> orchard_fields, std::vector<std::vector<multicrop *>> multicrop_fields, farmhouse* home_house, granary storehouse, brewery ale_house, workhouse dormitory, int size, char plant_chars[], char small_plant_chars[], int base_yields[])
+{
+    std::cout << "1. Wheat      Seeds: " << home_house->interact_seed_totals(seed_types[0]) << std::endl; //Generalise this later, ie. seed_types[i]
+    std::cout << "2. Barley     Seeds: " << home_house->interact_seed_totals(seed_types[1]) << std::endl;
+    std::cout << "3. Apple      Seeds: " << home_house->interact_seed_totals(seed_types[2]) << std::endl;
+    std::cout << "4. Orange     Seeds: " << home_house->interact_seed_totals(seed_types[3]) << std::endl;
+    std::cout << "5. Courgette  Seeds: " << home_house->interact_seed_totals(seed_types[4]) << std::endl;
+    std::cout << "6. Tomato     Seeds: " << home_house->interact_seed_totals(seed_types[5]) << std::endl << std::endl;
+    int seed_pick = int_inputter("Which seed would you like to plant: ");
+    if(((seed_pick > 0) && (seed_pick < 7)) && (home_house->interact_seed_totals(seed_types[seed_pick-1]) > 0)){
+        int x_coord = int_inputter("Please enter x coordinate: ");
+        int y_coord = int_inputter("Please enter y coordinate: ");
+        if((x_coord < 1) || (x_coord > size)){
+            std::cout << "x coordinate out of bounds, please try again." << std::endl;
+        }
+        else if((y_coord < 1) || (y_coord > size)){
+            std::cout << "y coordinate out of bounds, please try again." << std::endl;
+        }
+        else if((home_house->interact_x_location() == x_coord) && (home_house->interact_y_location() == y_coord)){
+            std::cout << "This location is already occupied by the farmhouse, please try again." << std::endl;
+        }
+        else if((storehouse.interact_is_working() == true) && (storehouse.interact_x_location() == x_coord) && (storehouse.interact_y_location() == y_coord)){
+            std::cout << "This location is already occupied by the storehouse, please try again." << std::endl;
+        }
+        else if((ale_house.interact_is_working() == true) && (ale_house.interact_x_location() == x_coord) && (ale_house.interact_y_location() == y_coord)){
+            std::cout << "This location is already occupied by the brewery, please try again." << std::endl;
+        }
+        else if((dormitory.interact_is_working() == true) && (dormitory.interact_x_location() == x_coord) && (dormitory.interact_y_location() == y_coord)){
+            std::cout << "This location is already occupied by the workhouse, please try again." << std::endl;
+        }
+        else if((crop_fields[y_coord-1][x_coord-1]->interact_is_active() == true) || (orchard_fields[y_coord-1][x_coord-1]->interact_is_active() == true) || (multicrop_fields[y_coord-1][x_coord-1]->interact_is_active() == true)){
+            std::cout << "This field is already in use. Clear it before planting something else." << std::endl;
+        }
+        else{
+            if((seed_pick == 1) || (seed_pick == 2)){ //Needs work on generalising which field subclass is used.
+                crop_fields[y_coord-1][x_coord-1]->plant_field(seed_types[seed_pick-1], plant_chars[seed_pick-1], small_plant_chars[seed_pick-1], base_yields[seed_pick-1]);
+                home_house->change_seed_totals(seed_types[seed_pick-1], -1);
+                crop_fields[y_coord-1][x_coord-1]->begin(0, false, false);
+            }
+            if((seed_pick == 3) || (seed_pick == 4)){
+                orchard_fields[y_coord-1][x_coord-1]->plant_field(seed_types[seed_pick-1], plant_chars[seed_pick-1], small_plant_chars[seed_pick-1], base_yields[seed_pick-1]);
+                home_house->change_seed_totals(seed_types[seed_pick-1], -1);
+                orchard_fields[y_coord-1][x_coord-1]->begin(0, false);
+            }
+            if((seed_pick == 5) || (seed_pick == 6)){
+                multicrop_fields[y_coord-1][x_coord-1]->plant_field(seed_types[seed_pick-1], plant_chars[seed_pick-1], small_plant_chars[seed_pick-1], base_yields[seed_pick-1]);
+                home_house->change_seed_totals(seed_types[seed_pick-1], -1);
+                multicrop_fields[y_coord-1][x_coord-1]->begin(0, false);
+            }
+        }
+    }
+    else if((seed_pick < 1) || (seed_pick > 6)){
+        std::cout << "Not a valid seed choice, please try again." << std::endl;
+    }
+    else{
+        std::cout << "You don't have any " << seed_types[seed_pick-1] << " seeds left." << std::endl;
+    }
+}
+void fertilise(std::vector<std::vector<crop *>> crop_fields, std::vector<std::vector<orchard *>> orchard_fields, std::vector<std::vector<multicrop *>> multicrop_fields, farmhouse* home_house, granary storehouse, brewery ale_house, workhouse dormitory, int size)
+{
+    std::cout << "You have " << home_house->interact_fertiliser() << " units of fertiliser." << std::endl;
+    if(home_house->interact_fertiliser() > 0){
+        std::cout << "Pick a field to fertilise." << std::endl;
+        int x_coord = int_inputter("Please enter x coordinate: ");
+        int y_coord = int_inputter("Please enter y coordinate: ");
+        if((x_coord < 1) || (x_coord > size)){
+            std::cout << "x coordinate out of bounds, please try again." << std::endl;
+        }
+        else if((y_coord < 1) || (y_coord > size)){
+            std::cout << "y coordinate out of bounds, please try again." << std::endl;
+        }
+        if(crop_fields[y_coord-1][x_coord-1]->interact_is_active() == true){
+            if(crop_fields[y_coord-1][x_coord-1]->interact_is_fertilised() == false){
+                crop_fields[y_coord-1][x_coord-1]->interact_is_fertilised(true);
+                home_house->interact_fertiliser(home_house->interact_fertiliser()-1);
+                std::cout << "Field at " << x_coord << "," << y_coord << " fertilised." << std::endl;
+            }
+            else{
+                std::cout << "This field is already fertilised." << std::endl;
+            }
+        }
+        else if(orchard_fields[y_coord-1][x_coord-1]->interact_is_active() == true){
+            if(orchard_fields[y_coord-1][x_coord-1]->interact_is_fertilised() == false){
+                orchard_fields[y_coord-1][x_coord-1]->interact_is_fertilised(true);
+                home_house->interact_fertiliser(home_house->interact_fertiliser()-1);
+                std::cout << "Field at " << x_coord << "," << y_coord << " fertilised." << std::endl;
+            }
+            else{
+                std::cout << "This field is already fertilised." << std::endl;
+            }
+        }
+        else if(multicrop_fields[y_coord-1][x_coord-1]->interact_is_active() == true){
+            if(multicrop_fields[y_coord-1][x_coord-1]->interact_is_fertilised() == false){
+                multicrop_fields[y_coord-1][x_coord-1]->interact_is_fertilised(true);
+                home_house->interact_fertiliser(home_house->interact_fertiliser()-1);
+                std::cout << "Field at " << x_coord << "," << y_coord << " fertilised." << std::endl;
+            }
+            else{
+                std::cout << "This field is already fertilised." << std::endl;
+            }
+        }
+        else if((home_house->interact_x_location() == x_coord) && (home_house->interact_y_location() == y_coord)){
+            std::cout << "This is your farmhouse. You can't fertilise it." << std::endl;
+        }
+        else if((storehouse.interact_is_working() == true) && (storehouse.interact_x_location() == x_coord) && (storehouse.interact_y_location() == y_coord)){
+            std::cout << "This is your storehouse. You can't fertilise it." << std::endl;
+        }
+        else if((ale_house.interact_is_working() == true) && (ale_house.interact_x_location() == x_coord) && (ale_house.interact_y_location() == y_coord)){
+            std::cout << "This is your brewery. You can't fertilise it." << std::endl;
+        }
+        else if((dormitory.interact_is_working() == true) && (dormitory.interact_x_location() == x_coord) && (dormitory.interact_y_location() == y_coord)){
+            std::cout << "This is your workhouse. You can't fertilise it." << std::endl;
+        }
+        else{
+            std::cout << "There is nothing in this field to fertilise." << std::endl;
+        }
+    }
+}
 void harvest(std::string seed_types, int current_price, granary *storehouse, brewery *ale_house, int output, int *money)
 {
     std::cout << "The current price of " << seed_types << " is \x9C" << current_price;
@@ -519,7 +631,6 @@ void harvest(std::string seed_types, int current_price, granary *storehouse, bre
         *money += (output*current_price);
     }
 }
-
 void clear(std::vector<std::vector<crop *>> crop_fields, std::vector<std::vector<orchard *>> orchard_fields, std::vector<std::vector<multicrop *>> multicrop_fields, farmhouse home_house, granary storehouse, brewery ale_house, workhouse dormitory, int size, int *harvestable)
 {
     int x_coord = int_inputter("Please enter x coordinate: ");
@@ -571,6 +682,11 @@ void clear(std::vector<std::vector<crop *>> crop_fields, std::vector<std::vector
     }
 }
 
+void test_function(farmhouse *home_house)
+{
+    home_house->change_seed_totals("Wheat", 5);
+    std::cout << "Upadating seed totals." << std::endl;
+}
 void test(int *money)
 {
     *money += 1000;
