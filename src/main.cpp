@@ -23,6 +23,12 @@ int main()
         std::vector<std::vector<crop>> crop_fields(size, row_crop);
         std::vector<std::vector<orchard>> orchard_fields(size, row_orchard);
         std::vector<std::vector<multicrop>> multicrop_fields(size, row_multicrop);
+        std::vector<crop *> row_crop_point(size);
+        std::vector<orchard *> row_orchard_point(size);
+        std::vector<multicrop *> row_multicrop_point(size);
+        std::vector<std::vector<crop *>> crop_fields_point(size, row_crop_point);
+        std::vector<std::vector<orchard *>> orchard_fields_point(size, row_orchard_point);
+        std::vector<std::vector<multicrop *>> multicrop_fields_point(size, row_multicrop_point);
         for(int i = 0; i < size; i++){
             for(int k = 0; k < size; k++){
                 crop_fields[i][k].interact_is_active(false);
@@ -31,6 +37,9 @@ int main()
                 orchard_fields[i][k].interact_is_producing(false);
                 multicrop_fields[i][k].interact_is_active(false);
                 multicrop_fields[i][k].interact_is_producing(false);
+                crop_fields_point[i][k] = &crop_fields[i][k];
+                orchard_fields_point[i][k] = &orchard_fields[i][k];
+                multicrop_fields_point[i][k] = &multicrop_fields[i][k];
             }
         }
         int number_of_plants = 6;
@@ -258,57 +267,8 @@ int main()
                     break;
                 }
                 case 'c':
-                case 'C':{
-                    std::cout << "Please enter x coordinate: ";
-                    int x_coord, y_coord;
-                    std::cin >> x_coord;
-                    std::cout << "Please enter y coordinate: ";
-                    std::cin >> y_coord;
-                    if((x_coord < 1) || (x_coord > size)){
-                        std::cout << "x coordinate out of bounds, please try again." << std::endl;
-                    }
-                    else if((y_coord < 1) || (y_coord > size)){
-                        std::cout << "y coordinate out of bounds, please try again." << std::endl;
-                    }
-                    if(crop_fields[y_coord-1][x_coord-1].interact_is_active() == true){
-                        crop_fields[y_coord-1][x_coord-1].clear_field();
-                        std::cout << "Field at " << x_coord << "," << y_coord << " cleared." << std::endl;
-                        if(crop_fields[y_coord-1][x_coord-1].interact_is_ripe() == true){
-                            harvestable--;
-                            crop_fields[y_coord-1][x_coord-1].interact_is_ripe(false);
-                        }
-                    }
-                    else if(orchard_fields[y_coord-1][x_coord-1].interact_is_active() == true){
-                        orchard_fields[y_coord-1][x_coord-1].clear_field();
-                        std::cout << "Field at " << x_coord << "," << y_coord << " cleared." << std::endl;
-                        if(orchard_fields[y_coord-1][x_coord-1].interact_is_producing() == true){
-                            harvestable--;
-                            orchard_fields[y_coord-1][x_coord-1].interact_is_producing(false);
-                        }
-                    }
-                    else if(multicrop_fields[y_coord-1][x_coord-1].interact_is_active() == true){
-                        multicrop_fields[y_coord-1][x_coord-1].clear_field();
-                        std::cout << "Field at " << x_coord << "," << y_coord << " cleared." << std::endl;
-                        if(multicrop_fields[y_coord-1][x_coord-1].interact_is_producing() == true){
-                            harvestable--;
-                            multicrop_fields[y_coord-1][x_coord-1].interact_is_producing();
-                        }
-                    }
-                    else if((home_house.interact_x_location() == x_coord) && (home_house.interact_y_location() == y_coord)){
-                        std::cout << "This is your farmhouse. You can't remove that: you live there." << std::endl;
-                    }
-                    else if((storehouse.interact_is_working() == true) && (storehouse.interact_x_location() == x_coord) && (storehouse.interact_y_location() == y_coord)){
-                        std::cout << "This is your storehouse, you can't remove that right now." << std::endl;
-                    }
-                    else if((ale_house.interact_is_working() == true) && (ale_house.interact_x_location() == x_coord) && (ale_house.interact_y_location() == y_coord)){
-                        std::cout << "This is your brewery, you can't remove that right now." << std::endl;
-                    }
-                    else if((dormitory.interact_is_working() == true) && (dormitory.interact_x_location() == x_coord) && (dormitory.interact_y_location() == y_coord)){
-                        std::cout << "This is your workhouse, you can't remove that right now." << std::endl;
-                    }
-                    else{
-                        std::cout << "There's nothing in this field to clear." << std::endl;
-                    }
+                case 'C':{ //Completely functioned
+                    clear(crop_fields_point, orchard_fields_point, multicrop_fields_point, home_house, storehouse, ale_house, dormitory, size, &harvestable);
                     system("pause");
                     break;
                 }

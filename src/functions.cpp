@@ -1,7 +1,28 @@
 #include "../include/functions.h"
 #include <iostream>
+#include <limits>
 
 std::string months[12] = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+
+int int_inputter(std::string request_output)
+{
+    bool in_int_loop = true;
+    int int_input;
+    while(in_int_loop == true){
+        std::cout << request_output;
+        std::cin >> int_input;
+        if(std::cin.fail()){
+            std::cout << "You did not enter an integer." << std::endl;
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }
+        else{
+            std::cout << "Yep, that's an integer." << std::endl;
+            in_int_loop = false;
+        }
+    }
+    return int_input;
+}
 
 void options(int lines_printed, granary storehouse, brewery ale_house, workhouse dormitory, int month, int money, int upkeep) //This function should only be called by the UI function.
 {
@@ -526,6 +547,60 @@ void harvest(std::string seed_types, int current_price, granary *storehouse, bre
         std::cout << "." << std::endl;
         std::cout << "You have made \x9C" << output*current_price << "." << std::endl;
         *money += (output*current_price);
+    }
+}
+
+void clear(std::vector<std::vector<crop *>> crop_fields, std::vector<std::vector<orchard *>> orchard_fields, std::vector<std::vector<multicrop *>> multicrop_fields, farmhouse home_house, granary storehouse, brewery ale_house, workhouse dormitory, int size, int *harvestable)
+{
+    std::cout << "Please enter x coordinate: ";
+    int x_coord, y_coord;
+    std::cin >> x_coord;
+    std::cout << "Please enter y coordinate: ";
+    std::cin >> y_coord;
+    if((x_coord < 1) || (x_coord > size)){
+        std::cout << "x coordinate out of bounds, please try again." << std::endl;
+    }
+    else if((y_coord < 1) || (y_coord > size)){
+        std::cout << "y coordinate out of bounds, please try again." << std::endl;
+    }
+    if(crop_fields[y_coord-1][x_coord-1]->interact_is_active() == true){
+        crop_fields[y_coord-1][x_coord-1]->clear_field();
+        std::cout << "Field at " << x_coord << "," << y_coord << " cleared." << std::endl;
+        if(crop_fields[y_coord-1][x_coord-1]->interact_is_ripe() == true){
+            *harvestable -= 1;
+            crop_fields[y_coord-1][x_coord-1]->interact_is_ripe(false);
+        }
+    }
+    else if(orchard_fields[y_coord-1][x_coord-1]->interact_is_active() == true){
+        orchard_fields[y_coord-1][x_coord-1]->clear_field();
+        std::cout << "Field at " << x_coord << "," << y_coord << " cleared." << std::endl;
+        if(orchard_fields[y_coord-1][x_coord-1]->interact_is_producing() == true){
+            *harvestable -= 1;
+            orchard_fields[y_coord-1][x_coord-1]->interact_is_producing(false);
+        }
+    }
+    else if(multicrop_fields[y_coord-1][x_coord-1]->interact_is_active() == true){
+        multicrop_fields[y_coord-1][x_coord-1]->clear_field();
+        std::cout << "Field at " << x_coord << "," << y_coord << " cleared." << std::endl;
+        if(multicrop_fields[y_coord-1][x_coord-1]->interact_is_producing() == true){
+            *harvestable -= 1;
+            multicrop_fields[y_coord-1][x_coord-1]->interact_is_producing();
+        }
+    }
+    else if((home_house.interact_x_location() == x_coord) && (home_house.interact_y_location() == y_coord)){
+        std::cout << "This is your farmhouse. You can't remove that: you live there." << std::endl;
+    }
+    else if((storehouse.interact_is_working() == true) && (storehouse.interact_x_location() == x_coord) && (storehouse.interact_y_location() == y_coord)){
+        std::cout << "This is your storehouse, you can't remove that right now." << std::endl;
+    }
+    else if((ale_house.interact_is_working() == true) && (ale_house.interact_x_location() == x_coord) && (ale_house.interact_y_location() == y_coord)){
+        std::cout << "This is your brewery, you can't remove that right now." << std::endl;
+    }
+    else if((dormitory.interact_is_working() == true) && (dormitory.interact_x_location() == x_coord) && (dormitory.interact_y_location() == y_coord)){
+        std::cout << "This is your workhouse, you can't remove that right now." << std::endl;
+    }
+    else{
+        std::cout << "There's nothing in this field to clear." << std::endl;
     }
 }
 
