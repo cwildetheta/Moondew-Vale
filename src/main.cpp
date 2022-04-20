@@ -57,7 +57,7 @@ int main()
         granary storehouse(number_of_plants, 200, 0, seed_types, initial_store, 150, 2, false);
         brewery ale_house(100, 10, 200, 3, false);
         workhouse dormitory(0, 10, 200, 5, false);
-        bool sim_loop = true;
+        bool sim_loop = true, first_run = false;
         int money = 1000, month = 1, harvestable = 0, upkeep = 0;
         while(sim_loop == true){
             system("cls");
@@ -67,7 +67,7 @@ int main()
                 std::cout << "\x9C" << current_price[i] << "   ";
             }
             std::cout << std::endl;*/
-            if((harvestable > 0) && (dormitory.interact_is_working() == true) && (dormitory.interact_harvesters() > 0)){
+            if((harvestable > 0) && (dormitory.interact_is_working() == true) && (dormitory.interact_harvesters() > 0) && (first_run == true)){
                 int auto_harvest[number_of_plants], to_harvest = dormitory.interact_harvesters(), i = 0, k = 0;
                 for(int i = 0; i < number_of_plants; i++){
                     auto_harvest[i] = 0;
@@ -124,6 +124,7 @@ int main()
                         harvest(seed_types[l], current_price[l], &storehouse, &ale_house, auto_harvest[l], &money);
                     }
                 }
+                first_run = false;
                 system("cls");
                 main_ui(crop_fields, orchard_fields, multicrop_fields, size, month, money, upkeep, harvestable, home_house, storehouse, ale_house, dormitory);
             }
@@ -554,9 +555,12 @@ int main()
                                 system("pause");
                             }
                         }
-                    }
-                    for(int i = 0; i < number_of_plants; i++){
-                        current_price[i] = change_prices(current_price[i], base_price[i], price_variation[i]);
+                        if((harvestable > 0) && (dormitory.interact_is_working() == true) && (dormitory.interact_harvesters() > 0)){
+                            first_run = true;
+                        }
+                        for(int i = 0; i < number_of_plants; i++){
+                            current_price[i] = change_prices(current_price[i], base_price[i], price_variation[i]);
+                        }
                     }
                     break;
                 }
