@@ -10,8 +10,8 @@
 #include "../include/workhouse.h"
 #include <vector>
 
-void options(int, granary, brewery, workhouse, int, int, int);
-void main_ui(std::vector<std::vector<crop>>, std::vector<std::vector<orchard>>, std::vector<std::vector<multicrop>>, int, int, int, int, int, farmhouse, granary, brewery, workhouse);
+void options(int, granary, brewery, workhouse, int, int, int, int[], int[], std::string[]);
+void main_ui(std::vector<std::vector<crop>>, std::vector<std::vector<orchard>>, std::vector<std::vector<multicrop>>, int, int, int, int, int, farmhouse, granary, brewery, workhouse, int[], int[], std::string[]);
 int change_prices(int, int, int);
 void set_up_granary(std::vector<std::vector<crop>>, std::vector<std::vector<orchard>>, std::vector<std::vector<multicrop>>, farmhouse, granary *, brewery, workhouse, int, int*, int*);
 void set_up_brewery(std::vector<std::vector<crop>>, std::vector<std::vector<orchard>>, std::vector<std::vector<multicrop>>, farmhouse, granary, brewery *, workhouse, int, int*, int *);

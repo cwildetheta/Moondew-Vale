@@ -1,75 +1,95 @@
 #include "../include/functions.h"
 #include <iostream>
+#include <iomanip>
 
 std::string months[12] = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 
-void options(int lines_printed, granary storehouse, brewery ale_house, workhouse dormitory, int month, int money, int upkeep) //This function should only be called by the UI function.
+void options(int lines_printed, granary storehouse, brewery ale_house, workhouse dormitory, int month, int money, int upkeep, int current_price[], int base_price[], std::string seed_types[]) //This function should only be called by the UI function.
 {
+    std::string gap = "        ";
     if(lines_printed == 0){
-        std::cout << "          " << "Current month: " << months[month] << ".";
+        std::cout << gap << "Current month: " << months[month] << ".";
     }
     else if(lines_printed == 1){
-        std::cout << "          " << "Current money: \x9C" << money << ".";
+        std::cout << gap << "Current money: \x9C" << money << ".";
     }
     else if(lines_printed == 2){
-        std::cout << "          " << "Current upkeep: \x9C" << upkeep << ".";
+        std::cout << gap << "Current upkeep: \x9C" << upkeep << ".";
     }
     else if(lines_printed == 3){
-        std::cout << "          ";
+        std::cout << gap;
     }
     else if(lines_printed == 4){
-        std::cout << "          " << "Press p to plant a crop.";
+        std::cout << gap << "Press p to plant a crop.";
     }
     else if(lines_printed == 5){
-        std::cout << "          " << "Press h to harvest a crop.";
+        std::cout << gap << "Press h to harvest a crop.";
     }
     else if(lines_printed == 6){
-        std::cout << "          " << "Press c to clear a field.";
+        std::cout << gap << "Press c to clear a field.";
     }
     else if(lines_printed == 7){
-        std::cout << "          " << "Press f to fertilise a field.";
+        std::cout << gap << "Press f to fertilise a field.";
     }
     else if(lines_printed == 8){
-        std::cout << "          ";
+        std::cout << gap;
     }
     else if(lines_printed == 9){
-        std::cout << "          " << "Press b to buy more seeds.";
+        std::cout << gap << "Press b to buy more seeds.";
     }
     else if(lines_printed == 10){
         if(storehouse.interact_is_working() == true){
-            std::cout << "          " << "Press s to view the storehouse.";
+            std::cout << gap << "Press s to view the storehouse.";
         }
         else{
-            std::cout << "          " << "Press s to build a storehouse.";
+            std::cout << gap << "Press s to build a storehouse.";
         }
     }
     else if(lines_printed == 11){
         if(ale_house.interact_is_working() == true){
-            std::cout << "          " << "Press a to view the brewery.";
+            std::cout << gap << "Press a to view the brewery.";
         }
         else{
-            std::cout << "          " << "Press a to build a brewery.";
+            std::cout << gap << "Press a to build a brewery.";
         }
     }
     else if(lines_printed == 12){
         if(dormitory.interact_is_working() == true){
-            std::cout << "          " << "Press d to view the dormitory.";
+            std::cout << gap << "Press d to view the dormitory.";
         }
         else{
-            std::cout << "          " << "Press d to build a dormitory.";
+            std::cout << gap << "Press d to build a dormitory.";
         }
     }
     else if(lines_printed == 13){
-        std::cout << "          ";
+        std::cout << gap;
     }
     else if(lines_printed == 14){
-        std::cout << "          " << "Press q to exit.";
+        std::cout << gap << "Press q to exit.";
     }
     else if(lines_printed == 15){
-        std::cout << "          " << "Press any other key to move on to the next season.";
+        std::cout << gap << "Press any other key to move on to the next season.";
+    }
+    else if(lines_printed == 17){ //The string length manipulation here is cheaty, as it relies on the prices not going above £19, otherwise things will break.
+        std::cout << gap << "Current price of " << seed_types[0] << ": \x9C" << current_price[0] << "." << std::setw(11-seed_types[0].length()-(current_price[0]/10)) << " " << "Average price: \x9C" << base_price[0] << "."; 
+    }
+    else if(lines_printed == 18){
+        std::cout << gap << "Current price of " << seed_types[1] << ": \x9C" << current_price[1] << "." << std::setw(11-seed_types[1].length()-(current_price[1]/10)) << " " << "Average price: \x9C" << base_price[1] << "."; 
+    }
+    else if(lines_printed == 19){
+        std::cout << gap << "Current price of " << seed_types[2] << ": \x9C" << current_price[2] << "." << std::setw(11-seed_types[2].length()-(current_price[2]/10)) << " " << "Average price: \x9C" << base_price[2] << "."; 
+    }
+    else if(lines_printed == 20){
+        std::cout << gap << "Current price of " << seed_types[3] << ": \x9C" << current_price[3] << "." << std::setw(11-seed_types[3].length()-(current_price[3]/10)) << " " << "Average price: \x9C" << base_price[3] << "."; 
+    }
+    else if(lines_printed == 21){
+        std::cout << gap << "Current price of " << seed_types[4] << ": \x9C" << current_price[4] << "." << std::setw(11-seed_types[4].length()-(current_price[4]/10)) << " " << "Average price: \x9C" << base_price[4] << "."; 
+    }
+    else if(lines_printed == 22){
+        std::cout << gap << "Current price of " << seed_types[5] << ": \x9C" << current_price[5] << "." << std::setw(11-seed_types[5].length()-(current_price[5]/10)) << " " << "Average price: \x9C" << base_price[5] << "."; 
     }
 }
-void main_ui(std::vector<std::vector<crop>> crop_fields, std::vector<std::vector<orchard>> orchard_fields, std::vector<std::vector<multicrop>> multicrop_fields, int size, int month, int money, int upkeep, int harvestable, farmhouse home_house, granary storehouse, brewery ale_house, workhouse dormitory)
+void main_ui(std::vector<std::vector<crop>> crop_fields, std::vector<std::vector<orchard>> orchard_fields, std::vector<std::vector<multicrop>> multicrop_fields, int size, int month, int money, int upkeep, int harvestable, farmhouse home_house, granary storehouse, brewery ale_house, workhouse dormitory, int current_price[], int base_price[], std::string seed_types[])
 {
     int lines_printed = 0;
     std::cout << "-------------------------------------------------------------------------------------" << std::endl;
@@ -289,18 +309,35 @@ void main_ui(std::vector<std::vector<crop>> crop_fields, std::vector<std::vector
             }
             //std::cout << " ";
             if((k+1)%3 == 0){
-                std::cout << "|";
+                //std::cout << "|";
+                std::cout << char(179);
             }
             else{
                 std::cout << " ";
             }
         }
-        options(lines_printed, storehouse, ale_house, dormitory, month, money, upkeep);
+        options(lines_printed, storehouse, ale_house, dormitory, month, money, upkeep, current_price, base_price, seed_types);
         std::cout << std::endl;
         lines_printed++;
         if((i+1)%3 == 0){
-            std::cout << "-------------------------------------------------------------------------------------";
-            options(lines_printed, storehouse, ale_house, dormitory, month, money, upkeep);
+            //std::cout << "-------------------------------------------------------------------------------------";
+            std::cout << char(195);
+            for(int l = 0; l < 7; l++){
+                if(l != 6){
+                    for(int o = 0; o < 11; o++){
+                        std::cout << char(196);
+                    }
+                    std::cout << char(197);
+                }
+                else{
+                    for(int o = 0; o < 11; o++){
+                        std::cout << char(196);
+                    }
+                    std::cout << char(180);
+                }
+            } 
+            //"-----------" << char(197) << "-----------" << char(197) << "-----------" << char(197) << "-----------" << char(197) << "-----------" << char(197) << "-----------" << char(197) << "-----------" << char(180);
+            options(lines_printed, storehouse, ale_house, dormitory, month, money, upkeep, current_price, base_price, seed_types);
             std::cout << std::endl;
             lines_printed++;
         }

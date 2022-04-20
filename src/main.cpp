@@ -49,7 +49,7 @@ int main()
         int initial_seed_numbers[number_of_plants] = {10, 10, 5, 5, 2, 2};
         int seed_prices[number_of_plants] = {30, 45, 35, 35, 25, 20};
         int base_yields[number_of_plants] = {15, 15, 5, 5, 5, 5};
-        int base_price[number_of_plants] = {5, 10, 6, 8, 3, 2}, current_price[number_of_plants] = {5, 10, 6, 8, 3, 2}, price_variation[number_of_plants] = {3, 8, 4, 5, 2, 1};
+        int base_price[number_of_plants] = {5, 4, 6, 8, 3, 2}, current_price[number_of_plants] = {5, 4, 6, 8, 3, 2}, price_variation[number_of_plants] = {3, 3, 4, 5, 2, 1};
         int initial_store[number_of_plants] = {0, 0, 0, 0, 0, 0};
         int *current_price_point[number_of_plants];
         for(int i = 0; i < number_of_plants; i++){
@@ -62,7 +62,7 @@ int main()
         bool sim_loop = true, first_run = false;
         while(sim_loop == true){
             system("cls");
-            main_ui(crop_fields, orchard_fields, multicrop_fields, size, month, money, upkeep, harvestable, home_house, storehouse, ale_house, dormitory);
+            main_ui(crop_fields, orchard_fields, multicrop_fields, size, month, money, upkeep, harvestable, home_house, storehouse, ale_house, dormitory, current_price, base_price, seed_types);
             if((harvestable > 0) && (dormitory.interact_is_working() == true) && (dormitory.interact_harvesters() > 0) && (first_run == true)){
                 int auto_harvest[number_of_plants], to_harvest = dormitory.interact_harvesters();
                 int *auto_harvest_point[number_of_plants];
@@ -77,7 +77,7 @@ int main()
                 }
                 first_run = false;
                 system("cls");
-                main_ui(crop_fields, orchard_fields, multicrop_fields, size, month, money, upkeep, harvestable, home_house, storehouse, ale_house, dormitory);
+                main_ui(crop_fields, orchard_fields, multicrop_fields, size, month, money, upkeep, harvestable, home_house, storehouse, ale_house, dormitory, current_price, base_price, seed_types);
             }
             char entry;
             std::cout << "Enter choice: ";
@@ -202,7 +202,7 @@ int main()
                         bool in_dormitory = true;
                         while(in_dormitory == true){
                             system("cls");
-                            main_ui(crop_fields, orchard_fields, multicrop_fields, size, month, money, upkeep, harvestable, home_house, storehouse, ale_house, dormitory);
+                            main_ui(crop_fields, orchard_fields, multicrop_fields, size, month, money, upkeep, harvestable, home_house, storehouse, ale_house, dormitory, current_price, base_price, seed_types);
                             std::cout << "You currently have " << dormitory.interact_workers() << " workers out of a maximum of " << dormitory.interact_max_workers() << "." << std::endl;
                             if(dormitory.interact_workers() > 0){
                                 std::cout << "Of those, " << dormitory.interact_harvesters() << " workers are assigned to harvesting, " << dormitory.interact_fertilisers() << " workers are assigned to fertilising, with " << (dormitory.interact_workers() - dormitory.interact_harvesters() - dormitory.interact_fertilisers()) << " workers unassigned." << std::endl;
@@ -247,9 +247,9 @@ int main()
             }
         }
     }
-    /*for(int i = 0; i < 256; i++){
+    for(int i = 0; i < 256; i++){
         std::cout << i << " is " << char(i) << "   ";
-    }*/
+    }
     system("pause");
     system("cls");
     return 0;
