@@ -22,9 +22,8 @@ void workhouse::increase_workers(int *money, int *upkeep)
             case 'h':
             case 'H':{
                 if(workers != max_workers){
-                    std::cout << "You have \x9C" << money << ", and workers cost \x9C" << "25 to hire, with an upkeep of \x9C" << "2." << std::endl;
-                    std::cout << "How many workers would you like to hire: ";
-                    std::cin >> int_input;
+                    std::cout << "You have \x9C" << *money << ", and workers cost \x9C" << "25 to hire, with an upkeep of \x9C" << "2." << std::endl;
+                    int_input = int_inputter("How many workers would you like to hire: ");
                     if((int_input >=0) && (int_input <= 10)){
                         if(int_input > (max_workers - workers)){
                             int_input = (max_workers - workers);
@@ -52,8 +51,7 @@ void workhouse::increase_workers(int *money, int *upkeep)
             case 'f':
             case 'F':{
                 if(workers != 0){
-                    std::cout << "How many workers do you want to fire: ";
-                    std::cin >> int_input;
+                    int_input = int_inputter("How many workers do you want to fire: ");
                     if(int_input > workers){
                         int_input = workers;
                     }
@@ -83,9 +81,7 @@ void workhouse::increase_workers(int *money, int *upkeep)
 }
 void workhouse::automate_harvest()
 {
-    std::cout << "How many workers do you want to assign to harvesting (negative to remove): ";
-    int int_input;
-    std::cin >> int_input;
+    int int_input = int_inputter("How many workers do you want to assign to harvesting (negative to remove): ");
     if((int_input >= -10) && (int_input <= 10)){
         if(int_input > (workers - harvesters - fertilisers)){
             std::cout << "You don't have that many free workers." << std::endl;
@@ -100,9 +96,7 @@ void workhouse::automate_harvest()
 }
 void workhouse::automate_fertilise()
 {
-    std::cout << "How many workers do you want to assign to fertilising (negative to remove): ";
-    int int_input;
-    std::cin >> int_input;
+    int int_input = int_inputter("How many workers do you want to assign to fertilising (negative to remove): ");
     if(int_input > (workers - harvesters - fertilisers)){
         std::cout << "You don't have that many free workers." << std::endl;
     }

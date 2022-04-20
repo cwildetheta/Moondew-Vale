@@ -33,8 +33,7 @@ int farmhouse::buy_menu(int money, int seed_prices[])
     std::cout << "4. Orange      Current seeds: " << std::setw(6) << seed_totals[3] << "     Cost: \x9C" << seed_prices[3] << "." << std::endl;
     std::cout << "5. Courgette   Current seeds: " << std::setw(6) << seed_totals[4] << "     Cost: \x9C" << seed_prices[4] << "." << std::endl;
     std::cout << "6. Tomato      Current seeds: " << std::setw(6) << seed_totals[5] << "     Cost: \x9C" << seed_prices[5] << "." << std::endl << std::endl;
-    int seed_pick;
-    std::cin >> seed_pick;
+    int seed_pick = int_inputter("Seed type: ");
     if((seed_pick > 0) && (seed_pick < 7)){
         if(seed_prices[seed_pick-1] > money){
             std::cout << "You do not have enough money for that." << std::endl;

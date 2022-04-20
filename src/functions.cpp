@@ -1,28 +1,7 @@
 #include "../include/functions.h"
 #include <iostream>
-#include <limits>
 
 std::string months[12] = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
-
-int int_inputter(std::string request_output)
-{
-    bool in_int_loop = true;
-    int int_input;
-    while(in_int_loop == true){
-        std::cout << request_output;
-        std::cin >> int_input;
-        if(std::cin.fail()){
-            std::cout << "You did not enter an integer." << std::endl;
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        }
-        else{
-            std::cout << "Yep, that's an integer." << std::endl;
-            in_int_loop = false;
-        }
-    }
-    return int_input;
-}
 
 void options(int lines_printed, granary storehouse, brewery ale_house, workhouse dormitory, int month, int money, int upkeep) //This function should only be called by the UI function.
 {
@@ -341,11 +320,11 @@ int change_prices(int current_price, int base_price, int price_variation)
     return current_price;
 }
 
-void test_function(farmhouse *home_house)
+/*void test_function(farmhouse *home_house)
 {
     home_house->change_seed_totals("Wheat", 5);
     std::cout << "Upadating seed totals." << std::endl;
-}
+}*/
 
 void set_up_granary(std::vector<std::vector<crop>> crop_fields, std::vector<std::vector<orchard>> orchard_fields, std::vector<std::vector<multicrop>> multicrop_fields, farmhouse home_house, granary *storehouse, brewery ale_house, workhouse dormitory, int size, int* money, int *upkeep)
 {
@@ -355,11 +334,8 @@ void set_up_granary(std::vector<std::vector<crop>> crop_fields, std::vector<std:
     switch(char_input){
         case 'y':
         case 'Y':{
-            std::cout << "Please enter x coordinate: ";
-            int x_coord, y_coord;
-            std::cin >> x_coord;
-            std::cout << "Please enter y coordinate: ";
-            std::cin >> y_coord;
+            int x_coord = int_inputter("Please enter x coordinate: ");
+            int y_coord = int_inputter("Please enter y coordinate: ");
             if((x_coord < 1) || (x_coord > size)){
                 std::cout << "x coordinate out of bounds, please try again." << std::endl;
             }
@@ -403,11 +379,8 @@ void set_up_brewery(std::vector<std::vector<crop>> crop_fields, std::vector<std:
     switch(char_input){
         case 'y':
         case 'Y':{
-            std::cout << "Please enter x coordinate: ";
-            int x_coord, y_coord;
-            std::cin >> x_coord;
-            std::cout << "Please enter y coordinate: ";
-            std::cin >> y_coord;
+            int x_coord = int_inputter("Please enter x coordinate: ");
+            int y_coord = int_inputter("Please enter y coordinate: ");
             if((x_coord < 1) || (x_coord > size)){
                 std::cout << "x coordinate out of bounds, please try again." << std::endl;
             }
@@ -451,11 +424,8 @@ void set_up_workhouse(std::vector<std::vector<crop>> crop_fields, std::vector<st
     switch(char_input){
         case 'y':
         case 'Y':{
-            std::cout << "Please enter x coordinate: ";
-            int x_coord, y_coord;
-            std::cin >> x_coord;
-            std::cout << "Please enter y coordinate: ";
-            std::cin >> y_coord;
+            int x_coord = int_inputter("Please enter x coordinate: ");
+            int y_coord = int_inputter("Please enter y coordinate: ");
             if((x_coord < 1) || (x_coord > size)){
                 std::cout << "x coordinate out of bounds, please try again." << std::endl;
             }
@@ -552,11 +522,8 @@ void harvest(std::string seed_types, int current_price, granary *storehouse, bre
 
 void clear(std::vector<std::vector<crop *>> crop_fields, std::vector<std::vector<orchard *>> orchard_fields, std::vector<std::vector<multicrop *>> multicrop_fields, farmhouse home_house, granary storehouse, brewery ale_house, workhouse dormitory, int size, int *harvestable)
 {
-    std::cout << "Please enter x coordinate: ";
-    int x_coord, y_coord;
-    std::cin >> x_coord;
-    std::cout << "Please enter y coordinate: ";
-    std::cin >> y_coord;
+    int x_coord = int_inputter("Please enter x coordinate: ");
+    int y_coord = int_inputter("Please enter y coordinate: ");
     if((x_coord < 1) || (x_coord > size)){
         std::cout << "x coordinate out of bounds, please try again." << std::endl;
     }

@@ -1,6 +1,7 @@
 #ifndef WORKHOUSE_H_INCLUDED
 #define WORKHOUSE_H_INCLUDED
 #include "building.h"
+#include "base_functions.h"
 
 class workhouse : public building{
     private:

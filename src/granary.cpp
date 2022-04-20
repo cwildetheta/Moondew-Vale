@@ -24,14 +24,11 @@ void granary::interact(std::string seed_types[], int current_price[], int *money
     std::cout << "4. Orange      Current store: " << std::setw(6) << interact_store_totals(seed_types[3]) << std::endl;
     std::cout << "5. Courgette   Current store: " << std::setw(6) << interact_store_totals(seed_types[4]) << std::endl;
     std::cout << "6. Tomato      Current store: " << std::setw(6) << interact_store_totals(seed_types[5]) << std::endl << std::endl;
-    std::cout << "Would you like to sell some of your stores? 0 to exit or pick a number: ";
-    int store_pick;
-    std::cin >> store_pick;
+    int store_pick = int_inputter("Would you like to sell some of your stores? 0 to exit or pick a number: ");
     if((store_pick > 0) && (store_pick < 7)){
         if(interact_store_totals(seed_types[store_pick-1]) > 0){
-            std::cout << "The current price of " << seed_types[store_pick-1] << " is \x9C" << current_price[store_pick-1] << ". How much would you like to sell?: ";
-            int sell_amount;
-            std::cin >> sell_amount;
+            std::cout << "The current price of " << seed_types[store_pick-1] << " is \x9C" << current_price[store_pick-1] << ". ";
+            int sell_amount = int_inputter("How much would you like to sell?: ");
             if(sell_amount >= interact_store_totals(seed_types[store_pick-1])){
                 sell_amount = interact_store_totals(seed_types[store_pick-1]);
                 std::cout << "Selling the entire store of " << seed_types[store_pick-1] << "." << std::endl;

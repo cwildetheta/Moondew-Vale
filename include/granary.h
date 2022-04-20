@@ -1,6 +1,7 @@
 #ifndef GRANARY_H_INCLUDED
 #define GRANARY_H_INCLUDED
 #include "building.h"
+#include "base_functions.h"
 #include <string>
 #include <vector>
 

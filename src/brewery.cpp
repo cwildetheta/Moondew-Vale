@@ -37,13 +37,12 @@ void brewery::barley_in(granary *storehouse)
     if(storehouse->interact_is_working() == true){
         if(storehouse->interact_store_totals("Barley") > 0){
             calculate_total();
-            std::cout << "How much Barley do you want to move into the brewery. There are " << storehouse->interact_store_totals("Barley") << " units in the storehouse and " << (interact_storage_space() - interact_current_total()) << " units of space in the brewery: ";
+            std::cout << "There are " << storehouse->interact_store_totals("Barley") << " units of Barley in the storehouse and " << (interact_storage_space() - interact_current_total()) << " units of space in the brewery. ";
             if(interact_current_total() == interact_storage_space()){
                 std::cout << "The brewery is full. Remove something if you wish to add more Barley to it." << std::endl;
             }
             else{
-                int move_input;
-                std::cin >> move_input;
+                int move_input = int_inputter("How much Barley do you want to move into the brewery: ");
                 if(move_input >= storehouse->interact_store_totals("Barley")){
                     move_input = storehouse->interact_store_totals("Barley");
                     std::cout << "Moving the entire Barley store into the brewery." << std::endl;
@@ -70,13 +69,12 @@ void brewery::barley_out(granary *storehouse)
     if(storehouse->interact_is_working() == true){
         if(interact_stored_barley() > 0){
             storehouse->calculate_total();
-            std::cout << "How much Barley do you want to move into the storehouse. There are " << interact_stored_barley() << " units in the brewery, and " << (storehouse->interact_storage_space() - storehouse->interact_current_total()) << " units of space free in the storehouse: ";
+            std::cout << "There are " << interact_stored_barley() << " units of Barley in the brewery, and " << (storehouse->interact_storage_space() - storehouse->interact_current_total()) << " units of space free in the storehouse. ";
             if(storehouse->interact_current_total() == storehouse->interact_storage_space()){
                 std::cout << "There storehouse is full, so no Barley can be move to there." << std::endl;
             }
             else{
-                int move_input;
-                std::cin >> move_input;
+                int move_input = int_inputter("How much Barley do you want to move into the storehouse: ");
                 if(move_input >= interact_stored_barley()){
                     move_input = interact_stored_barley();
                     std::cout << "Moving the entire Barley store into the storehouse." << std::endl;
@@ -117,8 +115,7 @@ void brewery::brew()
                     std::cout << "There is no Barley currently stored in the brewery to add to the process." << std::endl;
                 }
                 else{
-                    std::cout << "How much Barley would you like to add: ";
-                    std::cin >> move_amount;
+                    move_amount = int_inputter("How much Barley would you like to add: ");
                     if(move_amount > interact_stored_barley()){
                         move_amount = interact_stored_barley();
                     }
@@ -136,8 +133,7 @@ void brewery::brew()
                     std::cout << "There is no Barley in the brewing process to be removed." << std::endl;
                 }
                 else{
-                    std::cout << "How much Barley would you like to remove: ";
-                    std::cin >> move_amount;
+                    move_amount = int_inputter("How much Barley would you like to remove: ");
                     if(move_amount > interact_current_brewing()){
                         move_amount = interact_current_brewing();
                     }
@@ -161,9 +157,8 @@ void brewery::brew()
 void brewery::sale(int *money)
 {                                
     if(interact_stored_beer() > 0){
-        std::cout << "There are currently " << interact_stored_beer() << " units of beer in the brewery. It sells for \x9C" << "20 per unit. How many would you like to sell: ";
-        int sell_amount;
-        std::cin >> sell_amount;
+        std::cout << "There are currently " << interact_stored_beer() << " units of beer in the brewery. It sells for \x9C" << "20 per unit. ";
+        int sell_amount = int_inputter("How many would you like to sell: ");
         if(sell_amount >= interact_stored_beer()){
             sell_amount = interact_stored_beer();
             std::cout << "Selling the entire beer stock." << std::endl;

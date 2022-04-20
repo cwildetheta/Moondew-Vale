@@ -1,3 +1,4 @@
+#include "../include/base_functions.h"
 #include "../include/crop.h"
 #include "../include/orchard.h"
 #include "../include/multicrop.h"
@@ -138,25 +139,17 @@ int main()
                 }
                 case 'p':
                 case 'P':{
-                    std::cout << "Which plant would you like to plant?" << std::endl; //Generalise this later, ie. seed_types[i]
-                    std::cout << "1. Wheat      Seeds: " << home_house.interact_seed_totals(seed_types[0]) << std::endl;
+                    std::cout << "1. Wheat      Seeds: " << home_house.interact_seed_totals(seed_types[0]) << std::endl; //Generalise this later, ie. seed_types[i]
                     std::cout << "2. Barley     Seeds: " << home_house.interact_seed_totals(seed_types[1]) << std::endl;
                     std::cout << "3. Apple      Seeds: " << home_house.interact_seed_totals(seed_types[2]) << std::endl;
                     std::cout << "4. Orange     Seeds: " << home_house.interact_seed_totals(seed_types[3]) << std::endl;
                     std::cout << "5. Courgette  Seeds: " << home_house.interact_seed_totals(seed_types[4]) << std::endl;
                     std::cout << "6. Tomato     Seeds: " << home_house.interact_seed_totals(seed_types[5]) << std::endl << std::endl;
-                    int seed_pick;
-                    std::cin >> seed_pick;
-                    if(home_house.interact_seed_totals(seed_types[seed_pick-1]) > 0){
-                        std::cout << "Please enter x coordinate: ";
-                        int x_coord, y_coord;
-                        std::cin >> x_coord;
-                        std::cout << "Please enter y coordinate: ";
-                        std::cin >> y_coord;
-                        if((seed_pick < 1) || (seed_pick > 6)){
-                            std::cout << "Not a valid seed choice, please try again." << std::endl;
-                        }
-                        else if((x_coord < 1) || (x_coord > size)){
+                    int seed_pick = int_inputter("Which seed would you like to plant: ");
+                    if(((seed_pick > 0) && (seed_pick < 7)) && (home_house.interact_seed_totals(seed_types[seed_pick-1]) > 0)){
+                        int x_coord = int_inputter("Please enter x coordinate: ");
+                        int y_coord = int_inputter("Please enter y coordinate: ");
+                        if((x_coord < 1) || (x_coord > size)){
                             std::cout << "x coordinate out of bounds, please try again." << std::endl;
                         }
                         else if((y_coord < 1) || (y_coord > size)){
@@ -189,6 +182,9 @@ int main()
                             }
                         }
                     }
+                    else if((seed_pick < 1) || (seed_pick > 6)){
+                        std::cout << "Not a valid seed choice, please try again." << std::endl;
+                    }
                     else{
                         std::cout << "You don't have any " << seed_types[seed_pick-1] << " seeds left." << std::endl;
                     }
@@ -197,11 +193,9 @@ int main()
                 }
                 case 'h':
                 case 'H':{
-                    std::cout << "Please enter x coordinate: ";
                     int x_coord, y_coord, index = -1, output;
-                    std::cin >> x_coord;
-                    std::cout << "Please enter y coordinate: ";
-                    std::cin >> y_coord;
+                    x_coord = int_inputter("Please enter x coordinate: ");
+                    y_coord = int_inputter("Please enter y coordinate: ");
                     if((x_coord < 1) || (x_coord > size)){
                         std::cout << "x coordinate out of bounds, please try again." << std::endl;
                     }
@@ -277,11 +271,8 @@ int main()
                     std::cout << "You have " << home_house.interact_fertiliser() << " units of fertiliser." << std::endl;
                     if(home_house.interact_fertiliser() > 0){
                         std::cout << "Pick a field to fertilise." << std::endl;
-                        std::cout << "Please enter x coordinate: ";
-                        int x_coord, y_coord;
-                        std::cin >> x_coord;
-                        std::cout << "Please enter y coordinate: ";
-                        std::cin >> y_coord;
+                        int x_coord = int_inputter("Please enter x coordinate: ");
+                        int y_coord = int_inputter("Please enter y coordinate: ");
                         if((x_coord < 1) || (x_coord > size)){
                             std::cout << "x coordinate out of bounds, please try again." << std::endl;
                         }

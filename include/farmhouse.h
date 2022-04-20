@@ -1,6 +1,7 @@
 #ifndef FARMHOUSE_H_INCLUDED
 #define FARMHOUSE_H_INCLUDED
 #include "building.h"
+#include "base_functions.h"
 #include <string>
 
 class farmhouse : public building{
