@@ -994,11 +994,6 @@ void end_turn(std::vector<std::vector<crop *>> crop_fields, std::vector<std::vec
     }
 }
 
-void test_function(farmhouse *home_house)
-{
-    home_house->change_seed_totals("Wheat", 5);
-    std::cout << "Upadating seed totals." << std::endl;
-}
 void test(int *money)
 {
     *money += 1000;

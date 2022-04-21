@@ -1,6 +1,6 @@
 #ifndef BREWERY_H_INCLUDED
 #define BREWERY_H_INCLUDED
-#include "base_functions.h"
+#include "base_functions.h" 
 #include "building.h"
 #include "granary.h"
 #include <string>

@@ -98,7 +98,6 @@ void granary::add_to_store(std::string string_input, int int_input)
         }
     }
 }
-int sell_from_store(std::string, int);
 
 //INPUTS AND OUTPUTS//
 int granary::interact_storage_space()
@@ -134,4 +133,20 @@ void granary::interact_store_totals(std::string string_input, int int_input)
             store_totals[i] = int_input;
         }
     }
+}
+int granary::interact_num_store_types()
+{
+    return num_store_types;
+}
+void granary::interact_num_store_types(int int_input)
+{
+    num_store_types = int_input;
+}
+std::string granary::interact_store_types(int int_input)
+{
+    return store_types[int_input];
+}
+void granary::interact_store_types(std::string string_input, int int_input)
+{
+    store_types[int_input] = string_input;
 }

@@ -16,8 +16,6 @@ class granary : public building{
         void calculate_total();
         void increase_size(int);
         void add_to_store(std::string, int);
-        int sell_from_store(std::string, int);
-        int move_from_store(std::string, int);
 
         //VARIABLE INTERACTIONS//
         int interact_storage_space();
@@ -26,6 +24,10 @@ class granary : public building{
         void interact_current_total(int);
         int interact_store_totals(std::string);
         void interact_store_totals(std::string, int);
+        int interact_num_store_types();
+        void interact_num_store_types(int);
+        std::string interact_store_types(int);
+        void interact_store_types(std::string, int);
 
 };
 

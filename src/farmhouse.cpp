@@ -15,14 +15,6 @@ farmhouse::farmhouse(int int_input, std::string string_input_array[], int int_in
     interact_y_location(y_input);
     interact_is_working(is_working_input);
 }
-void farmhouse::change_seed_totals(std::string string_input, int int_input)
-{
-    for(int i = 0; i < num_seed_types; i++){
-        if(seed_types[i] == string_input){
-            seed_totals[i] = seed_totals[i] + int_input;
-        }
-    }
-}
 int farmhouse::buy_menu(int money, int seed_prices[], int *in_farmhouse)
 {
     std::cout << "Which type of seeds would you like to buy? Seeds are bought in packs of 5.    Current money: \x9C"<< money << "." << std::endl; //Generalise this later, ie. seed_types[i]
@@ -62,20 +54,20 @@ int farmhouse::buy_menu(int money, int seed_prices[], int *in_farmhouse)
     }
     return money;
 }
+void farmhouse::change_seed_totals(std::string string_input, int int_input)
+{
+    for(int i = 0; i < num_seed_types; i++){
+        if(seed_types[i] == string_input){
+            seed_totals[i] = seed_totals[i] + int_input;
+        }
+    }
+}
 void farmhouse::change_fertiliser(int int_input)
 {
     fertiliser += int_input;
 }
 
 //INPUTS AND OUTPUTS
-int farmhouse::interact_current_total()
-{
-    return current_total;
-}
-void farmhouse::interact_current_total(int int_input)
-{
-    current_total = int_input;
-}
 int farmhouse::interact_fertiliser()
 {
     return fertiliser;
@@ -86,7 +78,7 @@ void farmhouse::interact_fertiliser(int int_input)
 }
 int farmhouse::interact_seed_totals(std::string string_input)
 {
-    int return_value = 0; //If this function outputs zero, it may be due to this.
+    int return_value = -1; //If this function outputs -1, it may be due to this.
     for(int i = 0; i < num_seed_types; i++){
         if(seed_types[i] == string_input){
             return_value = seed_totals[i];
@@ -101,4 +93,20 @@ void farmhouse::interact_seed_totals(std::string string_input, int int_input)
             seed_totals[i] = int_input;
         }
     }
+}
+int farmhouse::interact_num_seed_types()
+{
+    return num_seed_types;
+}
+void farmhouse::interact_num_seed_types(int int_input)
+{
+    num_seed_types = int_input;
+}
+std::string farmhouse::interact_seed_types(int int_input)
+{
+    return seed_types[int_input];
+}
+void farmhouse::interact_seed_types(std::string string_input, int int_input)
+{
+    seed_types[int_input] = string_input;
 }

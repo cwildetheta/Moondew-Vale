@@ -6,7 +6,6 @@ void field::plant_field(std::string plant_name, char plant_symbol, char small_pl
     is_active = true;
     is_alive = true;
     is_fertilised = false;
-    health = 10;
     symbol = plant_symbol;
     immature_symbol = small_plant_symbol;
     yield = yield_input;
@@ -55,14 +54,6 @@ bool field::interact_is_fertilised()
 void field::interact_is_fertilised(bool bool_input)
 {
     is_fertilised = bool_input;
-}
-std::string field::interact_health()
-{
-    return health;
-}
-void field::interact_health(std::string string_health)
-{
-    health = string_health;
 }
 char field::interact_symbol()
 {
