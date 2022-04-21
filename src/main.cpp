@@ -247,9 +247,9 @@ int main()
             }
         }
     }
-    for(int i = 0; i < 256; i++){
+    /*for(int i = 0; i < 256; i++){
         std::cout << i << " is " << char(i) << "   ";
-    }
+    }*/
     system("pause");
     system("cls");
     return 0;

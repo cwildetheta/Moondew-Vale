@@ -92,9 +92,26 @@ void options(int lines_printed, granary storehouse, brewery ale_house, workhouse
 void main_ui(std::vector<std::vector<crop>> crop_fields, std::vector<std::vector<orchard>> orchard_fields, std::vector<std::vector<multicrop>> multicrop_fields, int size, int month, int money, int upkeep, int harvestable, farmhouse home_house, granary storehouse, brewery ale_house, workhouse dormitory, int current_price[], int base_price[], std::string seed_types[])
 {
     int lines_printed = 0;
-    std::cout << "-------------------------------------------------------------------------------------" << std::endl;
+    //std::cout << "-------------------------------------------------------------------------------------" << std::endl;
+    std::cout << char(218);
+    for(int l = 0; l < 7; l++){
+        if(l != 6){
+            for(int o = 0; o < 11; o++){
+                std::cout << char(196);
+            }
+            std::cout << char(194);
+        }
+        else{
+            for(int o = 0; o < 11; o++){
+                std::cout << char(196);
+            }
+            std::cout << char(191);
+        }
+    }
+    std::cout << std::endl;
     for(int i = 0; i < 3*size; i++){
-        std::cout << "|";
+        //std::cout << "|";
+        std::cout << char(179);
         for(int k = 0; k < 3*size; k++){
             //std::cout << " ";
             if(crop_fields[i/3][k/3].interact_is_active() == true){
@@ -321,21 +338,40 @@ void main_ui(std::vector<std::vector<crop>> crop_fields, std::vector<std::vector
         lines_printed++;
         if((i+1)%3 == 0){
             //std::cout << "-------------------------------------------------------------------------------------";
-            std::cout << char(195);
-            for(int l = 0; l < 7; l++){
-                if(l != 6){
-                    for(int o = 0; o < 11; o++){
-                        std::cout << char(196);
+            if(i != ((3*size) - 1)){
+                std::cout << char(195);
+                for(int l = 0; l < 7; l++){
+                    if(l != 6){
+                        for(int o = 0; o < 11; o++){
+                            std::cout << char(196);
+                        }
+                        std::cout << char(197);
                     }
-                    std::cout << char(197);
-                }
-                else{
-                    for(int o = 0; o < 11; o++){
-                        std::cout << char(196);
+                    else{
+                        for(int o = 0; o < 11; o++){
+                            std::cout << char(196);
+                        }
+                        std::cout << char(180);
                     }
-                    std::cout << char(180);
                 }
-            } 
+            }
+            else{
+                std::cout << char(192);
+                for(int l = 0; l < 7; l++){
+                    if(l != 6){
+                        for(int o = 0; o < 11; o++){
+                            std::cout << char(196);
+                        }
+                        std::cout << char(193);
+                    }
+                    else{
+                        for(int o = 0; o < 11; o++){
+                            std::cout << char(196);
+                        }
+                        std::cout << char(217);
+                    }
+                }
+            }
             //"-----------" << char(197) << "-----------" << char(197) << "-----------" << char(197) << "-----------" << char(197) << "-----------" << char(197) << "-----------" << char(197) << "-----------" << char(180);
             options(lines_printed, storehouse, ale_house, dormitory, month, money, upkeep, current_price, base_price, seed_types);
             std::cout << std::endl;
@@ -685,7 +721,6 @@ void harvest_auto(std::string seed_types[], std::vector<std::vector<crop *>> cro
             }
             *auto_harvest[index] += crop_fields[i][k]->harvest_field();
             crop_fields[i][k]->clear_field();
-            std::cout << to_harvest << std::endl;
             to_harvest--;
             *harvestable -= 1;
         }
@@ -696,8 +731,7 @@ void harvest_auto(std::string seed_types[], std::vector<std::vector<crop *>> cro
                 }
             }
             *auto_harvest[index] += orchard_fields[i][k]->harvest_field();
-            orchard_fields[i][k]->clear_field();
-            std::cout << to_harvest << std::endl;
+            orchard_fields[i][k]->interact_is_producing(false);
             to_harvest--;
             *harvestable -= 1;
         }
@@ -708,8 +742,7 @@ void harvest_auto(std::string seed_types[], std::vector<std::vector<crop *>> cro
                 }
             }
             *auto_harvest[index] += multicrop_fields[i][k]->harvest_field();
-            multicrop_fields[i][k]->clear_field();
-            std::cout << to_harvest << std::endl;
+            multicrop_fields[i][k]->interact_is_producing(false);
             to_harvest--;
             *harvestable -= 1;
         }
