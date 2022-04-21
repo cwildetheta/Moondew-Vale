@@ -915,6 +915,7 @@ void end_turn(std::vector<std::vector<crop *>> crop_fields, std::vector<std::vec
                     }
                     if(*month == 10 || *month == 11){
                         orchard_fields[i][k]->interact_is_producing(false);
+                        orchard_fields[i][k]->interact_is_fertilised(false);
                     }
                     orchard_fields[i][k]->grow();
                 }

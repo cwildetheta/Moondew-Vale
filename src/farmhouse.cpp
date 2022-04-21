@@ -23,7 +23,7 @@ void farmhouse::change_seed_totals(std::string string_input, int int_input)
         }
     }
 }
-int farmhouse::buy_menu(int money, int seed_prices[])
+int farmhouse::buy_menu(int money, int seed_prices[], int *in_farmhouse)
 {
     std::cout << "Which type of seeds would you like to buy? Seeds are bought in packs of 5.    Current money: \x9C"<< money << "." << std::endl; //Generalise this later, ie. seed_types[i]
     std::cout << "0. Fertiliser  Current ammount: " << std::setw(4) << fertiliser << "     Cost: \x9C" << "10." << std::endl;
@@ -33,8 +33,9 @@ int farmhouse::buy_menu(int money, int seed_prices[])
     std::cout << "4. Orange      Current seeds: " << std::setw(6) << seed_totals[3] << "     Cost: \x9C" << seed_prices[3] << "." << std::endl;
     std::cout << "5. Courgette   Current seeds: " << std::setw(6) << seed_totals[4] << "     Cost: \x9C" << seed_prices[4] << "." << std::endl;
     std::cout << "6. Tomato      Current seeds: " << std::setw(6) << seed_totals[5] << "     Cost: \x9C" << seed_prices[5] << "." << std::endl << std::endl;
-    int seed_pick = int_inputter("Seed type: ");
+    int seed_pick = int_inputter("Seed type, or press another number to leave: ");
     if((seed_pick > 0) && (seed_pick < 7)){
+        *in_farmhouse = 2;
         if(seed_prices[seed_pick-1] > money){
             std::cout << "You do not have enough money for that." << std::endl;
         }
@@ -45,6 +46,7 @@ int farmhouse::buy_menu(int money, int seed_prices[])
         }
     }
     else if(seed_pick == 0){
+        *in_farmhouse = 2;
         if(money > 9){
             money -= 10;
             fertiliser += 5;
@@ -55,7 +57,8 @@ int farmhouse::buy_menu(int money, int seed_prices[])
         }
     }
     else{
-        std::cout << "Invalid entry." << std::endl;
+        std::cout << "Leaving the storehouse." << std::endl;
+        *in_farmhouse = 0;
     }
     return money;
 }

@@ -108,8 +108,15 @@ int main()
                 }
                 case 'b':
                 case 'B':{ //Completely functioned
-                    money = home_house.buy_menu(money, seed_prices);
-                    system("pause");
+                    int in_farmhouse = 1;
+                    while(in_farmhouse > 0){
+                        if(in_farmhouse == 2){
+                            system("cls");
+                            main_ui(crop_fields, orchard_fields, multicrop_fields, size, month, money, upkeep, harvestable, home_house, storehouse, ale_house, dormitory, current_price, base_price, seed_types);
+                        }
+                        money = home_house.buy_menu(money, seed_prices, &in_farmhouse);
+                        system("pause");
+                    }
                     break;
                 }
                 case 'c':
@@ -134,11 +141,19 @@ int main()
                         else{
                             std::cout << "You do not have enough money currently." << std::endl;
                         }
+                        system("pause");
                     }
                     else{
-                        storehouse.interact(seed_types, current_price, &money);
+                        int in_storehouse = 1;
+                        while(in_storehouse > 0){
+                            if(in_storehouse == 2){
+                                system("cls");
+                                main_ui(crop_fields, orchard_fields, multicrop_fields, size, month, money, upkeep, harvestable, home_house, storehouse, ale_house, dormitory, current_price, base_price, seed_types);
+                            }
+                            storehouse.interact(seed_types, current_price, &money, &in_storehouse);
+                            system("pause");
+                        }
                     }
-                    system("pause");
                     break;
                 }
                 case 'a':
@@ -151,40 +166,50 @@ int main()
                         else{
                             std::cout << "You do not have enough money currently." << std::endl;
                         }
+                        system("pause");
                     }
                     else{
-                        std::cout << "The brewery currently contains " << ale_house.interact_stored_barley() << " units of Barley and " << ale_house.interact_stored_beer() << " units of Beer." << std::endl;
-                        std::cout << "The brewery can convert " << ale_house.interact_brewing_cap() << " units of Barley into Beer on a bimonthly basis, and is currently converting " << ale_house.interact_current_brewing() << " units." << std::endl;
-                        std::cout << "Would you like to move Barley into the brewery (i), move Barley out of the brewery (o), change the amount of beer being made (b), sell beer (s), or leave the brewery (any other key): ";
-                        char brewery_input;
-                        std::cin >> brewery_input;
-                        switch(brewery_input){
-                            case 'i':
-                            case 'I':{
-                                ale_house.barley_in(&storehouse);
-                                break;
+                        int in_brewery = 1;
+                        while(in_brewery > 0){
+                            if(in_brewery == 2){
+                                system("cls");
+                                main_ui(crop_fields, orchard_fields, multicrop_fields, size, month, money, upkeep, harvestable, home_house, storehouse, ale_house, dormitory, current_price, base_price, seed_types);
                             }
-                            case 'o':
-                            case 'O':{
-                                ale_house.barley_out(&storehouse);
-                                break;
+                            std::cout << "The brewery currently contains " << ale_house.interact_stored_barley() << " units of Barley and " << ale_house.interact_stored_beer() << " units of Beer." << std::endl;
+                            std::cout << "The brewery can convert " << ale_house.interact_brewing_cap() << " units of Barley into Beer on a bimonthly basis, and is currently converting " << ale_house.interact_current_brewing() << " units." << std::endl;
+                            std::cout << "Would you like to move Barley into the brewery (i), move Barley out of the brewery (o), change the amount of beer being made (b), sell beer (s), or leave the brewery (any other key): ";
+                            char brewery_input;
+                            std::cin >> brewery_input;
+                            in_brewery = 2;
+                            switch(brewery_input){
+                                case 'i':
+                                case 'I':{
+                                    ale_house.barley_in(&storehouse);
+                                    break;
+                                }
+                                case 'o':
+                                case 'O':{
+                                    ale_house.barley_out(&storehouse);
+                                    break;
+                                }
+                                case 'b':
+                                case 'B':{
+                                    ale_house.brew();
+                                    break;
+                                }
+                                case 's':
+                                case 'S':{
+                                    ale_house.sale(&money);
+                                    break;
+                                }
+                                default:{
+                                    in_brewery = 0;
+                                    break;
+                                }
                             }
-                            case 'b':
-                            case 'B':{
-                                ale_house.brew();
-                                break;
-                            }
-                            case 's':
-                            case 'S':{
-                                ale_house.sale(&money);
-                                break;
-                            }
-                            default:{
-                                break;
-                            }
+                            system("pause");
                         }
                     }
-                    system("pause");
                     break;
                 }
                 case 'd':
@@ -197,12 +222,15 @@ int main()
                         else{
                             std::cout << "You do not have enough money currently." << std::endl;
                         }
+                        system("pause");
                     }
                     else{
-                        bool in_dormitory = true;
-                        while(in_dormitory == true){
-                            system("cls");
-                            main_ui(crop_fields, orchard_fields, multicrop_fields, size, month, money, upkeep, harvestable, home_house, storehouse, ale_house, dormitory, current_price, base_price, seed_types);
+                        int in_dormitory = 1;
+                        while(in_dormitory > 0){
+                            if(in_dormitory == 2){
+                                system("cls");
+                                main_ui(crop_fields, orchard_fields, multicrop_fields, size, month, money, upkeep, harvestable, home_house, storehouse, ale_house, dormitory, current_price, base_price, seed_types);
+                            }
                             std::cout << "You currently have " << dormitory.interact_workers() << " workers out of a maximum of " << dormitory.interact_max_workers() << "." << std::endl;
                             if(dormitory.interact_workers() > 0){
                                 std::cout << "Of those, " << dormitory.interact_harvesters() << " workers are assigned to harvesting, " << dormitory.interact_fertilisers() << " workers are assigned to fertilising, with " << (dormitory.interact_workers() - dormitory.interact_harvesters() - dormitory.interact_fertilisers()) << " workers unassigned." << std::endl;
@@ -210,6 +238,7 @@ int main()
                             std::cout << "Would you like to change the number of workers assigned to harvesting (h), fertilising (f), hire new workers (n), or exit (any other key): ";
                             char dormitory_input;
                             std::cin >> dormitory_input;
+                            in_dormitory = 2;
                             switch(dormitory_input){
                                 case 'h':
                                 case 'H':{
@@ -227,13 +256,13 @@ int main()
                                     break;
                                 }
                                 default:{
-                                    in_dormitory = false;
+                                    in_dormitory = 0;
                                     break;
                                 }
                             }
+                            system("pause");
                         }
                     }
-                    system("pause");
                     break;
                 }
                 case 'l':{

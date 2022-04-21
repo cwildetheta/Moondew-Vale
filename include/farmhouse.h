@@ -12,7 +12,7 @@ class farmhouse : public building{
     public:
         farmhouse(int, std::string[], int[], int, int, int, int, bool);
         void change_seed_totals(std::string, int);
-        int buy_menu(int, int[]);
+        int buy_menu(int, int[], int *);
         void change_fertiliser(int);
 
         //VARIABLE INTERACTIONS//
