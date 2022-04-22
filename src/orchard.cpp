@@ -1,10 +1,10 @@
 #include "../include/orchard.h"
 #include <iostream>
 
-void orchard::grow()
+/*void orchard::grow()
 {
     age++;
-}
+}*/
 int orchard::harvest_field()
 {
     int output = -1;
@@ -29,19 +29,19 @@ int orchard::harvest_field()
 }
 void orchard::begin(int age_input, bool is_producing_input)
 {
-    age = age_input;
+    interact_lifestage(age_input);
     is_producing = is_producing_input;
 }
 
 //INPUTS AND OUTPUTS
-int orchard::interact_age()
+/*int orchard::interact_age()
 {
     return age;
 }
 void orchard::interact_age(int int_input)
 {
     age = int_input;
-}
+}*/
 bool orchard::interact_is_producing()
 {
     return is_producing;

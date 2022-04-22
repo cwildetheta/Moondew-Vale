@@ -10,9 +10,9 @@ void field::plant_field(std::string plant_name, char plant_symbol, char small_pl
     immature_symbol = small_plant_symbol;
     yield = yield_input;
 }
-void field::clear_field()
+void field::grow()
 {
-    is_active = false;
+    lifestage++;
 }
 void field::die()
 {
@@ -20,6 +20,10 @@ void field::die()
     is_fertilised = false;
     symbol = 'x';
     immature_symbol = 'x';
+}
+void field::clear_field()
+{
+    is_active = false;
 }
 
 //INPUTS AND OUTPUTS
@@ -78,4 +82,12 @@ int field::interact_yield()
 void field::interact_yield(int int_input)
 {
     yield = int_input;
+}
+int field::interact_lifestage()
+{
+    return lifestage;
+}
+void field::interact_lifestage(int int_input)
+{
+    lifestage = int_input;
 }

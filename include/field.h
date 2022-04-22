@@ -7,12 +7,13 @@ class field{
         bool is_active, is_alive, is_fertilised;
         std::string name;
         char symbol, immature_symbol;
-        int yield;
+        int yield, lifestage;
 
     public:
-        void clear_field();
-        void die();
         void plant_field(std::string, char, char, int);
+        void grow();
+        void die();
+        void clear_field();
 
         //VARIABLE INTERACTIONS//
         bool interact_is_active();
@@ -29,6 +30,8 @@ class field{
         void interact_immature_symbol(char);
         int interact_yield();
         void interact_yield(int);
+        int interact_lifestage();
+        void interact_lifestage(int);
 };
 
 #endif //FIELD_H_INCLUDED

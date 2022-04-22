@@ -5,17 +5,17 @@
 
 class orchard : public field{
     private:
-        int age;
+        //int age;
         bool is_producing;
 
     public:
-        void grow();
+        //void grow();
         int harvest_field();
         void begin(int, bool);
 
         //VARIABLE INTERACTIONS//
-        int interact_age();
-        void interact_age(int);
+        //int interact_age();
+        //void interact_age(int);
         bool interact_is_producing();
         void interact_is_producing(bool);
 };

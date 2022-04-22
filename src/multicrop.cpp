@@ -1,10 +1,10 @@
 #include "../include/multicrop.h"
 #include <iostream>
 
-void multicrop::grow()
+/*void multicrop::grow()
 {
     lifestage++;
-}
+}*/
 int multicrop::harvest_field()
 {
     int output = -1;
@@ -32,19 +32,19 @@ int multicrop::harvest_field()
 }
 void multicrop::begin(int lifestage_input, bool is_producing_input)
 {
-    lifestage = lifestage_input;
+    interact_lifestage(lifestage_input);
     is_producing = is_producing_input;
 }
 
 //INPUTS AND OUTPUTS
-int multicrop::interact_lifestage()
+/*int multicrop::interact_lifestage()
 {
     return lifestage;
 }
 void multicrop::interact_lifestage(int int_input)
 {
     lifestage = int_input;
-}
+}*/
 bool multicrop::interact_is_producing()
 {
     return is_producing;

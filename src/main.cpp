@@ -8,7 +8,6 @@
 #include "../include/workhouse.h"
 #include "../include/functions.h"
 #include <iostream>
-#include <iomanip>
 #include <vector>
 
 int main()
@@ -91,7 +90,7 @@ int main()
                 }
                 case 'p':
                 case 'P':{ //Completely functioned
-                    plant(seed_types, crop_fields_point, orchard_fields_point, multicrop_fields_point, &home_house, storehouse, ale_house, dormitory, size, plant_chars, small_plant_chars, base_yields);
+                    plant_menu(seed_types, crop_fields_point, orchard_fields_point, multicrop_fields_point, &home_house, storehouse, ale_house, dormitory, size, plant_chars, small_plant_chars, base_yields);
                     system("pause");
                     break;
                 }
@@ -121,13 +120,13 @@ int main()
                 }
                 case 'c':
                 case 'C':{ //Completely functioned
-                    clear(crop_fields_point, orchard_fields_point, multicrop_fields_point, home_house, storehouse, ale_house, dormitory, size, &harvestable);
+                    clear_menu(crop_fields_point, orchard_fields_point, multicrop_fields_point, home_house, storehouse, ale_house, dormitory, size, &harvestable);
                     system("pause");
                     break;
                 }
                 case 'f':
                 case 'F':{ //Completely functioned
-                    fertilise(crop_fields_point, orchard_fields_point, multicrop_fields_point, &home_house, storehouse, ale_house, dormitory, size);
+                    fertilise_menu(crop_fields_point, orchard_fields_point, multicrop_fields_point, &home_house, storehouse, ale_house, dormitory, size);
                     system("pause");
                     break;
                 }

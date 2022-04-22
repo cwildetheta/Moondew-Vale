@@ -5,21 +5,21 @@
 
 class crop : public field{
     private:
-        int lifestage;
-        bool is_ripe, is_overripe;
+        //int lifestage;
+        bool is_ripe, is_underripe;
 
     public:
-        void grow();
+        //void grow();
         int harvest_field();
         void begin(int, bool, bool);
 
         //VARIABLE INTERACTIONS//
-        int interact_lifestage();
-        void interact_lifestage(int);
+        //int interact_lifestage();
+        //void interact_lifestage(int);
         bool interact_is_ripe();
         void interact_is_ripe(bool);
-        bool interact_is_overripe();
-        void interact_is_overripe(bool);
+        bool interact_is_underripe();
+        void interact_is_underripe(bool);
 };
 
 #endif //CROP_H_INCLUDED

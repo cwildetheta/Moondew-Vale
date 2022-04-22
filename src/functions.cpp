@@ -145,10 +145,10 @@ void main_ui(std::vector<std::vector<crop>> crop_fields, std::vector<std::vector
             }
             else if(orchard_fields[i/3][k/3].interact_is_active() == true){
                 if(orchard_fields[i/3][k/3].interact_is_fertilised() == false){
-                    if(orchard_fields[i/3][k/3].interact_age() <= 18){
+                    if(orchard_fields[i/3][k/3].interact_lifestage() <= 18){
                         std::cout << " " << char(193) << " ";
                     }
-                    else if((orchard_fields[i/3][k/3].interact_age() > 18) && (orchard_fields[i/3][k/3].interact_is_producing() == true)){
+                    else if((orchard_fields[i/3][k/3].interact_lifestage() > 18) && (orchard_fields[i/3][k/3].interact_is_producing() == true)){
                         std::cout << " " << orchard_fields[i/3][k/3].interact_symbol() << " ";
                     }
                     else{
@@ -160,10 +160,10 @@ void main_ui(std::vector<std::vector<crop>> crop_fields, std::vector<std::vector
                         std::cout << " f ";
                     }
                     else{
-                        if(orchard_fields[i/3][k/3].interact_age() <= 18){
+                        if(orchard_fields[i/3][k/3].interact_lifestage() <= 18){
                             std::cout << " " << char(193) << " ";
                         }
-                        else if((orchard_fields[i/3][k/3].interact_age() > 18) && (orchard_fields[i/3][k/3].interact_is_producing() == true)){
+                        else if((orchard_fields[i/3][k/3].interact_lifestage() > 18) && (orchard_fields[i/3][k/3].interact_is_producing() == true)){
                             std::cout << " " << orchard_fields[i/3][k/3].interact_symbol() << " ";
                         }
                         else{
@@ -528,7 +528,7 @@ void set_up_workhouse(std::vector<std::vector<crop>> crop_fields, std::vector<st
     }
 }
 
-void plant(std::string seed_types[], std::vector<std::vector<crop *>> crop_fields, std::vector<std::vector<orchard *>> orchard_fields, std::vector<std::vector<multicrop *>> multicrop_fields, farmhouse* home_house, granary storehouse, brewery ale_house, workhouse dormitory, int size, char plant_chars[], char small_plant_chars[], int base_yields[])
+void plant_menu(std::string seed_types[], std::vector<std::vector<crop *>> crop_fields, std::vector<std::vector<orchard *>> orchard_fields, std::vector<std::vector<multicrop *>> multicrop_fields, farmhouse* home_house, granary storehouse, brewery ale_house, workhouse dormitory, int size, char plant_chars[], char small_plant_chars[], int base_yields[])
 {
     std::cout << "1. Wheat      Seeds: " << home_house->interact_seed_totals(seed_types[0]) << std::endl; //Generalise this later, ie. seed_types[i]
     std::cout << "2. Barley     Seeds: " << home_house->interact_seed_totals(seed_types[1]) << std::endl;
@@ -586,7 +586,7 @@ void plant(std::string seed_types[], std::vector<std::vector<crop *>> crop_field
         std::cout << "You don't have any " << seed_types[seed_pick-1] << " seeds left." << std::endl;
     }
 }
-void fertilise(std::vector<std::vector<crop *>> crop_fields, std::vector<std::vector<orchard *>> orchard_fields, std::vector<std::vector<multicrop *>> multicrop_fields, farmhouse* home_house, granary storehouse, brewery ale_house, workhouse dormitory, int size)
+void fertilise_menu(std::vector<std::vector<crop *>> crop_fields, std::vector<std::vector<orchard *>> orchard_fields, std::vector<std::vector<multicrop *>> multicrop_fields, farmhouse* home_house, granary storehouse, brewery ale_house, workhouse dormitory, int size)
 {
     std::cout << "You have " << home_house->interact_fertiliser() << " units of fertiliser." << std::endl;
     if(home_house->interact_fertiliser() > 0){
@@ -816,7 +816,7 @@ void harvest_manage(std::string seed_types, int current_price, granary *storehou
         *money += (output*current_price);
     }
 }
-void clear(std::vector<std::vector<crop *>> crop_fields, std::vector<std::vector<orchard *>> orchard_fields, std::vector<std::vector<multicrop *>> multicrop_fields, farmhouse home_house, granary storehouse, brewery ale_house, workhouse dormitory, int size, int *harvestable)
+void clear_menu(std::vector<std::vector<crop *>> crop_fields, std::vector<std::vector<orchard *>> orchard_fields, std::vector<std::vector<multicrop *>> multicrop_fields, farmhouse home_house, granary storehouse, brewery ale_house, workhouse dormitory, int size, int *harvestable)
 {
     int x_coord = int_inputter("Please enter x coordinate: ");
     int y_coord = int_inputter("Please enter y coordinate: ");
@@ -898,7 +898,7 @@ void end_turn(std::vector<std::vector<crop *>> crop_fields, std::vector<std::vec
                         }
                         else if(crop_fields[i][k]->interact_lifestage() == 3){
                             crop_fields[i][k]->interact_is_ripe(true);
-                            crop_fields[i][k]->interact_is_overripe(true);
+                            crop_fields[i][k]->interact_is_underripe(true);
                         }
                     }
                     if(crop_fields[i][k]->interact_lifestage() >= 5 || *month == 10 || *month == 11 || *month == 0){
@@ -910,7 +910,7 @@ void end_turn(std::vector<std::vector<crop *>> crop_fields, std::vector<std::vec
                     }
                 }
                 if(orchard_fields[i][k]->interact_is_active() == true){
-                    if((*month == 6 || *month == 7 || *month == 8 || *month == 9) && (orchard_fields[i][k]->interact_age() > 18)){
+                    if((*month == 6 || *month == 7 || *month == 8 || *month == 9) && (orchard_fields[i][k]->interact_lifestage() > 18)){
                         orchard_fields[i][k]->interact_is_producing(true);
                     }
                     if(*month == 10 || *month == 11){

@@ -17,12 +17,12 @@ void set_up_granary(std::vector<std::vector<crop>>, std::vector<std::vector<orch
 void set_up_brewery(std::vector<std::vector<crop>>, std::vector<std::vector<orchard>>, std::vector<std::vector<multicrop>>, farmhouse, granary, brewery *, workhouse, int, int*, int *);
 void set_up_workhouse(std::vector<std::vector<crop>>, std::vector<std::vector<orchard>>, std::vector<std::vector<multicrop>>, farmhouse, granary, brewery, workhouse *, int, int*, int *);
 
-void plant(std::string[], std::vector<std::vector<crop *>>, std::vector<std::vector<orchard *>>, std::vector<std::vector<multicrop *>>, farmhouse *, granary, brewery, workhouse, int, char[], char[], int[]);
-void fertilise(std::vector<std::vector<crop *>>, std::vector<std::vector<orchard *>>, std::vector<std::vector<multicrop *>>, farmhouse *, granary, brewery, workhouse, int);
+void plant_menu(std::string[], std::vector<std::vector<crop *>>, std::vector<std::vector<orchard *>>, std::vector<std::vector<multicrop *>>, farmhouse *, granary, brewery, workhouse, int, char[], char[], int[]);
+void fertilise_menu(std::vector<std::vector<crop *>>, std::vector<std::vector<orchard *>>, std::vector<std::vector<multicrop *>>, farmhouse *, granary, brewery, workhouse, int);
 void harvest_manual(std::vector<std::vector<crop *>>, std::vector<std::vector<orchard *>>, std::vector<std::vector<multicrop *>>, farmhouse, granary, brewery, workhouse, int, int *, int *, int, std::string[]);
 void harvest_auto(std::string[], std::vector<std::vector<crop *>>, std::vector<std::vector<orchard *>>, std::vector<std::vector<multicrop *>>, int *[], int, int, int *);
 void harvest_manage(std::string, int, granary *, brewery *, int, int *);
-void clear(std::vector<std::vector<crop *>>, std::vector<std::vector<orchard *>>, std::vector<std::vector<multicrop *>>, farmhouse, granary, brewery, workhouse, int, int *);
+void clear_menu(std::vector<std::vector<crop *>>, std::vector<std::vector<orchard *>>, std::vector<std::vector<multicrop *>>, farmhouse, granary, brewery, workhouse, int, int *);
 
 void end_turn(std::vector<std::vector<crop *>>, std::vector<std::vector<orchard *>>, std::vector<std::vector<multicrop *>>, farmhouse *, granary, brewery *, workhouse, int *, int *, int *, int, int, int, bool *, bool *, bool *, int *[], int[], int[]);
 
