@@ -26,6 +26,6 @@ void clear_menu(std::vector<std::vector<crop *>>, std::vector<std::vector<orchar
 
 void end_turn(std::vector<std::vector<crop *>>, std::vector<std::vector<orchard *>>, std::vector<std::vector<multicrop *>>, farmhouse *, granary, brewery *, workhouse, int *, int *, int *, int, int, int, bool *, bool *, bool *, int *[], int[], int[]);
 
-void test(int *);
+//void test(int *);
 
 #endif //FUNCTIONS_H_INCLUDED

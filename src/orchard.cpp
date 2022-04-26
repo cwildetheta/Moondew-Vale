@@ -14,6 +14,12 @@ int orchard::harvest_field()
                 output = interact_yield();
                 is_producing = false;
             }
+            else if(interact_lifestage() > 18){
+                std::cout << "This plant isn't producing at the moment." << std::endl;
+            }
+            else{
+                std::cout << "This plant isn't ripe yet, wait for it to grow some more." << std::endl;
+            }
         }
         else{
             std::cout << "This plant is dead, there is nothing left to harvest." << std::endl;

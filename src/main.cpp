@@ -13,6 +13,8 @@
 int main()
 {
     system("cls");
+    std::cout << "Welcome to Moondew Vale farming simulation." << std::endl << std::endl;
+    std::cout << "Please run the simulation in full screen, or there may be graphical issues." << std::endl << std::endl << std::endl;
     system("pause");
     bool simulation = true;
     while(simulation == true){
@@ -75,6 +77,7 @@ int main()
                     }
                 }
                 first_run = false;
+                system("pause");
                 system("cls");
                 main_ui(crop_fields, orchard_fields, multicrop_fields, size, month, money, upkeep, harvestable, home_house, storehouse, ale_house, dormitory, current_price, base_price, seed_types);
             }
@@ -264,10 +267,10 @@ int main()
                     }
                     break;
                 }
-                case 'l':{
+                /*case 'l':{
                     test(&money);
                     break;
-                }
+                }*/
                 default:{ //Completely functioned
                     end_turn(crop_fields_point, orchard_fields_point, multicrop_fields_point, &home_house, storehouse, &ale_house, dormitory, &harvestable, &month, &money, upkeep, size, number_of_plants, &sim_loop, &simulation, &first_run, current_price_point, base_price, price_variation);
                     break;

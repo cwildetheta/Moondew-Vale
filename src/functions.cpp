@@ -599,11 +599,16 @@ void fertilise_menu(std::vector<std::vector<crop *>> crop_fields, std::vector<st
         else if((y_coord < 1) || (y_coord > size)){
             std::cout << "y coordinate out of bounds, please try again." << std::endl;
         }
-        if(crop_fields[y_coord-1][x_coord-1]->interact_is_active() == true){
+        else if(crop_fields[y_coord-1][x_coord-1]->interact_is_active() == true){
             if(crop_fields[y_coord-1][x_coord-1]->interact_is_fertilised() == false){
-                crop_fields[y_coord-1][x_coord-1]->interact_is_fertilised(true);
-                home_house->interact_fertiliser(home_house->interact_fertiliser()-1);
-                std::cout << "Field at " << x_coord << "," << y_coord << " fertilised." << std::endl;
+                if(crop_fields[y_coord-1][x_coord-1]->interact_is_ripe() == true){
+                    std::cout << "This field has already grown, it is too late to fertilise it." << std::endl;
+                }
+                else{
+                    crop_fields[y_coord-1][x_coord-1]->interact_is_fertilised(true);
+                    home_house->interact_fertiliser(home_house->interact_fertiliser()-1);
+                    std::cout << "Field at " << x_coord << "," << y_coord << " fertilised." << std::endl;
+                }
             }
             else{
                 std::cout << "This field is already fertilised." << std::endl;
@@ -611,9 +616,14 @@ void fertilise_menu(std::vector<std::vector<crop *>> crop_fields, std::vector<st
         }
         else if(orchard_fields[y_coord-1][x_coord-1]->interact_is_active() == true){
             if(orchard_fields[y_coord-1][x_coord-1]->interact_is_fertilised() == false){
-                orchard_fields[y_coord-1][x_coord-1]->interact_is_fertilised(true);
-                home_house->interact_fertiliser(home_house->interact_fertiliser()-1);
-                std::cout << "Field at " << x_coord << "," << y_coord << " fertilised." << std::endl;
+                if(orchard_fields[y_coord-1][x_coord-1]->interact_is_producing() == true){
+                    std::cout << "This field is currently producing, it is too late to fertilise it." << std::endl;
+                }
+                else{
+                    orchard_fields[y_coord-1][x_coord-1]->interact_is_fertilised(true);
+                    home_house->interact_fertiliser(home_house->interact_fertiliser()-1);
+                    std::cout << "Field at " << x_coord << "," << y_coord << " fertilised." << std::endl;
+                }
             }
             else{
                 std::cout << "This field is already fertilised." << std::endl;
@@ -621,9 +631,14 @@ void fertilise_menu(std::vector<std::vector<crop *>> crop_fields, std::vector<st
         }
         else if(multicrop_fields[y_coord-1][x_coord-1]->interact_is_active() == true){
             if(multicrop_fields[y_coord-1][x_coord-1]->interact_is_fertilised() == false){
-                multicrop_fields[y_coord-1][x_coord-1]->interact_is_fertilised(true);
-                home_house->interact_fertiliser(home_house->interact_fertiliser()-1);
-                std::cout << "Field at " << x_coord << "," << y_coord << " fertilised." << std::endl;
+                if(multicrop_fields[y_coord-1][x_coord-1]->interact_is_producing() == true){
+                    std::cout << "This field is currently producing, it is too late to fertilise it." << std::endl;
+                }
+                else{
+                    multicrop_fields[y_coord-1][x_coord-1]->interact_is_fertilised(true);
+                    home_house->interact_fertiliser(home_house->interact_fertiliser()-1);
+                    std::cout << "Field at " << x_coord << "," << y_coord << " fertilised." << std::endl;
+                }
             }
             else{
                 std::cout << "This field is already fertilised." << std::endl;
@@ -656,7 +671,7 @@ void harvest_manual(std::vector<std::vector<crop *>> crop_fields, std::vector<st
     else if((y_coord < 1) || (y_coord > size)){
         std::cout << "y coordinate out of bounds, please try again." << std::endl;
     }
-    if(crop_fields[y_coord-1][x_coord-1]->interact_is_active() == true){
+    else if(crop_fields[y_coord-1][x_coord-1]->interact_is_active() == true){
         *output = crop_fields[y_coord-1][x_coord-1]->harvest_field();
         if(*output != -1){
             for(int i = 0; i < number_of_plants; i++){ //Be careful with the limit here.
@@ -826,7 +841,7 @@ void clear_menu(std::vector<std::vector<crop *>> crop_fields, std::vector<std::v
     else if((y_coord < 1) || (y_coord > size)){
         std::cout << "y coordinate out of bounds, please try again." << std::endl;
     }
-    if(crop_fields[y_coord-1][x_coord-1]->interact_is_active() == true){
+    else if(crop_fields[y_coord-1][x_coord-1]->interact_is_active() == true){
         crop_fields[y_coord-1][x_coord-1]->clear_field();
         std::cout << "Field at " << x_coord << "," << y_coord << " cleared." << std::endl;
         if(crop_fields[y_coord-1][x_coord-1]->interact_is_ripe() == true){
@@ -994,7 +1009,7 @@ void end_turn(std::vector<std::vector<crop *>> crop_fields, std::vector<std::vec
     }
 }
 
-void test(int *money)
+/*void test(int *money)
 {
     *money += 1000;
-}
+}*/
